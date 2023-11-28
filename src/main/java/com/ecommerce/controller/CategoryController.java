@@ -1,0 +1,35 @@
+package com.ecommerce.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.ecommerce.payload.ApiResponse;
+import com.ecommerce.payload.CategoryRequest;
+import com.ecommerce.service.CategoryService;
+import com.ecommerce.service.SubCategoryService;
+
+@RestController
+@RequestMapping("/ecommerce/category")
+@CrossOrigin
+public class CategoryController {
+
+	@Autowired
+	private CategoryService categoryService;
+	
+	@Autowired
+	private SubCategoryService subCategoryService;
+	
+	@PostMapping("/admin")
+	public ResponseEntity<ApiResponse> createCategory(@RequestBody CategoryRequest categoryRequest)
+	{
+		System.out.println("in api");
+		return new ResponseEntity<ApiResponse>(categoryService.addCategory(categoryRequest),HttpStatus.CREATED);
+	}
+	
+}
