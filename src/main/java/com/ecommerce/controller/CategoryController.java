@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ecommerce.payload.ApiResponse;
 import com.ecommerce.payload.CategoryRequest;
+import com.ecommerce.payload.SubCategoryRequest;
 import com.ecommerce.service.CategoryService;
-import com.ecommerce.service.SubCategoryService;
 
 @RestController
 @RequestMapping("/ecommerce/category")
@@ -21,15 +21,17 @@ public class CategoryController {
 
 	@Autowired
 	private CategoryService categoryService;
-	
-	@Autowired
-	private SubCategoryService subCategoryService;
-	
+		
 	@PostMapping("/admin")
 	public ResponseEntity<ApiResponse> createCategory(@RequestBody CategoryRequest categoryRequest)
 	{
-		System.out.println("in api");
 		return new ResponseEntity<ApiResponse>(categoryService.addCategory(categoryRequest),HttpStatus.CREATED);
+	}
+	
+	@PostMapping("/admin/subcategory")
+	public ResponseEntity<ApiResponse> createSubCategory(@RequestBody SubCategoryRequest subCategoryRequest)
+	{
+		return new ResponseEntity<ApiResponse>(categoryService.addSubCategory(subCategoryRequest),HttpStatus.CREATED);
 	}
 	
 }

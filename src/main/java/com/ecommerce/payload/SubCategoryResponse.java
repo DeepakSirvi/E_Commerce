@@ -1,8 +1,5 @@
 package com.ecommerce.payload;
 
-import java.util.Set;
-
-import com.ecommerce.model.User;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 

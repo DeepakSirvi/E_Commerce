@@ -5,12 +5,16 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import javax.crypto.SecretKey;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+
 
 
 @Component
@@ -24,9 +28,10 @@ public class JwtUtils {
 	}
 	
 	
-	public String generateToken(String subject)
+	public String generateToken(String subject,Long userId)
 	{
 		Map<String,Object> claims= new HashMap<>();
+		claims.put("userId", userId);
 		return genrateToken(claims,subject);
 	}
 	
@@ -42,5 +47,9 @@ public class JwtUtils {
 		return Jwts.parser().setSigningKey(secret.getBytes())
 				.parseClaimsJws(token).getBody();
 		}
-
+	
+	public Long getUserIdFromToken(String token) {
+        Claims claims = getClaims(token);
+        return claims.get("userId",Long.class);
+	}
 }

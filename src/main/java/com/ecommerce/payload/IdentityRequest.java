@@ -19,5 +19,4 @@ public class IdentityRequest {
 	private String idCardNumber;
 	private String description;
 	private String image;
-	private UserResponse user;
 }

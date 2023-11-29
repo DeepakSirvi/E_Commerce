@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ecommerce.payload.ApiResponse;
 import com.ecommerce.payload.ProductRequest;
-import com.ecommerce.payload.ProductResponse;
 import com.ecommerce.service.ProductService;
 
 @RestController

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.ecommerce.util.JwtUtils;
+import com.ecommerce.util.RequestContextHolder;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -21,30 +22,33 @@ import jakarta.servlet.http.HttpServletResponse;
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
 
-	
-
 	@Autowired
 	private JwtUtils jwtUtil;
 	@Autowired
 	private UserDetailsService detailsService;
-	
+
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-		String token = request.getHeader("Authorization");
-		if (token != null) {
-			String userName = jwtUtil.getUserName(token);
-			if(userName!=null && SecurityContextHolder.getContext().getAuthentication()==null) {
-				 UserDetails user =  detailsService.loadUserByUsername(userName);
-				 UsernamePasswordAuthenticationToken authenticationToken=new UsernamePasswordAuthenticationToken(userName,userName,user.getAuthorities());
-				 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-				 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+
+		try {
+			RequestContextHolder.setRequest(request);
+			String token = request.getHeader("Authorization");
+			if (token != null) {
+				String userName = jwtUtil.getUserName(token);
+				if (userName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+					UserDetails user = detailsService.loadUserByUsername(userName);
+					UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+							userName, userName, user.getAuthorities());
+					authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+					SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+				}
+			} else {
+				System.out.println("Invalid token");
 			}
+			filterChain.doFilter(request, response);
+		} finally {
+			RequestContextHolder.clear();
 		}
-		else
-		{
-			System.out.println("Invalid token");
-		}	
-		filterChain.doFilter(request, response);
 	}
 }

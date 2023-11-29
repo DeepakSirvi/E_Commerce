@@ -1,11 +1,7 @@
 package com.ecommerce.model;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -48,6 +44,8 @@ public class User extends Audit {
 	
 	private String LastName;
 	
+	private String gender;
+	
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
 	private Status status;
@@ -59,6 +57,8 @@ public class User extends Audit {
 	@OneToMany(mappedBy = "user")
 	private Set<Category> category;
 	
+	@OneToMany(mappedBy = "user")
+	private Set<VarientCategory> varientCategory;
 
 
 	

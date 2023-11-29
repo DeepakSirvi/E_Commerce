@@ -1,7 +1,9 @@
 package com.ecommerce.service.impl;
 
-import com.ecommerce.service.VarientService;
+import org.springframework.stereotype.Service;
 
+import com.ecommerce.service.VarientService;
+@Service
 public class VarientServiceImpl implements VarientService {
 
 }

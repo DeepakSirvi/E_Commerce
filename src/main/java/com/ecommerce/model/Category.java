@@ -28,8 +28,7 @@ public class Category extends Audit{
 	
 	private String categoryName;
 	
-	@OneToMany(mappedBy = "category",cascade = 
-			CascadeType.ALL)
+	@OneToMany(mappedBy = "category",cascade = CascadeType.ALL)
 	private Set<SubCategory> subCategory=new HashSet<>();
 	
 	@ManyToOne

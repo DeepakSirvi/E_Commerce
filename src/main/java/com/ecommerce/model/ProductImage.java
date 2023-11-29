@@ -1,35 +1,28 @@
 package com.ecommerce.model;
 
-import java.util.Map;
-
-import jakarta.persistence.CollectionTable;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
-@Entity
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class MapProductDescription {
-	
+@Entity
+public class ProductImage {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer id;
+	private Long id;
 	
-	private String title;
-	
-	@ElementCollection
-	@CollectionTable(name = "Product_Feature")
-    private Map<String, String> details;
-	
+	private String imageUrl;
 	
 	@ManyToOne
-	private ProductDescription product;
+	private Varient varientImage;
 }

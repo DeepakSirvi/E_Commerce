@@ -10,23 +10,22 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.ecommerce.model.User;
 import com.ecommerce.repository.UserRepo;
+import com.ecommerce.util.AppUtils;
+import com.ecommerce.util.JwtUtils;
+
+import io.jsonwebtoken.Jwts;
 
 public class SpringSecurityAuditAwareImpl implements AuditorAware<Long> {
 	
 	@Autowired
 	private UserRepo userRepo; 
+	
+	@Autowired
+	private AppUtils appUtils;
 
 	@Override
 	public Optional<Long> getCurrentAuditor() {
-		Authentication authentication = 
-				SecurityContextHolder.getContext().getAuthentication();
-		
-		if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
-			return Optional.empty();
-		}
-		System.out.println(authentication);	
-		User userPrincipal = userRepo.findByUserMobile(authentication.getPrincipal().toString()).get();
-		return Optional.ofNullable(userPrincipal.getId());
+		return Optional.ofNullable(appUtils.getUserId());
 	}
 
 }

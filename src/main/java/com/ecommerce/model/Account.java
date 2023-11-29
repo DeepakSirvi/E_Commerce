@@ -2,6 +2,8 @@ package com.ecommerce.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
@@ -28,6 +30,10 @@ public class Account extends Audit {
 	private String venderGSTnumber;
 	@Column(unique = true)
 	private String panNumber;
+	
+	@Column(nullable = false)
+	@Enumerated(EnumType.STRING)
+	private Status status;
 	
 	@ManyToOne
 	private User user;
