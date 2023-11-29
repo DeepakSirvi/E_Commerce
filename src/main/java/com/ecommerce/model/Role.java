@@ -1,5 +1,6 @@
 package com.ecommerce.model;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -22,7 +23,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Role extends Audit {
+public class Role{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -33,6 +34,12 @@ public class Role extends Audit {
 	
 	@Column(length=2000)
 	private String description;
+	
+	@Column(updatable = false,nullable = false)
+	private LocalDateTime createdAt;
+
+	@Column(nullable = false)
+	private LocalDateTime updatedAt;
 	
 	@OneToMany(mappedBy = "role")
 	private Set<UserRole> userRole= new HashSet<>();

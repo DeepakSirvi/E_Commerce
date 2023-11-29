@@ -31,7 +31,6 @@ public class AuthController {
 	
 	@PostMapping("/signup")
 	public ResponseEntity<ApiResponse> saveUser(@RequestBody UserRequest user){
-		
 		return new ResponseEntity<ApiResponse>(userService.addUser(user),HttpStatus.CREATED);
 	}
 	
