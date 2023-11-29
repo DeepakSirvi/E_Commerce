@@ -2,7 +2,7 @@ package com.ecommerce.model;
 
 import java.util.Set;
 
-
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -48,7 +48,7 @@ public class Product extends Audit {
 	private SubCategory subCategory;
 
 	
-	@OneToOne(mappedBy = "product")
+	@OneToOne(mappedBy = "product",cascade = CascadeType.ALL)
 	private ProductDescription description;
 	
 	@OneToMany(mappedBy = "product") 
@@ -72,6 +72,6 @@ public class Product extends Audit {
 	@OneToMany(mappedBy = "product")
 	private Set<OrderItem> orderItem;
 	
-	@OneToMany(mappedBy = "product")
+	@OneToMany(mappedBy = "product",cascade = CascadeType.ALL)
 	private Set<Varient> varient;
 }

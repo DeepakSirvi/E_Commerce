@@ -27,7 +27,7 @@ public class VarientRequest {
 	
 	private Status status;
 	
-	private Set<VarientCategoryJoin> attribute;
+	private Set<VarientCategoryJoinRequest> attribute;
 	
 	private Set<ProductImageRequest> imageRequests;
 	

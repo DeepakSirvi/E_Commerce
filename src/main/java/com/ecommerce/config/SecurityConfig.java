@@ -46,7 +46,7 @@ public class SecurityConfig {
 		.disable()  
 		.authorizeRequests()
 		.requestMatchers("ecommerce/auth/**").permitAll()
-		.requestMatchers("ecommerce/category/admin/**","ecommerce/varient/admin/**")
+		.requestMatchers("ecommerce/category/admin/**","ecommerce/varient/admin/**","ecommerce/product/admin/**")
 		.hasAuthority("ADMIN")
 		.anyRequest().authenticated()
 		.and()
