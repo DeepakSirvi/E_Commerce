@@ -18,7 +18,7 @@ public class AddressRequest {
 	private String name;
 	private String mobile;
 	private Integer pincode;
-	private String locatity;
+	private String locality;
 	private String city;
 	private String state;
 	private String landMark;

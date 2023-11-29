@@ -35,7 +35,7 @@ public class Address extends Audit {
 	private String mobile;
 	private Integer pincode;
 	
-	private String locatity;
+	private String locality;
 	
 	@Column(length=30)
 	private String city;
