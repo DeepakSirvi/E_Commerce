@@ -32,7 +32,7 @@ public class ProductRequest {
 	private String countryOfOrigin;
 	private String productType;
     
-	private Set<SubCategoryRequest> subCategory;
+	private SubCategoryRequest subCategory;
 	private Set<VarientRequest> varient;
 	private Set<ProductDescriptionRequest> description;
 
