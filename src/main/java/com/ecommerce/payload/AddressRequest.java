@@ -24,6 +24,5 @@ public class AddressRequest {
 	private String landMark;
 	private String alternateMobile;
 	private String addressType;
-	private UserRequest userAddress;
 
 }

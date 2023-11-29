@@ -31,6 +31,9 @@ public class UserRequest {
 	private String userEmail;
 	
 	@NotBlank
+	private String gender;
+	
+	@NotBlank
 	private String firstName;
 	
 	@NotBlank

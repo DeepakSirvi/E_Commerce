@@ -1,5 +1,6 @@
 package com.ecommerce.payload;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -19,6 +20,6 @@ public class VarientCategoryRequest {
 	
 	private Long id;
 	private String name;
-	private Set<VarientCategoryAttributeRequest> categoryAttributes;
+	private Set<VarientCategoryAttributeRequest> categoryAttributes=new HashSet<>();
 
 }

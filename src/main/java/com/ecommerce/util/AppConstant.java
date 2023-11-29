@@ -16,6 +16,7 @@ public class AppConstant {
 	public static final String ROLE_ALREADY_SAVE = "This role is already save";
 	public static final String RESGISTRATION_SUCCESSFULLY = "User resgistration successfully";
 	public static final String INTERNAL_SERVER_ERROR = "Internal Server Error";
+	public static final String INVALID_REQUEST = "Invalid request";
 	
 	
 

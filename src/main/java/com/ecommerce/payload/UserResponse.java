@@ -28,6 +28,8 @@ public class UserResponse {
 	
 	private String LastName;
 	
+	private String gender;
+	
 	private Status status;
 	
 	@JsonIgnoreProperties(value = {"user"})

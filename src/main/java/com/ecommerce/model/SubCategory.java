@@ -28,7 +28,7 @@ public class SubCategory {
 	
 	@ManyToOne
 	private Category category;
-	
+
 	
 	@OneToMany(mappedBy = "subCategory")
 	private Set<Product> product;

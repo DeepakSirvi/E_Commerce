@@ -106,7 +106,7 @@ public class LoginServiceImpl implements LoginService {
 			                .collect(Collectors.toSet()));
 					
 					
-					currentUser.setToken(jwtUtils.generateToken(login.get().getPhoneNumber()));	
+					currentUser.setToken(jwtUtils.generateToken(login.get().getPhoneNumber(),currentUser.getId()));	
 					return currentUser;
 					
 				}
