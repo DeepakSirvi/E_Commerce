@@ -1,10 +1,12 @@
 package com.ecommerce.payload;
 
-import java.util.List;
+import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.ElementCollection;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,11 +17,9 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(Include.NON_NULL)
-public class ProductDescriptionRequest {
-	
-	private Long id;
-	private String description;
-	private ProductRequest product;
-	private List<MapProductDescriptionRequest> descriptionRequests;
+public class MapProductDescriptionRequest {
 
+    private Long id;
+	private String title;
+    private Map<String, String> details;
 }

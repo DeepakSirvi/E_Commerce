@@ -29,7 +29,7 @@ public class ProductDescription {
 	private String description;
 	
 	@OneToMany(mappedBy = "product")
-    private List<MapProductDescription> desc;
+    private List<MapProductDescription> mapProductDescriptions;
 	
 	@ManyToOne
 	private Product product;

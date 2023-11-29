@@ -2,6 +2,7 @@ package com.ecommerce.service.impl;
 
 
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -72,6 +73,8 @@ public class UserServiceImpl implements UserService,UserDetailsService{
 		 
 		 user.setUserRole(userRoles);
 		 user.setStatus(Status.ACTIVE);
+		 user.setCreatedAt(LocalDateTime.now());
+		 user.setUpdatedAt(LocalDateTime.now());
 		 User user1 = userRepo.save(user);
 		
 		 if(user1.getId()!=null) {

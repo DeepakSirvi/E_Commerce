@@ -17,9 +17,10 @@ import lombok.Setter;
 @JsonInclude(Include.NON_NULL)
 public class ProductRequest {
 	
+	private Long id;
 	private String productName;
 	private Boolean listingStatus;
-	
+	private String brand;
 	private String fullfillmentBy;
 	private String shippingPovider;
 	private Float deliveryCharge;
@@ -31,9 +32,8 @@ public class ProductRequest {
 	private String countryOfOrigin;
 	private String productType;
     
-	private UserResponse vendor;
-	private Set<SubCategoryResponse> subCategory;
-	private Set<VarientResponse> varient;
+	private Set<SubCategoryRequest> subCategory;
+	private Set<VarientRequest> varient;
 	private Set<ProductDescriptionRequest> description;
 
 }

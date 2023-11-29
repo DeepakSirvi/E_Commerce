@@ -19,7 +19,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class UserRole extends Audit {
+public class UserRole  {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
