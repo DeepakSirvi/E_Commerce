@@ -4,6 +4,7 @@ import java.util.Set;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -29,7 +30,7 @@ public class Product extends Audit {
 	private Boolean listingStatus;
 	private String brand;
 	private String fullfillmentBy;
-	private String shippingPovider;
+	private String shippingProvider;
 	private Float deliveryCharge;
 	private Float productWeight;
 	private Float productLength;
@@ -47,9 +48,11 @@ public class Product extends Audit {
 	@ManyToOne
 	private SubCategory subCategory;
 
-	
 	@OneToOne(mappedBy = "product",cascade = CascadeType.ALL)
 	private ProductDescription description;
+	
+	@OneToMany(mappedBy = "product",cascade = CascadeType.ALL)
+	private Set<Varient> varient;
 	
 	@OneToMany(mappedBy = "product") 
 	private Set<CartItem> cart;
@@ -71,7 +74,5 @@ public class Product extends Audit {
 	
 	@OneToMany(mappedBy = "product")
 	private Set<OrderItem> orderItem;
-	
-	@OneToMany(mappedBy = "product",cascade = CascadeType.ALL)
-	private Set<Varient> varient;
+
 }

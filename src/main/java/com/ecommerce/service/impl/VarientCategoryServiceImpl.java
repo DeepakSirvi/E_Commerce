@@ -46,7 +46,7 @@ public class VarientCategoryServiceImpl implements VarientCategoryService {
 		
 		  for(VarientCategoryAttributeRequest attribute:varientCategory.getCategoryAttributes()) {
 			  VarientCategoryAttribute sCategory = new VarientCategoryAttribute();
-			  sCategory.setAttributeName(attribute.getName());
+			  sCategory.setAttributeName(attribute.getAttributeName());
 			  sCategory.setVarientCategory(category);
 			  category.getCategoryAttributes().add(sCategory);
 		  }
@@ -58,14 +58,14 @@ public class VarientCategoryServiceImpl implements VarientCategoryService {
 	@Override
 	public ApiResponse addVarientCategoryAttribute(VarientCategoryAttributeRequest varientCategoryAttribute) {
 		VarientCategory varientCategory = new VarientCategory();
-		varientCategory.setId(varientCategoryAttribute.getCategoryAttributes().getId());
-		if(attributeRepo.existsByAttributeNameAndVarientCategory(varientCategoryAttribute.getName(), varientCategory))
+		varientCategory.setId(varientCategoryAttribute.getVarientCategory().getId());
+		if(attributeRepo.existsByAttributeNameAndVarientCategory(varientCategoryAttribute.getAttributeName(), varientCategory))
 		{
 			 ApiResponse apiResponse = new ApiResponse(Boolean.FALSE, AppConstant.CATEGORY_TAKEN);
 			   throw new BadRequestException(apiResponse);	
 		}
 		VarientCategoryAttribute attribute  = new VarientCategoryAttribute();
-		attribute.setAttributeName(varientCategoryAttribute.getName());
+		attribute.setAttributeName(varientCategoryAttribute.getAttributeName());
 		attribute.setVarientCategory(varientCategory);
 		attributeRepo.save(attribute);
 		ApiResponse apiResponse = new ApiResponse(Boolean.TRUE,AppConstant.CATEGORY_ADDED);
