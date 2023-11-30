@@ -20,6 +20,6 @@ public class ProductDescriptionRequest {
 	private Long id;
 	private String description;
 	private ProductRequest product;
-	private List<MapProductDescriptionRequest> descriptionRequests;
+	private List<MapProductDescriptionRequest> mapProductDescriptions;
 
 }

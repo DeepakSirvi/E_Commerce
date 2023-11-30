@@ -1,5 +1,9 @@
 package com.ecommerce.payload;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import com.ecommerce.model.VarientCategoryJoin;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -7,7 +11,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
+
+@ToString
 @Getter
 @Setter
 @AllArgsConstructor
@@ -16,7 +23,8 @@ import lombok.Setter;
 public class VarientCategoryAttributeRequest {
 	
 	private Long id;
-	private String name;
-	private VarientCategoryRequest categoryAttributes;
+	private String attributeName;
+	private VarientCategoryRequest varientCategory;
+	private Set<VarientCategoryJoin> categoryJoins = new HashSet<>();
 
 }

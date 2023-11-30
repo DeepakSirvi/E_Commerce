@@ -9,7 +9,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
+@ToString
 @Getter
 @Setter
 @AllArgsConstructor
@@ -22,7 +24,7 @@ public class ProductRequest {
 	private Boolean listingStatus;
 	private String brand;
 	private String fullfillmentBy;
-	private String shippingPovider;
+	private String shippingProvider;
 	private Float deliveryCharge;
 	private Float productWeight;
 	private Float productLength;
@@ -34,6 +36,6 @@ public class ProductRequest {
     
 	private SubCategoryRequest subCategory;
 	private Set<VarientRequest> varient;
-	private Set<ProductDescriptionRequest> description;
+	private ProductDescriptionRequest description;
 
 }

@@ -1,5 +1,6 @@
 package com.ecommerce.payload;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import com.ecommerce.model.Status;
@@ -11,7 +12,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
+@ToString
 @Getter
 @Setter
 @AllArgsConstructor
@@ -27,8 +30,8 @@ public class VarientRequest {
 	
 	private Status status;
 	
-	private Set<VarientCategoryJoinRequest> attribute;
+	private Set<VarientCategoryJoinRequest> categoryJoins=new HashSet<>();
 	
-	private Set<ProductImageRequest> imageRequests;
+	private Set<ProductImageRequest> productImage=new HashSet<>();
 	
 }

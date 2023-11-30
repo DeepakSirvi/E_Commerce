@@ -19,10 +19,10 @@ private ModelMapper modelMapper;
 
 public AddressResponse addressToAddressResponse(Address address)
 
-
 { 
 	return this.modelMapper.map(address, AddressResponse.class);
 }
+
 public Address addressRequestToAddress(AddressRequest addressRequest)
 {
 	return this.modelMapper.map(addressRequest, Address.class);
@@ -31,9 +31,7 @@ public Address addressRequestToAddress(AddressRequest addressRequest)
 
 @Override
 public AddressResponse createAdress(AddressRequest addressRequest) {
-	Address address=this.addressRequestToAddress(addressRequest);
-	//System.out.println(addressRequest.getLocality());
-	
+	Address address=this.addressRequestToAddress(addressRequest);	
 	return this.addressToAddressResponse(this.addressRepo.save(address));
 }
 	

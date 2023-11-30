@@ -5,6 +5,7 @@ import java.util.Map;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -33,6 +34,6 @@ public class MapProductDescription {
     private Map<String, String> details;
 	
 	
-	@ManyToOne
-	private ProductDescription product;
+	@ManyToOne(fetch = FetchType.EAGER)
+	private ProductDescription productDescription;
 }
