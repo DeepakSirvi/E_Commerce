@@ -18,6 +18,7 @@ public class AppConstant {
 	public static final String INTERNAL_SERVER_ERROR = "Internal Server Error";
 	public static final String INVALID_REQUEST = "Invalid request";
 	public static final String PRODUCT_ADDED = "Product added succesfully";
+	public static final String ADDRESS_ADDED = "Address added succesfully";
 	
 	
 
