@@ -26,9 +26,7 @@ public class Account extends Audit {
 	private String accountHolderName;
 	private String bankName;
 	private String bankIFSCcode;
-	@Column(unique = true)
 	private String venderGSTnumber;
-	@Column(unique = true)
 	private String panNumber;
 	
 	@Column(nullable = false)
