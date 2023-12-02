@@ -1,6 +1,8 @@
 package com.ecommerce.exception;
 
-import com.ecommerce.payload.ApiResponse;
+import javax.validation.constraints.NotBlank;
+
+import org.springframework.http.HttpStatus;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,10 +13,8 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class BadRequestException extends RuntimeException {
-	
-	private String response;
-	
-	
-	
+public class ErrorResponse {
+
+	private String message;
+	private HttpStatus status;
 }

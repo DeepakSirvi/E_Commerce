@@ -65,19 +65,16 @@ public class LoginServiceImpl implements LoginService {
            }
     	   else if(user.get().getStatus().equals(Status.DEACTIVE))
     	   {
-    		   ApiResponse apiResponse = new ApiResponse(Boolean.FALSE, AppConstant.USER_DEACTIVE);
-    		   throw new BadRequestException(apiResponse);
+    		   throw new BadRequestException(AppConstant.USER_DEACTIVE);
     	   }
     	   else if(user.get().getStatus().equals(Status.BLOCK))
     	   {
-    		   ApiResponse apiResponse = new ApiResponse(Boolean.FALSE, AppConstant.USER_BLOCK);
-    		   throw new BadRequestException(apiResponse);
+    		   throw new BadRequestException(AppConstant.USER_BLOCK);
     	   }
        }
        else
        {
-    	   ApiResponse apiResponse = new ApiResponse(Boolean.FALSE, AppConstant.NEW_USER);
-		   throw new BadRequestException(apiResponse);
+		   throw new BadRequestException( AppConstant.NEW_USER);
        }
 		return otpResponse;
 	}
@@ -112,22 +109,19 @@ public class LoginServiceImpl implements LoginService {
 				}
 				else
 				{
-					 ApiResponse apiResponse = new ApiResponse(Boolean.FALSE, AppConstant.OTP_EXPERED);
-					   throw new BadRequestException(apiResponse);	
+					   throw new BadRequestException( AppConstant.OTP_EXPERED);	
 				}
 				
 			}
 			else
 			{
-				 ApiResponse apiResponse = new ApiResponse(Boolean.FALSE, AppConstant.INVALID_OTP);
-				   throw new BadRequestException(apiResponse);	
+				   throw new BadRequestException(AppConstant.INVALID_OTP);	
 			}
 			
 		}
 		else
 		{
-			 ApiResponse apiResponse = new ApiResponse(Boolean.FALSE, AppConstant.INVALID_PHONE_NUMBER);
-			   throw new BadRequestException(apiResponse);
+			   throw new BadRequestException(AppConstant.INVALID_PHONE_NUMBER);
 		}
 		
 	}

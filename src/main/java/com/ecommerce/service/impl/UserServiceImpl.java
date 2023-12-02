@@ -18,18 +18,25 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import com.ecommerce.exception.BadRequestException;
+import com.ecommerce.model.Login;
 import com.ecommerce.model.Role;
 import com.ecommerce.model.RoleName;
 import com.ecommerce.model.Status;
 import com.ecommerce.model.User;
 import com.ecommerce.model.UserRole;
 import com.ecommerce.payload.ApiResponse;
+import com.ecommerce.payload.LoginRequest;
 import com.ecommerce.payload.OtpResponse;
+import com.ecommerce.payload.RoleResponse;
 import com.ecommerce.payload.UserRequest;
+import com.ecommerce.payload.UserResponse;
+import com.ecommerce.payload.UserRoleResponse;
+import com.ecommerce.repository.LoginRepo;
 import com.ecommerce.repository.UserRepo;
 import com.ecommerce.service.LoginService;
 import com.ecommerce.service.UserService;
 import com.ecommerce.util.AppConstant;
+import com.ecommerce.util.AppUtils;
 
 @Service
 public class UserServiceImpl implements UserService,UserDetailsService{
@@ -43,19 +50,23 @@ public class UserServiceImpl implements UserService,UserDetailsService{
 	@Autowired 
 	private ModelMapper mapper;
 	
+	@Autowired
+	private LoginRepo loginRepo;
+	
+	@Autowired
+	private AppUtils appUtils;
+	
 	
 	private  ApiResponse apiResponse=null;
 	
 	public ApiResponse  addUser(UserRequest userRequest)
 	{
 		if (userRepo.existsByUserMobile(userRequest.getUserMobile())) {
-			ApiResponse apiResponse = new ApiResponse(Boolean.FALSE, AppConstant.NUMBER_ALREADY_TAKEN);
-			throw new BadRequestException(apiResponse);
+			throw new BadRequestException(AppConstant.NUMBER_ALREADY_TAKEN);
 		}
 
 		if (userRepo.existsByUserEmail(userRequest.getUserEmail())) {
-			ApiResponse apiResponse = new ApiResponse(Boolean.FALSE, AppConstant.EMAIL_ALREADY_TAKEN);
-			throw new BadRequestException(apiResponse);
+			throw new BadRequestException(AppConstant.EMAIL_ALREADY_TAKEN);
 		}
 		
 		 Role role = new Role();
@@ -98,8 +109,7 @@ public class UserServiceImpl implements UserService,UserDetailsService{
 		    			.collect(Collectors.toList());
 		    	return new org.springframework.security.core.userdetails.User(username,username,authority);
 		    }
-	     apiResponse = new ApiResponse(Boolean.FALSE, AppConstant.INTERNAL_SERVER_ERROR);
-	     throw new BadRequestException(apiResponse);
+	     throw new BadRequestException(AppConstant.INTERNAL_SERVER_ERROR);
 	}
 
 	@Override
@@ -107,6 +117,66 @@ public class UserServiceImpl implements UserService,UserDetailsService{
 	 return loginService.generateOtp(userRequest.getUserMobile());	
 	}
 
-	
+	@Override
+	public UserResponse getUserById() {
+       Optional<User> user = Optional.of(userRepo.findByIdAndStatus(appUtils.getUserId(),Status.ACTIVE).orElseThrow(()->new BadRequestException(AppConstant.USER_NOT_FOUND)));
+       
+       
+       UserResponse userResponse = new UserResponse();
+       userResponse.setFirstName(user.get().getFirstName());
+       userResponse.setLastName(user.get().getLastName());
+       userResponse.setGender(user.get().getGender());
+       userResponse.setId(user.get().getId());
+       userResponse.setUserMobile(user.get().getUserMobile());
+       userResponse.setUserEmail(user.get().getUserEmail());
+       userResponse.setStatus(user.get().getStatus());
+       
+       Set<UserRole> userRoles = user.get().getUserRole();
+       
+       Set<UserRoleResponse> collect = userRoles.stream().map(userRole -> userRoleToUserRoleResponse(userRole)).collect(Collectors.toSet());
+       userResponse.setUserRole(collect);      
+       return userResponse;
+       
+	}
 
+	private UserRoleResponse userRoleToUserRoleResponse(UserRole userRoles) {
+       UserRoleResponse response = new UserRoleResponse();
+       response.setId(userRoles.getId());
+       response.setRole(new RoleResponse(userRoles.getRole().getId(),userRoles.getRole().getRoleName(),userRoles.getRole().getDescription()));
+       return response;
+	}
+
+	@Override
+	public ApiResponse deativateAccount(LoginRequest loginRequest) {
+		System.out.println(loginRequest.getMobileNumber());
+		if(loginRepo.existsByPhoneNumber(loginRequest.getMobileNumber()))
+		{
+			Optional<Login> login = loginRepo.findByPhoneNumberAndOtp(loginRequest.getMobileNumber(), loginRequest.getOtp());
+			if(login.isPresent()) {
+				
+				if(login.get().getExperiedAt().compareTo(LocalDateTime.now())>=0){
+			    
+				// Code to deactivte account
+					Optional<User> user = userRepo.findByUserMobile(loginRequest.getMobileNumber());
+					user.get().setStatus(Status.DEACTIVE);
+					userRepo.save(user.get());
+				}
+				else
+				{
+					   throw new BadRequestException( AppConstant.OTP_EXPERED);	
+				}
+				
+			}
+			else
+			{
+				   throw new BadRequestException(AppConstant.INVALID_OTP);	
+			}
+			
+		}
+		else
+		{
+			   throw new BadRequestException(AppConstant.INVALID_PHONE_NUMBER);
+		}
+		return new ApiResponse(Boolean.TRUE,AppConstant.ACCOUNT_DEACTIVATE); 
+	}
 }

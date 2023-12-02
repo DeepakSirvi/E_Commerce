@@ -1,7 +1,9 @@
 package com.ecommerce.payload;
 
+import java.util.HashSet;
 import java.util.Set;
 
+import com.ecommerce.model.Status;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -27,6 +29,10 @@ public class VarientResponse {
 	
 	private Set<VarientCategoryAttributeResponse> attribute;
 	
-//	private Set<VarientCategoryJoin> categoryJoins;
+	private Status status;
+	
+	private Set<VarientCategoryJoinResonse> categoryJoins=new HashSet<>();
+	
+	private Set<ProductImageRespone> productImage=new HashSet<>();
 
 }

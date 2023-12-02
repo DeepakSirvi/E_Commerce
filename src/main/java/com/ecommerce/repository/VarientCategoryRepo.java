@@ -8,4 +8,6 @@ public interface VarientCategoryRepo extends JpaRepository<VarientCategory, Long
 
 	public Boolean existsByName(String name);
 
+	public Object existsByNameAndIdNot(String name,Long id);
+
 }

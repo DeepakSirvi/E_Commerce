@@ -19,5 +19,7 @@ public class SubCategoryResponse {
 	private String subCategory;
 	private CategoryResponse category;
 	private ProductResponse product;
+	
+	
 
 }

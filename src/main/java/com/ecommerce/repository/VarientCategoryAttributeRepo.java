@@ -13,4 +13,6 @@ public interface VarientCategoryAttributeRepo extends JpaRepository<VarientCateg
 
 	public boolean existsByAttributeNameAndVarientCategory(String name, VarientCategory varientCategory);
 
+	public Boolean existsByAttributeNameAndIdNot(String attributeName, Long id);
+
 }
