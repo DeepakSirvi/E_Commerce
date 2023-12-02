@@ -36,4 +36,8 @@ public class UserResponse {
 	private Set<UserRoleResponse> userRole;
 	
 	private String token;
+	
+	public UserResponse(Long id) {
+		this.id=id;
+	}
 }

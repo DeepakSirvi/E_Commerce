@@ -32,8 +32,7 @@ public class AppUtils {
 		}
 		else
 		{
-			 ApiResponse apiResponse = new ApiResponse(Boolean.FALSE, AppConstant.INVALID_REQUEST);
-			   throw new BadRequestException(apiResponse);
+			   throw new BadRequestException(AppConstant.INVALID_REQUEST);
 		}
 	}
 	

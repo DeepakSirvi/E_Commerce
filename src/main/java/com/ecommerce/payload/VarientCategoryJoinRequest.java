@@ -20,4 +20,6 @@ public class VarientCategoryJoinRequest {
 	private Long id;
 	private VarientCategoryAttributeRequest varAttribute;	
 	private VarientRequest varient;
+	
+	
 }

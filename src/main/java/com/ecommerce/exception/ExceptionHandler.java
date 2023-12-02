@@ -10,9 +10,9 @@ import com.ecommerce.payload.ApiResponse;
 public class ExceptionHandler {
 
 	@org.springframework.web.bind.annotation.ExceptionHandler(BadRequestException.class)
-	public ResponseEntity<ApiResponse> resolveException(BadRequestException exception) {
-		ApiResponse apiResponse = exception.getResponse();
-		return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+	public ResponseEntity<ErrorResponse> resolveException(BadRequestException exception) {
+		ErrorResponse errorResponse = new ErrorResponse(exception.getResponse(),HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<ErrorResponse>(errorResponse,HttpStatus.BAD_REQUEST);
 	}
 
 }

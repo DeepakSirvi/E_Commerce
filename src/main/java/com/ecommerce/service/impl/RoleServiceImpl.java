@@ -40,8 +40,7 @@ public class RoleServiceImpl implements RoleService{
 		}
 		else
 		{
-			 ApiResponse apiResponse = new ApiResponse(Boolean.FALSE, AppConstant.ROLE_ALREADY_SAVE);
-			   throw new BadRequestException(apiResponse);
+			   throw new BadRequestException(AppConstant.ROLE_ALREADY_SAVE);
 		}
 	}
 
