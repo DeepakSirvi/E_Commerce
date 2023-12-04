@@ -2,6 +2,10 @@ package com.ecommerce.util;
 
 public class AppConstant {
 	
+	public static final String DEFAULT_PAGE_NUMBER = "0";
+	public static final String DEFAULT_PAGE_SIZE = "1"; 
+	public static final Integer MAX_PAGE_SIZE = 10;
+	
 	public static final String RESGISTRATION_SUCCESSFULLY = "User resgistration successfully";
 	public static final String INVALID_PHONE_NUMBER = "Invalid mobile number";
 	public static final String NUMBER_ALREADY_TAKEN = "This mobile number is already taken";
@@ -22,11 +26,14 @@ public class AppConstant {
 	public static final String INTERNAL_SERVER_ERROR = "Internal Server Error";
 	public static final String INVALID_REQUEST = "Invalid request";
 	
-	
+	public static final String PRODUCT_NOT_FOUND = "Product is not found";
 	public static final String PRODUCT_ADDED = "Product added succesfully";
+	public static final String PRODUCT_DEACTIVE = "This product is deactive to display";
+
+	
+	
 	public static final String ADDRESS_ADDED = "Address added succesfully";
-	
-	
+
 	
 	public static final String CATEGORY_ADDED = "Category successfully added";
 	public static final String CATEGORY_TAKEN = "Category alrady used please use other name";
@@ -57,6 +64,7 @@ public class AppConstant {
 	public static final String VARIENT_ATTRIBUTE_ADD = "Varient attribute taken";
 	public static final String VARIENT_ATTIBUTE_NOT_FOUND = "Attribute is not found";
 	public static final String VARIENT_ATTRIBUTE_UPDATE = "Attribute updated";
+	
 	
 	
 

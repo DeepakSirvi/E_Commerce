@@ -20,7 +20,7 @@ public class ProductResponse {
 	private Long id;
 	private String productName;
 	private Boolean listingStatus;
-	
+	private String brand;
 	private String fullfillmentBy;
 	private String shippingPovider;
 	private Float deliveryCharge;
