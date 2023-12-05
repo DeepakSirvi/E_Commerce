@@ -1,5 +1,7 @@
 package com.ecommerce.controller;
 
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,8 @@ import com.ecommerce.payload.UserResponse;
 import com.ecommerce.service.LoginService;
 import com.ecommerce.service.UserService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/ecommerce/auth")
 @CrossOrigin
@@ -30,7 +34,7 @@ public class AuthController {
 	
 	
 	@PostMapping("/signup")
-	public ResponseEntity<ApiResponse> saveUser(@RequestBody UserRequest user){
+	public ResponseEntity<ApiResponse> saveUser(@Valid @RequestBody UserRequest user){
 		return new ResponseEntity<ApiResponse>(userService.addUser(user),HttpStatus.CREATED);
 	}
 	

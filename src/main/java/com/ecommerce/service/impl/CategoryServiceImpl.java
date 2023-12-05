@@ -45,13 +45,7 @@ public class CategoryServiceImpl implements CategoryService {
 		}
 		Category category = new Category();
 		category.setCategoryName(categoryRequest.getCategoryName());
-		
-		   User user = new User();
-		   user.setId(appUtils.getUserId());
-		   category.setUser(user);
-		
-
-		
+	    category.setUser(new User(appUtils.getUserId()));
 		  for(SubCategoryRequest subCategory:categoryRequest.getSubCategory()) {
 			  SubCategory sCategory = new SubCategory();
 			  sCategory.setSubCategory(subCategory.getSubCategory());

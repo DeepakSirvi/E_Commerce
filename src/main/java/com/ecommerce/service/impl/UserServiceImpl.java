@@ -91,9 +91,6 @@ public class UserServiceImpl implements UserService,UserDetailsService{
 		 if(user1.getId()!=null) {
 		  apiResponse = new ApiResponse(Boolean.TRUE, AppConstant.RESGISTRATION_SUCCESSFULLY);
 		 }
-		 else {
-				apiResponse = new ApiResponse(Boolean.FALSE, AppConstant.INTERNAL_SERVER_ERROR);
-		 }
 		return apiResponse;
 	}
 

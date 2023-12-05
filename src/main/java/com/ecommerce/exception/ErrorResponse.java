@@ -1,6 +1,5 @@
 package com.ecommerce.exception;
 
-import javax.validation.constraints.NotBlank;
 
 import org.springframework.http.HttpStatus;
 
