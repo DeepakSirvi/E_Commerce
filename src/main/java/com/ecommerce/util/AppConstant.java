@@ -19,6 +19,8 @@ public class AppConstant {
 	public static final String INVALID_REQUEST = "Invalid request";
 	public static final String PRODUCT_ADDED = "Product added succesfully";
 	public static final String ADDRESS_ADDED = "Address added succesfully";
+	public static final String ACCOUNT_NOT_FOUND = "Account Not Found With This Id => ";
+	
 	
 	
 

@@ -1,8 +1,15 @@
 package com.ecommerce.payload;
 
+import com.ecommerce.model.Status;
+import com.ecommerce.model.User;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,6 +21,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @JsonInclude(Include.NON_NULL)
 public class AccountRequest {
+
+	private Long id;
+	
 	
 	private String accountNumber;
 	private String accountHolderName;
@@ -21,7 +31,10 @@ public class AccountRequest {
 	private String bankIFSCcode;
 	private String venderGSTnumber;
 	private String panNumber;
-
+	private Status status;
+	
+	private User user;
+	
 
 
 }
