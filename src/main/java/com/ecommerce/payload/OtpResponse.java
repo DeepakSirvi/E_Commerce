@@ -13,6 +13,6 @@ import lombok.NoArgsConstructor;
 @JsonInclude(Include.NON_NULL)
 public class OtpResponse {
 
-	private Integer opt;
+	private Integer otp;
 	private String message;
 }
