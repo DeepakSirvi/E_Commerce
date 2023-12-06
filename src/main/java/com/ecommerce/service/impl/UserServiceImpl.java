@@ -116,19 +116,19 @@ public class UserServiceImpl implements UserService,UserDetailsService{
 
 	@Override
 	public UserResponse getUserById() {
-       Optional<User> user = Optional.of(userRepo.findByIdAndStatus(appUtils.getUserId(),Status.ACTIVE).orElseThrow(()->new BadRequestException(AppConstant.USER_NOT_FOUND)));
+       User user = userRepo.findByIdAndStatus(appUtils.getUserId(),Status.ACTIVE).orElseThrow(()->new BadRequestException(AppConstant.USER_NOT_FOUND));
        
        
        UserResponse userResponse = new UserResponse();
-       userResponse.setFirstName(user.get().getFirstName());
-       userResponse.setLastName(user.get().getLastName());
-       userResponse.setGender(user.get().getGender());
-       userResponse.setId(user.get().getId());
-       userResponse.setUserMobile(user.get().getUserMobile());
-       userResponse.setUserEmail(user.get().getUserEmail());
-       userResponse.setStatus(user.get().getStatus());
+       userResponse.setFirstName(user.getFirstName());
+       userResponse.setLastName(user.getLastName());
+       userResponse.setGender(user.getGender());
+       userResponse.setId(user.getId());
+       userResponse.setUserMobile(user.getUserMobile());
+       userResponse.setUserEmail(user.getUserEmail());
+       userResponse.setStatus(user.getStatus());
        
-       Set<UserRole> userRoles = user.get().getUserRole();
+       Set<UserRole> userRoles = user.getUserRole();
        
        Set<UserRoleResponse> collect = userRoles.stream().map(userRole -> userRoleToUserRoleResponse(userRole)).collect(Collectors.toSet());
        userResponse.setUserRole(collect);      

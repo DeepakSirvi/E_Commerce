@@ -22,6 +22,6 @@ public class WishListProduct extends Audit {
 	private User user;
 	
 	@ManyToOne
-	private Product product;
+	private Varient varient;
 
 }

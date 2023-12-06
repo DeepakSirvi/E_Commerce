@@ -1,8 +1,5 @@
-package com.ecommerce.model;
+package com.ecommerce.payload;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +9,14 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CartItem extends Audit {
-
+public class CartResponse {
+	
 	private Long id;
+	
+	private ProductResponse product;
+	
+	private Integer quantity;
+	
+	private UserResponse user;
+
 }
