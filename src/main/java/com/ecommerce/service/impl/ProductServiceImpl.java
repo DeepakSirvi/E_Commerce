@@ -1,6 +1,5 @@
 package com.ecommerce.service.impl;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -25,7 +24,6 @@ import com.ecommerce.payload.ApiResponse;
 import com.ecommerce.payload.PageResponse;
 import com.ecommerce.payload.ProductRequest;
 import com.ecommerce.payload.ProductResponse;
-import com.ecommerce.repository.CategoryRepo;
 import com.ecommerce.repository.ProductRepo;
 import com.ecommerce.repository.SubCategoryRepo;
 import com.ecommerce.service.ProductService;

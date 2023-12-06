@@ -62,11 +62,11 @@ public class UserServiceImpl implements UserService,UserDetailsService{
 	public ApiResponse  addUser(UserRequest userRequest)
 	{
 		if (userRepo.existsByUserMobile(userRequest.getUserMobile())) {
-			throw new BadRequestException(AppConstant.NUMBER_ALREADY_TAKEN);
+			throw new BadRequestException(AppConstant.NUMBER_ALREADY_TAKEN +" " +userRequest.getUserMobile());
 		}
 
 		if (userRepo.existsByUserEmail(userRequest.getUserEmail())) {
-			throw new BadRequestException(AppConstant.EMAIL_ALREADY_TAKEN);
+			throw new BadRequestException(AppConstant.EMAIL_ALREADY_TAKEN+" "+userRequest.getUserEmail());
 		}
 		
 		 Role role = new Role();

@@ -67,6 +67,7 @@ public class AppConstant {
 	public static final String OUT_OF_STOCK = "This product out of stock";
 	public static final String AVAILABLE_STOCK = "Product is out of avalibility";
 	public static final Object PRODUCT_ADD_TO_CART = "This product is added to card ";
+	public static final Object PRODUCT_REMOVE = "Product successfully remove";
 	
 	
 	

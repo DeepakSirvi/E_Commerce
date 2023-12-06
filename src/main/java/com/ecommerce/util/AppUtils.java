@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.ecommerce.exception.BadRequestException;
-import com.ecommerce.payload.ApiResponse;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -16,7 +15,7 @@ public class AppUtils {
 	
 	@Autowired
 	private JwtUtils jwtUtils;
-	private String token;
+	
    
 	public Integer generateOtp() {
 		Random r = new Random();

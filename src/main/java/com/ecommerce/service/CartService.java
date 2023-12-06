@@ -6,4 +6,5 @@ public interface CartService {
 
 	public Map<String, Object> addProductToCart(Long id, short quantity);
 
+
 }

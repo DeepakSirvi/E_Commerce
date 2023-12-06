@@ -12,7 +12,6 @@ import com.ecommerce.exception.BadRequestException;
 import com.ecommerce.model.Login;
 import com.ecommerce.model.Status;
 import com.ecommerce.model.User;
-import com.ecommerce.payload.ApiResponse;
 import com.ecommerce.payload.LoginRequest;
 import com.ecommerce.payload.OtpResponse;
 import com.ecommerce.payload.UserResponse;
