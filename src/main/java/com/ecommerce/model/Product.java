@@ -23,6 +23,8 @@ import lombok.Setter;
 @Entity
 public class Product extends Audit {
 	
+	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
@@ -54,8 +56,7 @@ public class Product extends Audit {
 	@OneToMany(mappedBy = "product",cascade = CascadeType.ALL)
 	private Set<Varient> varient;
 	
-	@OneToMany(mappedBy = "product") 
-	private Set<CartItem> cart;
+
 	
 	@OneToMany(mappedBy = "product")
 	private Set<ProductReview> productReview;
@@ -65,14 +66,12 @@ public class Product extends Audit {
 	
 	@OneToMany(mappedBy = "product")
 	private Set<ProductFAQ> faq;
-	
-	@OneToMany(mappedBy = "product")
-	private Set<WishListProduct> wishList;
-	
-	@OneToMany(mappedBy = "product")
-	private Set<ProductSaveForLater> saveLater;
-	
+		
 	@OneToMany(mappedBy = "product")
 	private Set<OrderItem> orderItem;
+	
+	public Product(Long id) {
+		this.id=id;
+}
 
 }

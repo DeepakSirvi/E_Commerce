@@ -1,4 +1,4 @@
-    package com.ecommerce.model;
+package com.ecommerce.model;
 
 import java.util.Set;
 
@@ -27,6 +27,10 @@ import lombok.ToString;
 @Entity
 public class Varient extends Audit {
 	
+	public Varient(Long id2) {
+		this.id=id2;
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 
@@ -47,6 +51,17 @@ public class Varient extends Audit {
 	
 	@OneToMany(mappedBy = "varientImage",cascade = CascadeType.ALL)
 	private Set<ProductImage> productImage;
+	
+	@OneToMany(mappedBy = "varient") 
+	private Set<Cart> cart;
+	
+	@OneToMany(mappedBy = "varient")
+	private Set<WishListProduct> wishList;
+	
+	@OneToMany(mappedBy = "varient")
+	private Set<ProductSaveForLater> saveLater;
+	
+
 	
 
 }
