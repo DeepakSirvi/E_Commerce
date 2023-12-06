@@ -19,7 +19,7 @@ public class ProductSaveForLater {
 	private Long id;
 	
 	@ManyToOne
-	private Product product;
+	private Varient varient;
 	
 	@ManyToOne
 	private User user;
