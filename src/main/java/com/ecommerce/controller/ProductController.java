@@ -1,7 +1,6 @@
 package com.ecommerce.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -58,4 +57,5 @@ public class ProductController {
 	public ResponseEntity<ProductResponse> getProductById(@PathVariable(value = "productId") Long productId){
 		return new ResponseEntity<ProductResponse>(productService.getProduct(productId) ,HttpStatus.OK);
 	}
+	
 }

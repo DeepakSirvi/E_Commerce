@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,5 +29,7 @@ public class CartController {
 	{
 	return new ResponseEntity<Map<String,Object>>(cartService.addProductToCart(id,quantity),HttpStatus.OK);	
 	}
-
+	
+	
+ 
 }
