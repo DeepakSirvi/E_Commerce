@@ -26,7 +26,7 @@ public class AppUtils {
 		HttpServletRequest  httpRequest = RequestContextHolder.getRequest();
 		if(httpRequest!=null)
 		{
-		   String token = httpRequest.getHeader("Authorization");
+		   String token = httpRequest.getParameter("Authorization");
 		   return jwtUtils.getUserIdFromToken(token);
 		}
 		else
