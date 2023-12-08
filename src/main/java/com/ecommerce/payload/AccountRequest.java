@@ -21,7 +21,4 @@ public class AccountRequest {
 	private String bankIFSCcode;
 	private String venderGSTnumber;
 	private String panNumber;
-
-
-
 }

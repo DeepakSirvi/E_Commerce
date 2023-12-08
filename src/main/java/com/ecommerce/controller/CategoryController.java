@@ -1,5 +1,7 @@
 package com.ecommerce.controller;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -51,6 +53,12 @@ public class CategoryController {
 	public ResponseEntity<SubCategoryResponse> getSubCategory(@PathVariable(value = "subCategoryId") Long id)
 	{
 		return new ResponseEntity<SubCategoryResponse>(categoryService.getSubCategoryById(id),HttpStatus.OK);
+	}
+	
+	@GetMapping("/admin")
+	public ResponseEntity<Map<String, Object>> getAllCategory()
+	{
+		return new ResponseEntity<Map<String,Object>>(categoryService.getCategory(),HttpStatus.OK);
 	}
 	
 	@PutMapping("/admin")

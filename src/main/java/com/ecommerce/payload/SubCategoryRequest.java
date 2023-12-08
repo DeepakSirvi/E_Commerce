@@ -24,6 +24,6 @@ public class SubCategoryRequest {
     private Long id;
 	private String subCategory;
 	private CategoryRequest category;
-	private Set<ProductResponse> product;
+	
 	
 }
