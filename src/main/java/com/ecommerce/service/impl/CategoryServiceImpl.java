@@ -85,7 +85,7 @@ public class CategoryServiceImpl implements CategoryService {
 			}
 	
 	
-	public SubCategoryResponse subCategoryToSubCategoryResponse(SubCategory s) {
+	private SubCategoryResponse subCategoryToSubCategoryResponse(SubCategory s) {
 				SubCategoryResponse response = new SubCategoryResponse();
 				response.setId(s.getId());
 				response.setSubCategory(s.getSubCategory());

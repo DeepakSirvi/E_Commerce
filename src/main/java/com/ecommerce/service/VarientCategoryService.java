@@ -1,27 +1,28 @@
 package com.ecommerce.service;
 
-import com.ecommerce.payload.ApiResponse;
+import java.util.Map;
+
 import com.ecommerce.payload.VarientCategoryAttributeRequest;
-import com.ecommerce.payload.VarientCategoryAttributeResponse;
-import com.ecommerce.payload.VarientCategoryReponse;
 import com.ecommerce.payload.VarientCategoryRequest;
 
 public interface VarientCategoryService {
 
-	ApiResponse addVarientCategory(VarientCategoryRequest varientCategory);
+	public Map<String,Object> addVarientCategory(VarientCategoryRequest varientCategory);
 
-	ApiResponse addVarientCategoryAttribute(VarientCategoryAttributeRequest varientCategoryAttribute);
+	public Map<String,Object> addVarientCategoryAttribute(VarientCategoryAttributeRequest varientCategoryAttribute);
 
-	ApiResponse deleteVarientCategoryAttributeById(Long id);
+	public Map<String,Object> deleteVarientCategoryAttributeById(Long id);
 
-	ApiResponse updateVarientCategoryAttribute(VarientCategoryAttributeRequest varientCategoryAttribute);
+	public Map<String,Object> updateVarientCategoryAttribute(VarientCategoryAttributeRequest varientCategoryAttribute);
 
-	ApiResponse deleteVarientCategoryById(Long id);
+	public Map<String,Object> deleteVarientCategoryById(Long id);
 
-	ApiResponse updateVarientCategory(VarientCategoryRequest varientCategory);
+	public Map<String,Object> updateVarientCategory(VarientCategoryRequest varientCategory);
 
-	VarientCategoryAttributeResponse getVarientCategoryAttributeById(Long id);
+	public Map<String,Object> getVarientCategoryAttributeById(Long id);
 
-	VarientCategoryReponse getVarientCategoryById(Long id);
+	public Map<String,Object> getVarientCategoryById(Long id);
+
+	public Map<String, Object> getAllVarient();
 
 }
