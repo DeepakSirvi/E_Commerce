@@ -26,5 +26,4 @@ public class CategoryRequest {
 	  private Long id;
 	private String categoryName;
 	private Set<SubCategoryRequest> subCategory = new HashSet<>();
-	private UserRequest user;
 }

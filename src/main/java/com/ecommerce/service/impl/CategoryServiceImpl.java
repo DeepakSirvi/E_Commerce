@@ -1,5 +1,8 @@
 package com.ecommerce.service.impl;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -77,24 +80,14 @@ public class CategoryServiceImpl implements CategoryService {
 	@Override
 	public CategoryResponse getCategoryById(Long id) {
 		Category category = categoryRepo.findById(id).orElseThrow(()->new BadRequestException(AppConstant.CATEGORY_NOT_FOUND));
-			CategoryResponse categoryResponse = new CategoryResponse();
-			categoryResponse.setId(category.getId());
-			categoryResponse.setCategoryName(category.getCategoryName());
-			
-			Set<SubCategory> subCategories = category.getSubCategory();
-			
-			Set<SubCategoryResponse> collect = subCategories.stream().map(subCat -> this.subCategoryToSubCategoryResponse(subCat)).collect(Collectors.toSet());
-			categoryResponse.setSubCategory(collect);
-			
-			
-			UserResponse user = new UserResponse(category.getUser().getId());
-			categoryResponse.setUser(user);			
+			CategoryResponse categoryResponse = categoryToCategoryResponse(category);	
 			return categoryResponse;
 			}
 	
 	
-			public SubCategoryResponse subCategoryToSubCategoryResponse(SubCategory s) {
+	public SubCategoryResponse subCategoryToSubCategoryResponse(SubCategory s) {
 				SubCategoryResponse response = new SubCategoryResponse();
+				response.setId(s.getId());
 				response.setSubCategory(s.getSubCategory());
 				return response;
 				}
@@ -102,9 +95,7 @@ public class CategoryServiceImpl implements CategoryService {
 	@Override
 	public SubCategoryResponse getSubCategoryById(Long id) {
 		SubCategory subCategory = subCategoryRepo.findById(id).orElseThrow(()->new BadRequestException(AppConstant.SUB_CATEGORY_NOT_FOUND));
-		SubCategoryResponse response = new SubCategoryResponse();
-		response.setId(subCategory.getId());
-		response.setSubCategory(subCategory.getSubCategory());
+		SubCategoryResponse response = subCategoryToSubCategoryResponse(subCategory);
 		return response;
 	}
 
@@ -153,6 +144,31 @@ public class CategoryServiceImpl implements CategoryService {
 		subCategory.setSubCategory(subCategoryRequest.getSubCategory());
 		subCategoryRepo.save(subCategory);	
 	    return new ApiResponse(Boolean.TRUE,AppConstant.SUBCATEGORY_UPDATED,HttpStatus.OK);
+	}
+
+	@Override
+	public Map<String, Object> getCategory() {
+		Map<String, Object> response = new HashMap<>();
+		List<Category> findAll = categoryRepo.findAll();	
+		Set<CategoryResponse> category= findAll.stream().map(categoryRes -> categoryToCategoryResponse(categoryRes)).collect(Collectors.toSet());
+		response.put("AllCategory", category);
+		return response;
+	}
+
+	private CategoryResponse categoryToCategoryResponse(Category category) {
+		CategoryResponse categoryResponse = new CategoryResponse();
+		categoryResponse.setId(category.getId());
+		categoryResponse.setCategoryName(category.getCategoryName());
+		
+		Set<SubCategory> subCategories = category.getSubCategory();
+		
+		Set<SubCategoryResponse> collect = subCategories.stream().map(subCat -> this.subCategoryToSubCategoryResponse(subCat)).collect(Collectors.toSet());
+		categoryResponse.setSubCategory(collect);
+		
+		
+		UserResponse user = new UserResponse(category.getUser().getId());
+		categoryResponse.setUser(user);			
+		return categoryResponse;
 	}
 
 
