@@ -1,11 +1,15 @@
 package com.ecommerce.service.impl;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.service.annotation.PutExchange;
 
 import com.ecommerce.exception.BadRequestException;
 import com.ecommerce.model.User;
@@ -36,7 +40,8 @@ public class VarientCategoryServiceImpl implements VarientCategoryService {
 	private AppUtils appUtils;
 	
 	@Override
-	public ApiResponse addVarientCategory(VarientCategoryRequest varientCategory) {
+	public Map<String, Object> addVarientCategory(VarientCategoryRequest varientCategory) {
+		 Map<String, Object> response = new HashMap<>();
 		if(varienCategoryRepo.existsByName(varientCategory.getName()))
 		{
 			   throw new BadRequestException( AppConstant.VARIENT_CATEGORY_NOT_FOUND);	
@@ -57,13 +62,15 @@ public class VarientCategoryServiceImpl implements VarientCategoryService {
 		  
 		  
 		  varienCategoryRepo.save(category);
-		  ApiResponse apiResponse = new ApiResponse(Boolean.TRUE,AppConstant.VARIENTCAT_ADDED);
-		  return apiResponse;
+		  ApiResponse apiResonse = new ApiResponse(Boolean.TRUE,AppConstant.VARIENTCAT_ADDED);
+		  response.put("response", apiResonse);
+		  return response;
 		  
 	}
 
 	@Override
-	public ApiResponse addVarientCategoryAttribute(VarientCategoryAttributeRequest varientCategoryAttribute) {
+	public Map<String, Object> addVarientCategoryAttribute(VarientCategoryAttributeRequest varientCategoryAttribute) {
+		 Map<String, Object> response = new HashMap<>();
 		VarientCategory varientCategory = new VarientCategory();
 		varientCategory.setId(varientCategoryAttribute.getVarientCategorys().getId());
 		if(attributeRepo.existsByAttributeNameAndVarientCategory(varientCategoryAttribute.getAttributeName(), varientCategory))
@@ -74,8 +81,9 @@ public class VarientCategoryServiceImpl implements VarientCategoryService {
 		attribute.setAttributeName(varientCategoryAttribute.getAttributeName());
 		attribute.setVarientCategory(varientCategory);
 		attributeRepo.save(attribute);
-		ApiResponse apiResponse = new ApiResponse(Boolean.TRUE,AppConstant.VARIENT_ATTRIBUTE_ADD);
-	    return apiResponse;
+		 ApiResponse apiResonse = new ApiResponse(Boolean.TRUE,AppConstant.VARIENT_ATTRIBUTE_ADD);
+		  response.put("response", apiResonse);
+		  return response;
 	}
 
 
@@ -83,29 +91,36 @@ public class VarientCategoryServiceImpl implements VarientCategoryService {
 	
 
 	@Override
-	public ApiResponse deleteVarientCategoryById(Long id) {
+	public Map<String, Object> deleteVarientCategoryById(Long id) {
+		 Map<String, Object> response = new HashMap<>();
 		VarientCategory varientCategory = varienCategoryRepo.findById(id).orElseThrow(()->new BadRequestException(AppConstant.VARIENT_CATEGORY_NOT_FOUND));
 		if(varientCategory.getCategoryAttributes().size()!=0)
 		{
 			throw new BadRequestException(AppConstant.DELETE_ALL_ATTRIBUTE);
 		}
 		varienCategoryRepo.deleteById(id);
-		return new ApiResponse(Boolean.TRUE,AppConstant.VARIENTCAT_DELETED);
+		ApiResponse apiResonse = new ApiResponse(Boolean.TRUE,AppConstant.VARIENTCAT_DELETED);
+		  response.put("response", apiResonse);
+		  return response;
 	}
 	
 	@Override
-	public ApiResponse deleteVarientCategoryAttributeById(Long id) {	
+	public Map<String, Object> deleteVarientCategoryAttributeById(Long id) {	
+		 Map<String, Object> response = new HashMap<>();
 		VarientCategoryAttribute categoryAttribute = attributeRepo.findById(id).orElseThrow(()->new BadRequestException(AppConstant.VARIENT_ATTRIBUTE_TAKEN));
 		if(categoryAttribute.getCategoryJoins().size()!=0)
 		{
 			throw new BadRequestException(AppConstant.DELETE_ALL_PRODUCT);
 		}
 		attributeRepo.deleteById(id);
-		return new ApiResponse(Boolean.TRUE,AppConstant.ATTRIBUTE_DELETED);
+		ApiResponse apiResonse = new ApiResponse(Boolean.TRUE,AppConstant.ATTRIBUTE_DELETED);
+		  response.put("response", apiResonse);
+		  return response;
 	}
 
 	@Override
-	public ApiResponse updateVarientCategory(VarientCategoryRequest varientCategoryRequest) {
+	public Map<String, Object> updateVarientCategory(VarientCategoryRequest varientCategoryRequest) {
+		 Map<String, Object> response = new HashMap<>();
 		VarientCategory varientCategory = varienCategoryRepo.findById(varientCategoryRequest.getId()).
 				                                     orElseThrow(()->new BadRequestException(AppConstant.VARIENT_CATEGORY_NOT_FOUND));
 		Optional.of(varienCategoryRepo.existsByNameAndIdNot(varientCategoryRequest.getName(),varientCategory.getId()))
@@ -114,11 +129,14 @@ public class VarientCategoryServiceImpl implements VarientCategoryService {
 	  
 		varientCategory.setName(varientCategoryRequest.getName());
 		varienCategoryRepo.save(varientCategory);
-		return new ApiResponse(Boolean.TRUE, AppConstant.VARIENTCAT_UPDATED);
+		ApiResponse apiResonse = new ApiResponse(Boolean.TRUE,AppConstant.VARIENTCAT_UPDATED);
+		  response.put("response", apiResonse);
+		  return response;
 	}
 	
 	@Override
-	public ApiResponse updateVarientCategoryAttribute(VarientCategoryAttributeRequest varientCategoryAttribute) {
+	public Map<String, Object> updateVarientCategoryAttribute(VarientCategoryAttributeRequest varientCategoryAttribute) {
+		 Map<String, Object> response = new HashMap<>();
 		VarientCategoryAttribute attribute = attributeRepo.findById(varientCategoryAttribute.getId()).orElseThrow(()->new BadRequestException(AppConstant.VARIENT_ATTIBUTE_NOT_FOUND));
 		
 		Optional.of(attributeRepo.existsByAttributeNameAndIdNot(varientCategoryAttribute.getAttributeName(),varientCategoryAttribute.getId()))
@@ -126,35 +144,30 @@ public class VarientCategoryServiceImpl implements VarientCategoryService {
 		
 		attribute.setAttributeName(varientCategoryAttribute.getAttributeName());
 	    attributeRepo.save(attribute);
-		return new ApiResponse(Boolean.TRUE,AppConstant.VARIENT_ATTRIBUTE_UPDATE);
+	    ApiResponse apiResonse = new ApiResponse(Boolean.TRUE,AppConstant.VARIENT_ATTRIBUTE_UPDATE);
+		  response.put("response", apiResonse);
+		  return response;
 	}
 
 	@Override
-	public VarientCategoryAttributeResponse getVarientCategoryAttributeById(Long id) {
+	public Map<String, Object> getVarientCategoryAttributeById(Long id) {
+		 Map<String, Object> response = new HashMap<>();
 		VarientCategoryAttribute varientCategoryAttribute = attributeRepo.findById(id).orElseThrow(()->new BadRequestException(AppConstant.VARIENT_ATTIBUTE_NOT_FOUND));
 		
-		VarientCategoryAttributeResponse response = new VarientCategoryAttributeResponse();
-		response.setId(varientCategoryAttribute.getId());
-		response.setAttributeName(varientCategoryAttribute.getAttributeName());
+		VarientCategoryAttributeResponse responseAttribute = attributeToAttributResponse(varientCategoryAttribute);
+		response.put("varientAttribute", responseAttribute);
 		return response;
 	}
 
 	@Override
-	public VarientCategoryReponse getVarientCategoryById(Long id) {
+	public Map<String, Object> getVarientCategoryById(Long id) {
+		 Map<String, Object> response = new HashMap<>();
 		VarientCategory varientCategory = varienCategoryRepo.findById(id).orElseThrow(()->new BadRequestException(AppConstant.VARIENT_CATEGORY_NOT_FOUND));
 		
 		
-		VarientCategoryReponse varientCategoryReponse = new  VarientCategoryReponse();
-		varientCategoryReponse.setId(id);
-		varientCategoryReponse.setName(varientCategory.getName());
-		varientCategoryReponse.setUser(new UserResponse(varientCategory.getUser().getId()));
-		
-		
-		Set<VarientCategoryAttributeResponse> collect = varientCategory.getCategoryAttributes().
-				stream().map(attribute -> attributeToAttributResponse(attribute)).collect(Collectors.toSet());
-		varientCategoryReponse.setCategoryAttributes(collect);
-		
-		return varientCategoryReponse;
+		VarientCategoryReponse varientCategoryReponse = varientCategoryToResponse(varientCategory);
+		response.put("varientCategory", varientCategoryReponse);
+		return response;
 	}
 
 	private VarientCategoryAttributeResponse attributeToAttributResponse(VarientCategoryAttribute attribute) {
@@ -162,6 +175,31 @@ public class VarientCategoryServiceImpl implements VarientCategoryService {
 		attributeResponse.setId(attribute.getId());
 		attributeResponse.setAttributeName(attribute.getAttributeName());
 		return attributeResponse;
+	}
+
+	@Override
+	public Map<String, Object> getAllVarient() {
+		 Map<String, Object> response = new HashMap<>();
+		 List<VarientCategory> findAll = varienCategoryRepo.findAll();
+		
+		 Set<VarientCategoryReponse> varientCategoryReponses = findAll.stream().map(category -> varientCategoryToResponse(category)).collect(Collectors.toSet());
+		 response.put("AllVarientCategory", varientCategoryReponses);
+		return response;
+	}
+
+	private VarientCategoryReponse varientCategoryToResponse(VarientCategory varientCategory) {
+		
+		
+		VarientCategoryReponse varientCategoryReponse = new  VarientCategoryReponse();
+		varientCategoryReponse.setId(varientCategory.getId());
+		varientCategoryReponse.setName(varientCategory.getName());
+		varientCategoryReponse.setUser(new UserResponse(varientCategory.getUser().getId()));
+		
+		
+		Set<VarientCategoryAttributeResponse> collect = varientCategory.getCategoryAttributes().
+				stream().map(attribute -> attributeToAttributResponse(attribute)).collect(Collectors.toSet());
+		varientCategoryReponse.setCategoryAttributes(collect);
+		return varientCategoryReponse;
 	}
 
 }
