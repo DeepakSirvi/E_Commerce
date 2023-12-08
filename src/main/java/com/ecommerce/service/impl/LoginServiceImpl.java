@@ -83,6 +83,7 @@ public class LoginServiceImpl implements LoginService {
 		if(loginRepo.existsByPhoneNumber(loginRequest.getMobileNumber()))
 		{
 			Optional<Login> login = loginRepo.findByPhoneNumberAndOtp(loginRequest.getMobileNumber(), loginRequest.getOtp());
+			System.err.println(login.get());
 			if(login.isPresent()) {
 				
 				if(login.get().getExperiedAt().compareTo(LocalDateTime.now())>=0){
