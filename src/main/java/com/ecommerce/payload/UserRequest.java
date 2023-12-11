@@ -21,6 +21,12 @@ import lombok.Setter;
 @JsonInclude(Include.NON_NULL)
 public class UserRequest {
 	
+	public UserRequest(Long userId2) {
+		// TODO Auto-generated constructor stub
+		this.userId=userId2;
+	}
+
+
 	private Long userId;
 
 	@NotBlank
