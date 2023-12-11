@@ -26,6 +26,5 @@ public class VarientCategoryRequest {
 	private Long id;
 	private String name;
 	private Set<VarientCategoryAttributeRequest> categoryAttributes=new HashSet<>();
-	private UserRequest user;
 
 }

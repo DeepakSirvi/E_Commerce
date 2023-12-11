@@ -25,6 +25,4 @@ public class VarientCategoryAttributeRequest {
 	private Long id;
 	private String attributeName;
 	private VarientCategoryRequest varientCategorys;
-	private Set<VarientCategoryJoinRequest> categoryJoins = new HashSet<>();
-
 }

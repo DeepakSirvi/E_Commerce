@@ -1,10 +1,11 @@
 package com.ecommerce.service.impl;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,15 +16,18 @@ import com.ecommerce.exception.BadRequestException;
 import com.ecommerce.model.Category;
 import com.ecommerce.model.MapProductDescription;
 import com.ecommerce.model.Product;
-import com.ecommerce.model.ProductImage;
+import com.ecommerce.model.ProductDescription;
 import com.ecommerce.model.SubCategory;
 import com.ecommerce.model.User;
-import com.ecommerce.model.Varient;
-import com.ecommerce.model.VarientCategoryJoin;
 import com.ecommerce.payload.ApiResponse;
+import com.ecommerce.payload.MapProductDescriptionRequest;
+import com.ecommerce.payload.MapProductDescriptionResponse;
 import com.ecommerce.payload.PageResponse;
+import com.ecommerce.payload.ProductDescriptionRequest;
+import com.ecommerce.payload.ProductDescriptionResponse;
 import com.ecommerce.payload.ProductRequest;
 import com.ecommerce.payload.ProductResponse;
+import com.ecommerce.payload.UserResponse;
 import com.ecommerce.repository.ProductRepo;
 import com.ecommerce.repository.SubCategoryRepo;
 import com.ecommerce.service.ProductService;
@@ -38,49 +42,69 @@ public class ProductServiceImpl implements ProductService {
 
 	@Autowired 
 	private SubCategoryRepo categoryRepo;
-	
-	@Autowired
-	private ModelMapper mapper;
+
 	
 	@Autowired
 	private AppUtils appUtils;
 	
 	@Override
-	public ApiResponse addProduct(ProductRequest productRequest) {
-		Product product = mapper.map(productRequest, Product.class);
+	public Map<String, Object> addProduct(ProductRequest productRequest) {
 		
-		User user = new User();
-		user.setId(appUtils.getUserId());
-		product.setVendor(user);
-		
-		product.getDescription().setProduct(product);
-		
-		for(MapProductDescription productDescription :product.getDescription().getMapProductDescriptions()) {
-			productDescription.setProductDescription(product.getDescription());
-		}
-		
-		for(Varient varient: product.getVarient())
-		{
-			varient.setProduct(product);
-			for(ProductImage productImage:varient.getProductImage())
-			{
-				productImage.setVarientImage(varient);
+		if(productRepo.existsByProductName(productRequest.getProductName())){
+			throw new BadRequestException(AppConstant.PRODUCT_NAME_TAKEN);
 			}
-			
-			for(VarientCategoryJoin varientCategoryJoin:varient.getCategoryJoins())
-			{
-				varientCategoryJoin.setVarient(varient);
-			}
-		}
+		Map<String, Object> response = new HashMap<>();
+		Product product = productRequestToProduct(productRequest);
 
-        System.out.println(productRequest.getVarient().toString());
-		productRepo.save(product);
+		Product product1 = productRepo.save(product);
 		ApiResponse apiResponse = new ApiResponse(Boolean.TRUE, AppConstant.PRODUCT_ADDED);
-		return apiResponse;
+		response.put("response", apiResponse);
+		response.put("product",productToProductResponse(product1));
+		return response;
 		
 		
 
 		
+	}
+
+	private Product productRequestToProduct(ProductRequest productRequest) {
+		Product product= new Product();
+		
+		product.setVendor(new User(appUtils.getUserId()));
+		product.setProductName(productRequest.getProductName());
+		product.setListingStatus(productRequest.getListingStatus());
+		product.setBrand(productRequest.getBrand());
+		product.setFullfillmentBy(productRequest.getFullfillmentBy());
+		product.setShippingProvider(productRequest.getShippingProvider());
+		product.setDeliveryCharge(productRequest.getDeliveryCharge());
+		product.setProductWeight(productRequest.getProductWeight());
+		product.setProductHeight(productRequest.getProductHeight());
+		product.setProductWidth(productRequest.getProductWidth());
+		product.setProductLength(productRequest.getProductLength());	
+		product.setTaxCode(productRequest.getTaxCode());
+		product.setCountryOfOrigin(productRequest.getCountryOfOrigin());
+		product.setProductType(productRequest.getProductType());
+
+		ProductDescription productDescription = descriptionRequestToDescription(productRequest.getDescription());	
+		product.setDescription(productDescription);
+		
+		return product;
+	}
+
+	private ProductDescription descriptionRequestToDescription(ProductDescriptionRequest description) {
+		ProductDescription productDescription =new ProductDescription();
+		productDescription.setDescription(description.getDescription());
+		Set<MapProductDescription> mapProductDescription = description.getMapProductDescriptions().stream()
+														.map(mapDescription -> mapDescritionRequestToMapDescription(mapDescription)).collect(Collectors.toSet());
+		productDescription.setMapProductDescriptions(mapProductDescription);
+		return productDescription;
+	}
+
+	private MapProductDescription mapDescritionRequestToMapDescription(MapProductDescriptionRequest mapDescription) {
+		MapProductDescription mapProductDescription = new MapProductDescription();
+		mapProductDescription.setTitle(mapDescription.getTitle());
+		mapProductDescription.setDetails(mapDescription.getDetails());
+		return mapProductDescription;
 	}
 
 	@Override
@@ -108,8 +132,40 @@ public class ProductServiceImpl implements ProductService {
 	private ProductResponse productToProductResponse(Product product) {
 		ProductResponse response = new ProductResponse();
 		response.setId(product.getId());
+		response.setVendor(new UserResponse(appUtils.getUserId()));
+		response.setProductName(product.getProductName());
+		response.setListingStatus(product.getListingStatus());
+		response.setBrand(product.getBrand());
+		response.setFullfillmentBy(product.getFullfillmentBy());
+		response.setShippingProvider(product.getShippingProvider());
+		response.setDeliveryCharge(product.getDeliveryCharge());
+		response.setProductWeight(product.getProductWeight());
+		response.setProductHeight(product.getProductHeight());
+		response.setProductWidth(product.getProductWidth());
+		response.setProductLength(product.getProductLength());	
+		response.setTaxCode(product.getTaxCode());
+		response.setCountryOfOrigin(product.getCountryOfOrigin());
+		response.setProductType(product.getProductType());
 		
+		ProductDescriptionResponse productDescription = descriptionToDescriptionResponse(product.getDescription());		
+		response.setDescription(productDescription);
 		return response;
+	}
+
+	private ProductDescriptionResponse descriptionToDescriptionResponse(ProductDescription description) {
+		ProductDescriptionResponse productDescription =new ProductDescriptionResponse();
+		productDescription.setDescription(description.getDescription());
+		Set<MapProductDescriptionResponse> mapProductDescription = description.getMapProductDescriptions().stream()
+														.map(mapDescription -> mapDescriptionToMapDescriptionResponse(mapDescription)).collect(Collectors.toSet());
+		productDescription.setMapProductDescriptions(mapProductDescription);
+		return productDescription;
+	}
+
+	private MapProductDescriptionResponse mapDescriptionToMapDescriptionResponse(MapProductDescription mapDescription) {
+		MapProductDescriptionResponse mapProductDescription = new MapProductDescriptionResponse();
+		mapProductDescription.setTitle(mapDescription.getTitle());
+		mapProductDescription.setDetails(mapDescription.getDetails());
+		return mapProductDescription;
 	}
 
 	@Override
@@ -137,17 +193,7 @@ public class ProductServiceImpl implements ProductService {
 		if(!product.getListingStatus()) {
 			throw new BadRequestException(AppConstant.PRODUCT_DEACTIVE);
 			}
-		
-		
-		ProductResponse productResponse = new ProductResponse();
-		productResponse.setId(productId);		
-		productResponse.setProductName(product.getProductName());
-		productResponse.setListingStatus(product.getListingStatus());
-		productResponse.setBrand(product.getBrand());
-		productResponse.setFullfillmentBy(product.getFullfillmentBy());
-		productResponse.setShippingPovider(product.getShippingProvider());
-		productResponse.setDeliveryCharge(product.getDeliveryCharge());
-		;
+		ProductResponse productResponse = productToProductResponse(product);
 		return productResponse;
 	}
 
