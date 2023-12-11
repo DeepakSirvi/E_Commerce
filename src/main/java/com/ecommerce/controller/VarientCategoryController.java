@@ -23,10 +23,8 @@ import com.ecommerce.service.VarientService;
 @RestController
 @RequestMapping("ecommerce/varient")
 @CrossOrigin
-public class VarientController {
+public class VarientCategoryController {
 	
-	@Autowired
-	private VarientService varient;
 	
 	@Autowired
 	private  VarientCategoryService varientCategoryService;

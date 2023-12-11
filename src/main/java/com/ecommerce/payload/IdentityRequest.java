@@ -1,8 +1,14 @@
 package com.ecommerce.payload;
 
+import com.ecommerce.model.Status;
+import com.ecommerce.model.User;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,4 +25,6 @@ public class IdentityRequest {
 	private String idCardNumber;
 	private String description;
 	private String image;
+	private Status status;
+	
 }

@@ -31,6 +31,7 @@ public class Product extends Audit {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
+	@Column(unique = true)
 	private String productName;
 	private Boolean listingStatus;
 	@Column(nullable = false)

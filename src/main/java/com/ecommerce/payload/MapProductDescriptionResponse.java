@@ -1,6 +1,6 @@
 package com.ecommerce.payload;
 
-import java.util.Set;
+import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -15,13 +15,9 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(Include.NON_NULL)
-public class ProductDescriptionResponse {
-	
-
+public class MapProductDescriptionResponse {
 
 	private Long id;
-	private String description;
-    private Set<MapProductDescriptionResponse> mapProductDescriptions;
-	private ProductResponse product;
-
+	private String title;
+    private Map<String, String> details;
 }

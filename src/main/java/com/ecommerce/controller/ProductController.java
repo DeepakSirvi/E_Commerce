@@ -1,5 +1,7 @@
 package com.ecommerce.controller;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,8 +30,8 @@ public class ProductController {
 	private ProductService productService;
 	
 	@PostMapping("/admin")
-	public ResponseEntity<ApiResponse> createProduct(@RequestBody ProductRequest productRequest ){
-		return new ResponseEntity<ApiResponse>(productService.addProduct(productRequest),HttpStatus.CREATED);
+	public ResponseEntity<Map<String, Object>> createProduct(@RequestBody ProductRequest productRequest ){
+		return new ResponseEntity<Map<String, Object>>(productService.addProduct(productRequest),HttpStatus.CREATED);
 	}
 	
 	@GetMapping("/ByCategory/{categoryId}/{subCategoryId}")
