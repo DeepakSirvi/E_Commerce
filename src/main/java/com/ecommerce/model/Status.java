@@ -9,7 +9,7 @@ public enum Status {
 	APPROVED,
 	REJECTED,
 	Delivered,
-	PICKUP, BLOCK,
+	PICKUP, BLOCK, INACTIVE,
 	
 	
 

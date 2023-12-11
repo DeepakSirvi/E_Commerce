@@ -1,5 +1,7 @@
 package com.ecommerce.payload;
 
+import com.ecommerce.model.Status;
+import com.ecommerce.model.User;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -21,6 +23,9 @@ public class AccountRequest {
 	private String bankIFSCcode;
 	private String venderGSTnumber;
 	private String panNumber;
+	private Status status;
+	private UserRequest user;
+
 
 
 

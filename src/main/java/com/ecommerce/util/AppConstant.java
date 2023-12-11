@@ -68,6 +68,16 @@ public class AppConstant {
 	public static final String AVAILABLE_STOCK = "Product is out of avalibility";
 	public static final Object PRODUCT_ADD_TO_CART = "This product is added to card ";
 	public static final Object PRODUCT_REMOVE = "Product successfully remove";
+	public static final String ACCOUNT_NUMBER_TAKEN ="Account number is already in use";
+	public static final String ACCOUNT_NOT_FOUND = "Account not found";
+	public static final String ERROR_UPDATING_ACCOUNT_STATUS = "Error updating account status";
+	public static final String ACCOUNT_DEACTIVATED = "Account Deactivated";
+	public static final String ACCOUNT_ACTIVATED = "Account Activated";
+	public static final String ACCOUNT_FOUND = "ACCOUNT_FOUND";
+	public static final Object ACCOUNTS_FOUND = "Accounts found";
+	public static final Object NO_ACCOUNTS_FOUND = "No accounts found";
+	
+	
 	
 	
 	

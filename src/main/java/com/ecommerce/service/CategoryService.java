@@ -16,12 +16,12 @@ public interface CategoryService {
 
    public SubCategoryResponse getSubCategoryById(Long id);
 
-public ApiResponse deleteSubCategoryById(Long id);
+   public ApiResponse deleteSubCategoryById(Long id);
 
-public ApiResponse updateCategory(CategoryRequest categoryRequest);
+    public ApiResponse updateCategory(CategoryRequest categoryRequest);
 
-public ApiResponse updateSubCategory(SubCategoryRequest subCategoryRequest);
+    public ApiResponse updateSubCategory(SubCategoryRequest subCategoryRequest);
 
-public ApiResponse deleteCategoryById(Long id);
+    public ApiResponse deleteCategoryById(Long id);
 
 }

@@ -28,6 +28,7 @@ public class AppUtils {
 		{
 		   String token = httpRequest.getHeader("Authorization");
 		   return jwtUtils.getUserIdFromToken(token);
+		   
 		}
 		else
 		{
