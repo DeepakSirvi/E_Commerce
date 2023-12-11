@@ -35,6 +35,7 @@ public class Varient extends Audit {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 
 	private Long id;
+	@Column(unique = true)
 	private String varientName;
 	private Float price;
 	private Integer stock;

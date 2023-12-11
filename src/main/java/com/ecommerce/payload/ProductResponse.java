@@ -22,7 +22,7 @@ public class ProductResponse {
 	private Boolean listingStatus;
 	private String brand;
 	private String fullfillmentBy;
-	private String shippingPovider;
+	private String shippingProvider;
 	private Float deliveryCharge;
 	private Float productWeight;
 	private Float productLength;
@@ -33,7 +33,7 @@ public class ProductResponse {
 	private String productType;
     
 	private UserResponse vendor;
-	private Set<SubCategoryResponse> subCategory;
+	private SubCategoryResponse subCategory;
 	private Set<VarientResponse> varient;
-	private Set<ProductDescriptionResponse> description;
+	private ProductDescriptionResponse description;
 }

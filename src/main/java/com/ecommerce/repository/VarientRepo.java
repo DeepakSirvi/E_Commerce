@@ -6,4 +6,6 @@ import com.ecommerce.model.Varient;
 
 public interface VarientRepo extends JpaRepository<Varient, Long> {
 
+	public boolean existsByVarientName(String varientName);
+
 }

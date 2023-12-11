@@ -33,7 +33,7 @@ public class SecurityFilter extends OncePerRequestFilter {
 
 		try {
 			RequestContextHolder.setRequest(request);
-			String token = request.getHeader("Authorization");
+			String token = request.getParameter("Authorization");
 			if (token != null) {
 				String userName = jwtUtil.getUserName(token);
 				if (userName != null && SecurityContextHolder.getContext().getAuthentication() == null) {

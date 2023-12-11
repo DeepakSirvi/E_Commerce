@@ -1,7 +1,5 @@
 package com.ecommerce.payload;
 
-import java.util.Set;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -33,9 +31,7 @@ public class ProductRequest {
 	private String taxCode;
 	private String countryOfOrigin;
 	private String productType;
-    
-	private SubCategoryRequest subCategory;
-	private Set<VarientRequest> varient;
+    private SubCategoryRequest subCategory;
 	private ProductDescriptionRequest description;
 
 }

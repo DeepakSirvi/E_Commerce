@@ -68,6 +68,10 @@ public class AppConstant {
 	public static final String AVAILABLE_STOCK = "Product is out of avalibility";
 	public static final Object PRODUCT_ADD_TO_CART = "This product is added to card ";
 	public static final Object PRODUCT_REMOVE = "Product successfully remove";
+	public static final String PRODUCT_NAME_TAKEN = "This product name is already taken";
+	public static final String VARIENT_TAKEN = "Varient Name is taken ";
+	public static final String PRODUCT_IMAGE_PATH = "productImage";
+	public static final String VARIENT_ADDED = "Varient added successfully";
 	
 	
 	
