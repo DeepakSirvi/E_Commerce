@@ -45,6 +45,7 @@ public class AuthController {
 	
 	@PostMapping("/login")
 	public ResponseEntity<UserResponse> loginUserWithMobile(@RequestBody LoginRequest loginRequest){
+		System.err.println("lOGIN");
 		return new ResponseEntity<UserResponse>(loginService.loginUser(loginRequest),HttpStatus.OK);
 	}
 	
