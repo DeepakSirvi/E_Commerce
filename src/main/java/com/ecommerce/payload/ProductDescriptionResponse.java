@@ -21,7 +21,7 @@ public class ProductDescriptionResponse {
 
 	private Long id;
 	private String description;
-    private Set<MapProductDescriptionResponse> mapProductDescriptions;
+//    private Set<MapProductDescriptionResponse> mapProductDescriptions;
 	private ProductResponse product;
 
 }

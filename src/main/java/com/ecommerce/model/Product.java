@@ -40,11 +40,11 @@ public class Product extends Audit {
 	private String brand;
 	private String fullfillmentBy;
 	private String shippingProvider;
-	private Float deliveryCharge;
-	private Float productWeight;
-	private Float productLength;
-	private Float productWidth;
-	private Float productHeight;
+	private String deliveryCharge;
+	private String productWeight;
+	private String productLength;
+	private String productWidth;
+	private String productHeight;
 	private String taxCode;
 	private String countryOfOrigin;
 	private String productType;
