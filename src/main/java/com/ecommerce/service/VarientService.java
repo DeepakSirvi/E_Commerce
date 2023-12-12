@@ -1,5 +1,6 @@
 package com.ecommerce.service;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -8,7 +9,7 @@ import com.ecommerce.payload.VarientRequest;
 
 public interface VarientService {
 
-	public Map<String, Object> createVarient(VarientRequest varientRequest, MultipartFile[] image);
+	public Map<String, Object> createVarient(VarientRequest varientRequest, List<MultipartFile> multipartFiles);
 
 	public Map<String, Object> updateVarient(VarientRequest varientRequest);
 

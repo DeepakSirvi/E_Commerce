@@ -13,7 +13,7 @@ public interface ProductService {
 
 	public PageResponse<ProductResponse> getProductBySubCategory(Long id, Long subId, Integer page, Integer size);
 
-	public PageResponse<ProductResponse> getAllProduct(Integer page, Integer size);
+	public PageResponse<ProductResponse> getAllProduct(Integer page, Integer size,ProductRequest productRequest);
 
 	public ProductResponse getProduct(Long productId);
 	

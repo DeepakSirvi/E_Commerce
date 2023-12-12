@@ -37,7 +37,6 @@ public class CartServiceImpl implements CartService {
 		if(cart.isPresent()) {
 			cart2 = cart.get();
 			Integer q = cart2.getQuantity()+quantity;
-					
 			if(q>cart2.getVarient().getStock())
 				throw new BadRequestException(AppConstant.AVAILABLE_STOCK +" "+ cart2.getVarient().getStock());			
 		
