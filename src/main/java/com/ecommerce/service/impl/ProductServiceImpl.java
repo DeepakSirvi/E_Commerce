@@ -20,6 +20,7 @@ import com.ecommerce.model.Category;
 import com.ecommerce.model.MapProductDescription;
 import com.ecommerce.model.Product;
 import com.ecommerce.model.ProductDescription;
+import com.ecommerce.model.Status;
 import com.ecommerce.model.SubCategory;
 import com.ecommerce.model.User;
 import com.ecommerce.payload.ApiResponse;
@@ -87,8 +88,11 @@ public class ProductServiceImpl implements ProductService {
 		product.setTaxCode(productRequest.getTaxCode());
 		product.setCountryOfOrigin(productRequest.getCountryOfOrigin());
 		product.setProductType(productRequest.getProductType());
+		product.setVerified(Status.UNVERIFIED);
+		product.setSubCategory(new SubCategory(productRequest.getSubCategory().getId()));
 
-		ProductDescription productDescription = descriptionRequestToDescription(productRequest.getDescription());	
+		ProductDescription productDescription = descriptionRequestToDescription(productRequest.getDescription());
+		productDescription.setProduct(product);
 		product.setDescription(productDescription);
 		
 		return product;
@@ -97,18 +101,18 @@ public class ProductServiceImpl implements ProductService {
 	private ProductDescription descriptionRequestToDescription(ProductDescriptionRequest description) {
 		ProductDescription productDescription =new ProductDescription();
 		productDescription.setDescription(description.getDescription());
-		Set<MapProductDescription> mapProductDescription = description.getMapProductDescriptions().stream()
+	/*	Set<MapProductDescription> mapProductDescription = description.getMapProductDescriptions().stream()
 														.map(mapDescription -> mapDescritionRequestToMapDescription(mapDescription)).collect(Collectors.toSet());
-		productDescription.setMapProductDescriptions(mapProductDescription);
+		productDescription.setMapProductDescriptions(mapProductDescription);*/
 		return productDescription;
 	}
 
-	private MapProductDescription mapDescritionRequestToMapDescription(MapProductDescriptionRequest mapDescription) {
-		MapProductDescription mapProductDescription = new MapProductDescription();
-		mapProductDescription.setTitle(mapDescription.getTitle());
-		mapProductDescription.setDetails(mapDescription.getDetails());
-		return mapProductDescription;
-	}
+//	private MapProductDescription mapDescritionRequestToMapDescription(MapProductDescriptionRequest mapDescription) {
+//		MapProductDescription mapProductDescription = new MapProductDescription();
+//		mapProductDescription.setTitle(mapDescription.getTitle());
+//		mapProductDescription.setDetails(mapDescription.getDetails());
+//		return mapProductDescription;
+//	}
 
 	@Override
 	public PageResponse<ProductResponse> getProductBySubCategory(Long id, Long subId, Integer page, Integer size) {
@@ -159,9 +163,9 @@ public class ProductServiceImpl implements ProductService {
 	private ProductDescriptionResponse descriptionToDescriptionResponse(ProductDescription description) {
 		ProductDescriptionResponse productDescription =new ProductDescriptionResponse();
 		productDescription.setDescription(description.getDescription());
-		Set<MapProductDescriptionResponse> mapProductDescription = description.getMapProductDescriptions().stream()
+/*	Set<MapProductDescriptionResponse> mapProductDescription = description.getMapProductDescriptions().stream()
 														.map(mapDescription -> mapDescriptionToMapDescriptionResponse(mapDescription)).collect(Collectors.toSet());
-		productDescription.setMapProductDescriptions(mapProductDescription);
+		productDescription.setMapProductDescriptions(mapProductDescription);*/
 		return productDescription;
 	}
 
