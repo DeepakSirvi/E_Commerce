@@ -3,6 +3,7 @@ package com.ecommerce.service;
 
 import java.util.Map;
 
+import com.ecommerce.model.Account;
 import com.ecommerce.model.Status;
 import com.ecommerce.payload.AccountRequest;
 import com.ecommerce.payload.ApiResponse;
@@ -18,10 +19,9 @@ public interface AccountService {
   public  Map<String, Object> getAllAccountsByUserId(Long userId);
   
   public  Map<String, Object> getAccountByStatusAndUserId(Long userId, Status status);
-   
+  
+  public  Map<String, Object> updateAccountDetailsById(Long accountId, Account updatedDetails);
  
-  
-  
   
   
   
