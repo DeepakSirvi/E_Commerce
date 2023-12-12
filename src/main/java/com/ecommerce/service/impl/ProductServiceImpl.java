@@ -7,6 +7,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.ExampleMatcher.StringMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -147,7 +150,8 @@ public class ProductServiceImpl implements ProductService {
 		response.setCountryOfOrigin(product.getCountryOfOrigin());
 		response.setProductType(product.getProductType());
 		
-		ProductDescriptionResponse productDescription = descriptionToDescriptionResponse(product.getDescription());		
+		ProductDescriptionResponse productDescription = descriptionToDescriptionResponse(product.getDescription());
+		
 		response.setDescription(productDescription);
 		return response;
 	}
@@ -169,12 +173,20 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public PageResponse<ProductResponse> getAllProduct(Integer page, Integer size) {
+	public PageResponse<ProductResponse> getAllProduct(Integer page, Integer size,ProductRequest productRequest) {
 		AppUtils.validatePageAndSize(page, size);
-		Pageable pageable = PageRequest.of(page, size);	
-	    Page<Product> productSet =productRepo.findByListingStatus(true,pageable);		
+		ExampleMatcher exampleMatcher = ExampleMatcher.matching()
+				.withIgnoreNullValues()
+				.withStringMatcher(StringMatcher.EXACT.CONTAINING)
+				.withIgnoreCase()
+				.withMatcher("id", match->match.transform(value->value.map(id->(((Long)id).intValue()==0)?null:((Long)id).intValue())));
+		Example<Product> example = Example.of(productRequestToProduct(productRequest), exampleMatcher);
 		
-	    Set<ProductResponse> productResponses = productSet.getContent().stream().map(product -> productToProductResponse(product)
+		
+		Pageable pageable = PageRequest.of(page, size);	
+	    Page<Product> productSet =productRepo.findByListingStatus(true,example,pageable);		
+		
+	    Set<ProductResponse> productResponses = productSet.getContent().stream().map(product -> productToProductResponseList(product)
 	    		).collect(Collectors.toSet());
 		PageResponse<ProductResponse> pageResponse = new PageResponse<>();
 		pageResponse.setContent(productResponses);
@@ -186,6 +198,18 @@ public class ProductServiceImpl implements ProductService {
 		pageResponse.setFirst(productSet.isFirst());
 		return pageResponse;
 	}
+
+	private ProductResponse productToProductResponseList(Product product) {
+		ProductResponse response = new ProductResponse();
+		response.setId(product.getId());
+		response.setVendor(new UserResponse(appUtils.getUserId()));
+		response.setProductName(product.getProductName());
+		response.setListingStatus(product.getListingStatus());
+		response.setBrand(product.getBrand());
+		response.setCountryOfOrigin(product.getCountryOfOrigin());
+		response.setProductType(product.getProductType());
+		return response;
+		}
 
 	@Override
 	public ProductResponse getProduct(Long productId) {

@@ -80,6 +80,8 @@ public class AppConstant {
 	public static final String VARIENT_TAKEN = "Varient Name is taken ";
 	public static final String PRODUCT_IMAGE_PATH = "productImage";
 	public static final String VARIENT_ADDED = "Varient added successfully";
+	public static final String VARIENT_NOT_FOUND = "Varient not found";
+	public static final String STATUS_UPDATE = "Status is sucessfully update";
 	
 	
 	

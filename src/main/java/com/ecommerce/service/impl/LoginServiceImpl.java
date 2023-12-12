@@ -1,6 +1,9 @@
 package com.ecommerce.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -12,6 +15,7 @@ import com.ecommerce.exception.BadRequestException;
 import com.ecommerce.model.Login;
 import com.ecommerce.model.Status;
 import com.ecommerce.model.User;
+import com.ecommerce.model.UserRole;
 import com.ecommerce.payload.LoginRequest;
 import com.ecommerce.payload.OtpResponse;
 import com.ecommerce.payload.UserResponse;
@@ -22,6 +26,7 @@ import com.ecommerce.service.LoginService;
 import com.ecommerce.util.AppConstant;
 import com.ecommerce.util.AppUtils;
 import com.ecommerce.util.JwtUtils;
+import com.ecommerce.util.UserRoleComparator;
 
 @Service
 public class LoginServiceImpl implements LoginService {
@@ -101,8 +106,8 @@ public class LoginServiceImpl implements LoginService {
 					currentUser.setUserRole( user.get().getUserRole().stream()
 			                .map(userRole -> modelMapper.map(userRole, UserRoleResponse.class))
 			                .collect(Collectors.toSet()));
-					
-					
+//					 List<UserRole> stringList =new ArrayList<>(currentUser.getUserRole());
+//					Collections.sort(stringList,new UserRoleComparator());
 					currentUser.setToken(jwtUtils.generateToken(login.get().getPhoneNumber(),currentUser.getId()));	
 					return currentUser;
 					

@@ -46,12 +46,12 @@ public class ProductController {
 	}
 	
 	@GetMapping("/")
-	public ResponseEntity<PageResponse<ProductResponse>> getAllProduct(
+	public ResponseEntity<PageResponse<ProductResponse>> getAllProduct(@RequestBody ProductRequest productRequest,
 			@RequestParam(value = "page", required = false, defaultValue =  AppConstant.DEFAULT_PAGE_NUMBER) Integer page,
 			@RequestParam(value = "size", required = false, defaultValue = AppConstant.DEFAULT_PAGE_SIZE) Integer size)
 	{
 		
-		PageResponse<ProductResponse> pageResponse=productService.getAllProduct(page,size);
+		PageResponse<ProductResponse> pageResponse=productService.getAllProduct(page,size,productRequest);
 		return new ResponseEntity<>(pageResponse,HttpStatus.OK);
 	}
 	

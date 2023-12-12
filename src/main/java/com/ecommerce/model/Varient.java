@@ -1,5 +1,6 @@
 package com.ecommerce.model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import jakarta.persistence.CascadeType;
@@ -51,7 +52,7 @@ public class Varient extends Audit {
 	private Set<VarientCategoryJoin> categoryJoins;
 	
 	@OneToMany(mappedBy = "varientImage",cascade = CascadeType.ALL)
-	private Set<ProductImage> productImage;
+	private Set<ProductImage> productImage = new HashSet<>();
 	
 	@OneToMany(mappedBy = "varient") 
 	private Set<Cart> cart;

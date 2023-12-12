@@ -16,6 +16,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ecommerce.exception.BadRequestException;
+import com.ecommerce.model.Status;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -26,7 +27,7 @@ public class AppUtils {
 	@Autowired
 	private JwtUtils jwtUtils;
 	
-	@Value("${path}")
+	@Value("${app.path}")
 	private String path;
 	
    
@@ -64,21 +65,28 @@ public class AppUtils {
 		}
 	}
      
-     public String uploadImage(MultipartFile file,String dir) {
+     public String uploadImage(MultipartFile file,String dir,String uuid) {
  		String currentDir = System.getProperty("user.dir") + path +File.separator+dir + File.separator;
- 		System.out.println(currentDir);
  	    String originalFilename = StringUtils.cleanPath(file.getOriginalFilename());
- 	    String	uuid = UUID.randomUUID().toString();
+ 	    if(!Objects.nonNull(uuid))
+ 	   	uuid = UUID.randomUUID().toString();
  		String randomName =  uuid.concat(originalFilename.substring(originalFilename.lastIndexOf(".")));
- 		System.out.println(randomName);
+ 		System.out.println(currentDir +randomName);
  		try {
  			Files.copy(file.getInputStream(),Paths.get(currentDir , randomName), StandardCopyOption.REPLACE_EXISTING);
  		} catch (IOException e) {
  			//e.printStackTrace();
  		}
- 		System.out.println(randomName);
  		return dir+File.separator+randomName;
  	}
+     
+     public void validateStatusTransition(Status currentStatus, Status newStatus) {
+	        if ((currentStatus == Status.ACTIVE && newStatus == Status.ACTIVE) ||
+	            (currentStatus == Status.DEACTIVE && newStatus == Status.DEACTIVE)) {
+	            throw new BadRequestException("Invalid status transition");
+	        }
+	 }
+
 
 	
 }

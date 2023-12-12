@@ -1,5 +1,6 @@
 package com.ecommerce.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +14,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ecommerce.payload.VarientRequest;
 import com.ecommerce.service.VarientService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.websocket.server.PathParam;
 
@@ -29,10 +35,24 @@ public class VarientPController {
 	@Autowired
 	private VarientService varientService;
 	
-	@PostMapping("/")
-	public ResponseEntity<Map<String, Object>> addProductVarient(@Param(value = "varientRequest") VarientRequest varientRequest,MultipartFile[] image){
+	@PostMapping(path="/")
+	public ResponseEntity<Map<String, Object>> addProductVarient(@RequestParam(value = "varientRequest") String varientRequest,
 		
-		return new ResponseEntity<Map<String,Object>>(varientService.createVarient(varientRequest,image),HttpStatus.CREATED);
+			@RequestParam(value="file[]",required = false) List<MultipartFile> multipartFiles){
+		
+		VarientRequest request=null;
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			request=mapper.readValue(varientRequest, VarientRequest.class);
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+				System.out.println(request.getVarientName());
+		return new ResponseEntity<Map<String,Object>>(varientService.createVarient(request,multipartFiles),HttpStatus.CREATED);
 	}
 	
 	@PutMapping("/")
