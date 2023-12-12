@@ -155,16 +155,45 @@ public class AccountServiceImpl implements AccountService {
 	    }
 	}
 
-
 	
+	@Override
+	public Map<String, Object> updateAccountDetailsById(Long accountId, Account updatedDetails) {
+		        Map<String,Object> response = new HashMap<>();
+		        Account account = accountRepo.findById(accountId).orElseThrow(()->new BadRequestException(AppConstant.ACCOUNT_NOT_FOUND));
+		        try {
+		        if (!account.getAccountNumber().equals(updatedDetails.getAccountNumber()) &&
+		                accountRepo.existsByAccountNumber(updatedDetails.getAccountNumber())) {
+		            throw new BadRequestException(AppConstant.DUPLICATE_ACCOUNT_NUMBER);
+		        }    
+		        account.setAccountHolderName(updatedDetails.getAccountHolderName());
+		        account.setAccountNumber(updatedDetails.getAccountNumber());
+		        account.setBankName(updatedDetails.getBankName());
+		        account.setBankIFSCcode(updatedDetails.getBankIFSCcode());
+		        account.setVenderGSTnumber(updatedDetails.getVenderGSTnumber());
+		        account.setPanNumber(updatedDetails.getPanNumber());
+//		        account.setStatus(updatedDetails.getStatus());
+		        account.setUpdatedAt(updatedDetails.getCreatedAt());
+		        account.setUpdatedBy(updatedDetails.getCreatedBy());
+		        account.setUser(updatedDetails.getUser());
+		        account.setVenderGSTnumber(updatedDetails.getVenderGSTnumber());
+		        this.accountRepo.save(account);
+		        response.put("dee", AppConstant.UPDATE_ACCOUNT);
+		        response.put("account", accountToAccountResponse(account));
+		        return response;
+		    } catch (BadRequestException e) {
+		        response.put("dee", AppConstant.DUPLICATE_ACCOUNT_NUMBER);
+		        response.put("message", e.getMessage());
+		        return response;
+		    }
+		}
 }
-	
-	
-
-	
+        
+		        		
+		      
 
 	   
-	            
+		      
+	
 	
 	
 	
