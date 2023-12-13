@@ -7,7 +7,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -32,6 +34,9 @@ public class VarientServiceImpl implements VarientService {
 	@Autowired
 	private AppUtils appUtils;
 	
+	@Autowired
+	private ModelMapper modelMapper;
+	
 	
 	@Override
 	public Map<String, Object> createVarient(VarientRequest varientRequest,List<MultipartFile> image) {
@@ -39,32 +44,9 @@ public class VarientServiceImpl implements VarientService {
         {
         	throw new BadRequestException(AppConstant.VARIENT_TAKEN);
         }
-		Varient varient= varientRequestToVarient(varientRequest,image);	
-		Map<String,Object> response = new HashMap<>();
-		Varient save = varientRepo.save(varient);
-		
-		response.put("response", new ApiResponse(Boolean.TRUE, AppConstant.VARIENT_ADDED));
-		response.put("varient", varientToVarientResponse(save));
-		return response;
-	}
-
-	private VarientResponse varientToVarientResponse(Varient varient) {
-		VarientResponse varientResponse= new VarientResponse();
-		varientResponse.setId(varient.getId());		
-		
-		return varientResponse;
-	}
-
-	private Varient varientRequestToVarient(VarientRequest varientRequest,List<MultipartFile> image) {
-		Varient varient = new Varient();
-		varient.setVarientName(varientRequest.getVarientName());
-		varient.setPrice(varientRequest.getPrice());
-		varient.setStock(varientRequest.getStock());
-		varient.setStatus(varientRequest.getStatus());
-		varient.setProduct(new Product(varientRequest.getProduct().getId()));
-		
-		varient.setStatus(Status.DEACTIVE);
-		
+		Varient varient= modelMapper.map(varientRequest,Varient.class);
+        varient.setStatus(Status.DEACTIVE);
+           	
 		for(MultipartFile file:image)
 		{
 			String uploadImage = appUtils.uploadImage(file, AppConstant.PRODUCT_IMAGE_PATH,null);
@@ -72,10 +54,16 @@ public class VarientServiceImpl implements VarientService {
 			productImage.setImageUrl(uploadImage);
 			varient.getProductImage().add(productImage);
 			productImage.setVarientImage(varient);	
-			}
-			
-		return varient;
+		}
+		
+		Map<String,Object> response = new HashMap<>();
+		Varient save = varientRepo.save(varient);
+		response.put(AppConstant.RESPONSE_MESSAGE, new ApiResponse(Boolean.TRUE, AppConstant.VARIENT_ADDED,HttpStatus.CREATED));
+		response.put("varient", varientToVarientResponse(save));
+		return response;
 	}
+
+
 
 	@Override
 	public Map<String, Object> updateVarient(VarientRequest varientRequest) {
@@ -93,6 +81,13 @@ public class VarientServiceImpl implements VarientService {
 		 response.put("varient", varientResponse);
 		 return response;
 	}
+	
+	private VarientResponse varientToVarientResponse(Varient varient) {
+		VarientResponse varientResponse= new VarientResponse();
+		varientResponse.setId(varient.getId());		
+		return varientResponse;
+	}
+
 
 	@Override
 	public Map<String, Object> getAllVarientByProductId(Long id) {

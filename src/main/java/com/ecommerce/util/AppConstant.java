@@ -6,6 +6,8 @@ public class AppConstant {
 	public static final String DEFAULT_PAGE_SIZE = "1"; 
 	public static final Integer MAX_PAGE_SIZE = 10;
 	
+	public static final String RESPONSE_MESSAGE="response";
+	
 	public static final String RESGISTRATION_SUCCESSFULLY = "User resgistration successfully";
 	public static final String INVALID_PHONE_NUMBER = "Invalid mobile number";
 	public static final String NUMBER_ALREADY_TAKEN = "This mobile number is already taken";
@@ -61,7 +63,7 @@ public class AppConstant {
 	public static final String VARIENT_ATTRIBUTE_TAKEN = "Varient attribute taken";
 	public static final String DELETE_ALL_PRODUCT = "Delete all product related to this category";
 	public static final String ATTRIBUTE_DELETED = "Varient attribute deleted successfully";
-	public static final String VARIENT_ATTRIBUTE_ADD = "Varient attribute taken";
+	public static final String VARIENT_ATTRIBUTE_ADD = "Varient attribute added";
 	public static final String VARIENT_ATTIBUTE_NOT_FOUND = "Attribute is not found";
 	public static final String VARIENT_ATTRIBUTE_UPDATE = "Attribute updated";
 	public static final String OUT_OF_STOCK = "This product out of stock";

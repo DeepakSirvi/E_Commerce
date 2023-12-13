@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -38,6 +39,9 @@ public class CategoryServiceImpl implements CategoryService {
 	@Autowired
 	private AppUtils appUtils;
 	
+	@Autowired
+	private ModelMapper modelMapper;
+	
 	@Override
 	public ApiResponse addCategory(CategoryRequest categoryRequest) {
 		
@@ -45,52 +49,61 @@ public class CategoryServiceImpl implements CategoryService {
 		{
 			   throw new BadRequestException(AppConstant.CATEGORY_TAKEN);	
 		}
-		Category category = new Category();
-		category.setCategoryName(categoryRequest.getCategoryName());
-	    category.setUser(new User(appUtils.getUserId()));
-		  for(SubCategoryRequest subCategory:categoryRequest.getSubCategory()) {
-			  SubCategory sCategory = new SubCategory();
-			  sCategory.setSubCategory(subCategory.getSubCategory());
-			  sCategory.setCategory(category);
-			  category.getSubCategory().add(sCategory);
-		  }
-			categoryRepo.save(category);
-			ApiResponse apiResponse = new ApiResponse(Boolean.TRUE,AppConstant.CATEGORY_ADDED);
+		    Category category = modelMapper.map(categoryRequest, Category.class);
+		    category.setUser(new User(appUtils.getUserId()));
+		    categoryRepo.save(category);
+			ApiResponse apiResponse = new ApiResponse(Boolean.TRUE,AppConstant.CATEGORY_ADDED,HttpStatus.CREATED);
 		    return apiResponse;
 	}
 
 	@Override
 	public ApiResponse addSubCategory(SubCategoryRequest subCategoryRequest) {
 		
-		Category category = new Category();
-		category.setId(subCategoryRequest.getCategory().getId());
-		if(subCategoryRepo.existsBySubCategoryAndCategory(subCategoryRequest.getSubCategory(), category))
+	
+		if(subCategoryRepo.existsBySubCategoryAndCategory(subCategoryRequest.getSubCategory(),new Category(subCategoryRequest.getCategory().getId())))
 		{
 			   throw new BadRequestException(AppConstant.SUBCATEGORY_TAKEN);	
 		}
-		
-		SubCategory subCategory = new SubCategory();
-		subCategory.setSubCategory(subCategoryRequest.getSubCategory());
-		subCategory.setCategory(category);
+		SubCategory subCategory = modelMapper.map(subCategoryRequest,SubCategory.class);
 	    subCategoryRepo.save(subCategory);
-		ApiResponse apiResponse = new ApiResponse(Boolean.TRUE,AppConstant.SUBCATEGORY_ADDED);
-	    return apiResponse;
+		
+	    return new ApiResponse(Boolean.TRUE,AppConstant.SUBCATEGORY_ADDED,HttpStatus.CREATED);
 	}
 
 	@Override
 	public CategoryResponse getCategoryById(Long id) {
 		Category category = categoryRepo.findById(id).orElseThrow(()->new BadRequestException(AppConstant.CATEGORY_NOT_FOUND));
-			CategoryResponse categoryResponse = categoryToCategoryResponse(category);	
+			CategoryResponse categoryResponse = new CategoryResponse();
+			categoryResponse.setId(id);
+			categoryResponse.setCategoryName(category.getCategoryName());
+			categoryResponse.setUser(new UserResponse(category.getUser().getId()));
 			return categoryResponse;
 			}
 	
 	
+	private CategoryResponse categoryToCategoryResponse(Category category) {
+		
+		CategoryResponse categoryResponse = new CategoryResponse();
+		categoryResponse.setId(category.getId());
+		categoryResponse.setCategoryName(category.getCategoryName());
+		
+		Set<SubCategory> subCategories = category.getSubCategory();
+		
+		Set<SubCategoryResponse> collect = subCategories.stream().map(subCat -> this.subCategoryToSubCategoryResponse(subCat)).collect(Collectors.toSet());
+		categoryResponse.setSubCategory(collect);
+		
+		UserResponse user = new UserResponse(category.getUser().getId());
+		categoryResponse.setUser(user);			
+		return categoryResponse;
+	}
+	
 	private SubCategoryResponse subCategoryToSubCategoryResponse(SubCategory s) {
-				SubCategoryResponse response = new SubCategoryResponse();
-				response.setId(s.getId());
-				response.setSubCategory(s.getSubCategory());
-				return response;
-				}
+		SubCategoryResponse response = new SubCategoryResponse();
+		response.setId(s.getId());
+		response.setSubCategory(s.getSubCategory());
+		return response;
+		}
+
 
 	@Override
 	public SubCategoryResponse getSubCategoryById(Long id) {
@@ -98,7 +111,8 @@ public class CategoryServiceImpl implements CategoryService {
 		SubCategoryResponse response = subCategoryToSubCategoryResponse(subCategory);
 		return response;
 	}
-
+	
+	
 	@Override
 	public ApiResponse deleteCategoryById(Long id) {
 		Category category = categoryRepo.findById(id).orElseThrow(()->new BadRequestException(AppConstant.CATEGORY_NOT_FOUND));
@@ -106,7 +120,6 @@ public class CategoryServiceImpl implements CategoryService {
 		if(category.getSubCategory().size()!=0)
 		 throw new BadRequestException(AppConstant.DELETE_SUBCATEGORY);
 		categoryRepo.deleteById(id);
-		
 		return new ApiResponse(Boolean.TRUE,AppConstant.CATEGORY_DELETED,HttpStatus.OK);
 	}
 
@@ -155,21 +168,7 @@ public class CategoryServiceImpl implements CategoryService {
 		return response;
 	}
 
-	private CategoryResponse categoryToCategoryResponse(Category category) {
-		CategoryResponse categoryResponse = new CategoryResponse();
-		categoryResponse.setId(category.getId());
-		categoryResponse.setCategoryName(category.getCategoryName());
-		
-		Set<SubCategory> subCategories = category.getSubCategory();
-		
-		Set<SubCategoryResponse> collect = subCategories.stream().map(subCat -> this.subCategoryToSubCategoryResponse(subCat)).collect(Collectors.toSet());
-		categoryResponse.setSubCategory(collect);
-		
-		
-		UserResponse user = new UserResponse(category.getUser().getId());
-		categoryResponse.setUser(user);			
-		return categoryResponse;
-	}
+	
 
 
 }

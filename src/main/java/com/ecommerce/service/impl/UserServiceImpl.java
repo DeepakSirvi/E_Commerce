@@ -1,7 +1,5 @@
 package com.ecommerce.service.impl;
 
-
-
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
@@ -47,6 +45,9 @@ public class UserServiceImpl implements UserService,UserDetailsService{
 	@Autowired
 	private LoginService loginService;
 	
+	@Autowired
+	private LoginServiceImpl loginServiceImpl;
+	
 	@Autowired 
 	private ModelMapper mapper;
 	
@@ -59,7 +60,8 @@ public class UserServiceImpl implements UserService,UserDetailsService{
 	
 	private  ApiResponse apiResponse=null;
 	
-	public ApiResponse  addUser(UserRequest userRequest)
+	@Override
+	public ApiResponse addUser(UserRequest userRequest)
 	{
 		if (userRepo.existsByUserMobile(userRequest.getUserMobile())) {
 			throw new BadRequestException(AppConstant.NUMBER_ALREADY_TAKEN +" " +userRequest.getUserMobile());
@@ -81,14 +83,13 @@ public class UserServiceImpl implements UserService,UserDetailsService{
 		 Set<UserRole> userRoles = new HashSet<>();
 		 userRoles.add(userRole);
 		 
-		 
 		 user.setUserRole(userRoles);
 		 user.setStatus(Status.ACTIVE);
 		 user.setCreatedAt(LocalDateTime.now());
 		 user.setUpdatedAt(LocalDateTime.now());
-		 User user1 = userRepo.save(user);
-		
-		 if(user1.getId()!=null) {
+		 
+		 user = userRepo.save(user);
+		 if(user.getId()!=null) {
 		  apiResponse = new ApiResponse(Boolean.TRUE, AppConstant.RESGISTRATION_SUCCESSFULLY);
 		 }
 		return apiResponse;
@@ -117,40 +118,18 @@ public class UserServiceImpl implements UserService,UserDetailsService{
 	@Override
 	public UserResponse getUserById() {
        User user = userRepo.findByIdAndStatus(appUtils.getUserId(),Status.ACTIVE).orElseThrow(()->new BadRequestException(AppConstant.USER_NOT_FOUND));
-       
-       
-       UserResponse userResponse = new UserResponse();
-       userResponse.setFirstName(user.getFirstName());
-       userResponse.setLastName(user.getLastName());
-       userResponse.setGender(user.getGender());
-       userResponse.setId(user.getId());
-       userResponse.setUserMobile(user.getUserMobile());
-       userResponse.setUserEmail(user.getUserEmail());
-       userResponse.setStatus(user.getStatus());
-       
-       Set<UserRole> userRoles = user.getUserRole();
-       
-       Set<UserRoleResponse> collect = userRoles.stream().map(userRole -> userRoleToUserRoleResponse(userRole)).collect(Collectors.toSet());
-       userResponse.setUserRole(collect);      
-       return userResponse;
-       
+       UserResponse userResponse =loginServiceImpl.userToUserResponse(user);           
+       return userResponse;  
 	}
 
-	private UserRoleResponse userRoleToUserRoleResponse(UserRole userRoles) {
-       UserRoleResponse response = new UserRoleResponse();
-       response.setId(userRoles.getId());
-       response.setRole(new RoleResponse(userRoles.getRole().getId(),userRoles.getRole().getRoleName(),userRoles.getRole().getDescription()));
-       return response;
-	}
+	
 
 	@Override
 	public ApiResponse deativateAccount(LoginRequest loginRequest) {
-		System.out.println(loginRequest.getMobileNumber());
 		if(loginRepo.existsByPhoneNumber(loginRequest.getMobileNumber()))
 		{
 			Optional<Login> login = loginRepo.findByPhoneNumberAndOtp(loginRequest.getMobileNumber(), loginRequest.getOtp());
 			if(login.isPresent()) {
-				
 				if(login.get().getExperiedAt().compareTo(LocalDateTime.now())>=0){
 			    
 				// Code to deactivte account
@@ -161,14 +140,12 @@ public class UserServiceImpl implements UserService,UserDetailsService{
 				else
 				{
 					   throw new BadRequestException( AppConstant.OTP_EXPERED);	
-				}
-				
+				}	
 			}
 			else
 			{
 				   throw new BadRequestException(AppConstant.INVALID_OTP);	
-			}
-			
+			}	
 		}
 		else
 		{
