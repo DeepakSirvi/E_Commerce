@@ -83,4 +83,5 @@ public class VarientCategoryController {
 	{
 		return new ResponseEntity<Map<String, Object>>(varientCategoryService.deleteVarientCategoryAttributeById(id),HttpStatus.OK);
 	}
+	
 }

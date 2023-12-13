@@ -11,6 +11,8 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,6 +26,8 @@ import lombok.Setter;
 public class CategoryRequest {
 	
 	  private Long id;
-	private String categoryName;
-	private Set<SubCategoryRequest> subCategory = new HashSet<>();
+	  @NotBlank
+	  @Size(min=1 , max=255)
+	 private String categoryName;
+	 private Set<SubCategoryRequest> subCategory = new HashSet<>();
 }
