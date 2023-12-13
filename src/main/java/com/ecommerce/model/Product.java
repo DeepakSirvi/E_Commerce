@@ -11,6 +11,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
@@ -26,8 +27,6 @@ import lombok.Setter;
 @Entity
 public class Product extends Audit {
 	
-	
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
@@ -57,13 +56,12 @@ public class Product extends Audit {
 	@ManyToOne
 	private SubCategory subCategory;
 
-	@OneToOne(mappedBy = "product",cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "product_Id")
 	private ProductDescription description;
 	
 	@OneToMany(mappedBy = "product",cascade = CascadeType.ALL)
 	private Set<Varient> varient;
-	
-
 	
 	@OneToMany(mappedBy = "product")
 	private Set<ProductReview> productReview;

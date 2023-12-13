@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -40,16 +41,10 @@ public class UserRequest {
 	private String gender;
 	
 	@NotBlank
+	@Size(min=4,max=255)
 	private String firstName;
-	
-	@NotBlank
-	private String LastName;
-	
+	private String LastName;	
 	private Status status;
-	
-
 	private LocalDateTime createdAt;
-	
-
 	private LocalDateTime updatedAt;
 }

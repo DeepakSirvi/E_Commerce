@@ -18,9 +18,6 @@ import io.jsonwebtoken.Jwts;
 public class SpringSecurityAuditAwareImpl implements AuditorAware<Long> {
 	
 	@Autowired
-	private UserRepo userRepo; 
-	
-	@Autowired
 	private AppUtils appUtils;
 
 	@Override

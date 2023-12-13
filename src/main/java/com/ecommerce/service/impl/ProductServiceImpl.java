@@ -1,11 +1,13 @@
 package com.ecommerce.service.impl;
 
+import java.net.http.HttpResponse.ResponseInfo;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -17,17 +19,13 @@ import org.springframework.stereotype.Service;
 
 import com.ecommerce.exception.BadRequestException;
 import com.ecommerce.model.Category;
-import com.ecommerce.model.MapProductDescription;
 import com.ecommerce.model.Product;
 import com.ecommerce.model.ProductDescription;
 import com.ecommerce.model.Status;
 import com.ecommerce.model.SubCategory;
 import com.ecommerce.model.User;
 import com.ecommerce.payload.ApiResponse;
-import com.ecommerce.payload.MapProductDescriptionRequest;
-import com.ecommerce.payload.MapProductDescriptionResponse;
 import com.ecommerce.payload.PageResponse;
-import com.ecommerce.payload.ProductDescriptionRequest;
 import com.ecommerce.payload.ProductDescriptionResponse;
 import com.ecommerce.payload.ProductRequest;
 import com.ecommerce.payload.ProductResponse;
@@ -45,11 +43,13 @@ public class ProductServiceImpl implements ProductService {
 	private ProductRepo productRepo; 
 
 	@Autowired 
-	private SubCategoryRepo categoryRepo;
-
+	private SubCategoryRepo subCategoryRepo;
 	
 	@Autowired
 	private AppUtils appUtils;
+	
+	@Autowired
+	private ModelMapper modelMapper;
 	
 	@Override
 	public Map<String, Object> addProduct(ProductRequest productRequest) {
@@ -58,67 +58,21 @@ public class ProductServiceImpl implements ProductService {
 			throw new BadRequestException(AppConstant.PRODUCT_NAME_TAKEN);
 			}
 		Map<String, Object> response = new HashMap<>();
-		Product product = productRequestToProduct(productRequest);
-
+		Product product = modelMapper.map(productRequest, Product.class);
+		product.setVerified(Status.UNVERIFIED);
+		product.setVendor(new User(appUtils.getUserId()));
 		Product product1 = productRepo.save(product);
 		ApiResponse apiResponse = new ApiResponse(Boolean.TRUE, AppConstant.PRODUCT_ADDED);
-		response.put("response", apiResponse);
+		response.put(AppConstant.RESPONSE_MESSAGE, apiResponse);
 		response.put("product",productToProductResponse(product1));
 		return response;
-		
-		
-
-		
 	}
-
-	private Product productRequestToProduct(ProductRequest productRequest) {
-		Product product= new Product();
-		
-		product.setVendor(new User(appUtils.getUserId()));
-		product.setProductName(productRequest.getProductName());
-		product.setListingStatus(productRequest.getListingStatus());
-		product.setBrand(productRequest.getBrand());
-		product.setFullfillmentBy(productRequest.getFullfillmentBy());
-		product.setShippingProvider(productRequest.getShippingProvider());
-		product.setDeliveryCharge(productRequest.getDeliveryCharge());
-		product.setProductWeight(productRequest.getProductWeight());
-		product.setProductHeight(productRequest.getProductHeight());
-		product.setProductWidth(productRequest.getProductWidth());
-		product.setProductLength(productRequest.getProductLength());	
-		product.setTaxCode(productRequest.getTaxCode());
-		product.setCountryOfOrigin(productRequest.getCountryOfOrigin());
-		product.setProductType(productRequest.getProductType());
-		product.setVerified(Status.UNVERIFIED);
-		product.setSubCategory(new SubCategory(productRequest.getSubCategory().getId()));
-
-		ProductDescription productDescription = descriptionRequestToDescription(productRequest.getDescription());
-		productDescription.setProduct(product);
-		product.setDescription(productDescription);
-		
-		return product;
-	}
-
-	private ProductDescription descriptionRequestToDescription(ProductDescriptionRequest description) {
-		ProductDescription productDescription =new ProductDescription();
-		productDescription.setDescription(description.getDescription());
-	/*	Set<MapProductDescription> mapProductDescription = description.getMapProductDescriptions().stream()
-														.map(mapDescription -> mapDescritionRequestToMapDescription(mapDescription)).collect(Collectors.toSet());
-		productDescription.setMapProductDescriptions(mapProductDescription);*/
-		return productDescription;
-	}
-
-//	private MapProductDescription mapDescritionRequestToMapDescription(MapProductDescriptionRequest mapDescription) {
-//		MapProductDescription mapProductDescription = new MapProductDescription();
-//		mapProductDescription.setTitle(mapDescription.getTitle());
-//		mapProductDescription.setDetails(mapDescription.getDetails());
-//		return mapProductDescription;
-//	}
 
 	@Override
 	public PageResponse<ProductResponse> getProductBySubCategory(Long id, Long subId, Integer page, Integer size) {
 		AppUtils.validatePageAndSize(page, size);
 		Pageable pageable = PageRequest.of(page, size);
-		SubCategory category = Optional.of(categoryRepo.findByIdAndCategory(id,new Category(subId))).orElseThrow(()-> new BadRequestException(AppConstant.SUB_CATEGORY_NOT_FOUND));
+		SubCategory category = Optional.of(subCategoryRepo.findByIdAndCategory(subId,new Category(id))).orElseThrow(()-> new BadRequestException(AppConstant.SUB_CATEGORY_NOT_FOUND));
 	    Page<Product> productSet =productRepo.findBySubCategoryAndListingStatus(category,true,pageable);		
 		
 	    Set<ProductResponse> productResponses = productSet.getContent().stream().map(product -> productToProductResponse(product)
@@ -151,7 +105,6 @@ public class ProductServiceImpl implements ProductService {
 		response.setTaxCode(product.getTaxCode());
 		response.setCountryOfOrigin(product.getCountryOfOrigin());
 		response.setProductType(product.getProductType());
-		
 		ProductDescriptionResponse productDescription = descriptionToDescriptionResponse(product.getDescription());
 		
 		response.setDescription(productDescription);
@@ -182,7 +135,7 @@ public class ProductServiceImpl implements ProductService {
 				.withStringMatcher(StringMatcher.EXACT.CONTAINING)
 				.withIgnoreCase()
 				.withMatcher("id", match->match.transform(value->value.map(id->(((Long)id).intValue()==0)?null:((Long)id).intValue())));
-		Example<Product> example = Example.of(productRequestToProduct(productRequest), exampleMatcher);
+		Example<Product> example = Example.of(modelMapper.map(productRequest ,Product.class),exampleMatcher);
 		
 		
 		Pageable pageable = PageRequest.of(page, size);	
