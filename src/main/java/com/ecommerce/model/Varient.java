@@ -12,6 +12,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
@@ -48,7 +49,8 @@ public class Varient extends Audit {
 	@ManyToOne
 	private Product product;
 	
-	@OneToMany(mappedBy = "varient",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+	@JoinColumn(name = "varient_Id")
 	private Set<VarientCategoryJoin> categoryJoins;
 	
 	@OneToMany(mappedBy = "varientImage",cascade = CascadeType.ALL)

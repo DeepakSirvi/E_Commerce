@@ -30,8 +30,8 @@ public class ProductDescription {
 	@Column(length = 10000)
 	private String description;
 	
-	@OneToMany(mappedBy = "productDescription",cascade = CascadeType.ALL)
-    private Set<MapProductDescription> mapProductDescriptions=new HashSet<>();
+//	@OneToMany(mappedBy = "productDescription",cascade = CascadeType.ALL)
+//    private Set<MapProductDescription> mapProductDescriptions=new HashSet<>();
 	
 	@ManyToOne
 	private Product product;

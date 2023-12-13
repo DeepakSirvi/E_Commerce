@@ -116,8 +116,6 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public PageResponse<ProductResponse> getProductBySubCategory(Long id, Long subId, Integer page, Integer size) {
-		
-		
 		AppUtils.validatePageAndSize(page, size);
 		Pageable pageable = PageRequest.of(page, size);
 		SubCategory category = Optional.of(categoryRepo.findByIdAndCategory(id,new Category(subId))).orElseThrow(()-> new BadRequestException(AppConstant.SUB_CATEGORY_NOT_FOUND));
@@ -169,12 +167,12 @@ public class ProductServiceImpl implements ProductService {
 		return productDescription;
 	}
 
-	private MapProductDescriptionResponse mapDescriptionToMapDescriptionResponse(MapProductDescription mapDescription) {
-		MapProductDescriptionResponse mapProductDescription = new MapProductDescriptionResponse();
-		mapProductDescription.setTitle(mapDescription.getTitle());
-		mapProductDescription.setDetails(mapDescription.getDetails());
-		return mapProductDescription;
-	}
+//	private MapProductDescriptionResponse mapDescriptionToMapDescriptionResponse(MapProductDescription mapDescription) {
+//		MapProductDescriptionResponse mapProductDescription = new MapProductDescriptionResponse();
+//		mapProductDescription.setTitle(mapDescription.getTitle());
+//		mapProductDescription.setDetails(mapDescription.getDetails());
+//		return mapProductDescription;
+//	}
 
 	@Override
 	public PageResponse<ProductResponse> getAllProduct(Integer page, Integer size,ProductRequest productRequest) {

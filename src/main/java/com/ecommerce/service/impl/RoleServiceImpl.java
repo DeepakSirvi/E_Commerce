@@ -22,19 +22,19 @@ public class RoleServiceImpl implements RoleService{
 	
 	@Override
 	public RoleResponse createRole(RoleRequest roleRequest) {
-		Role role = new Role();
-		role.setRoleName(roleRequest.getRoleName());
-		role.setDescription(roleRequest.getDescription());
 		if(!roleRepo.existsByRoleName(roleRequest.getRoleName())) {
+			Role role = new Role();
+			role.setRoleName(roleRequest.getRoleName());
+			role.setDescription(roleRequest.getDescription());
 			role.setCreatedAt(LocalDateTime.now());
 			role.setUpdatedAt(LocalDateTime.now());
-		Role save = roleRepo.save(role);
-		System.out.println(save.getRoleName());
-	    RoleResponse roleResponse = new RoleResponse();
-	    roleResponse.setId(save.getId());
-	    roleResponse.setRoleName(save.getRoleName());
-	    roleResponse.setDescription(save.getDescription());
-		return roleResponse;
+		    role = roleRepo.save(role);
+			System.out.println(role.getRoleName());
+		    RoleResponse roleResponse = new RoleResponse();
+		    roleResponse.setId(role.getId());
+		    roleResponse.setRoleName(role.getRoleName());
+		    roleResponse.setDescription(role.getDescription());
+			return roleResponse;
 		}
 		else
 		{
