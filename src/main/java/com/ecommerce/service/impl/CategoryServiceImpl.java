@@ -44,7 +44,7 @@ public class CategoryServiceImpl implements CategoryService {
 	
 	@Override
 	public ApiResponse addCategory(CategoryRequest categoryRequest) {
-		
+		System.out.println(categoryRequest.getId());
 		if(categoryRepo.existsByCategoryName(categoryRequest.getCategoryName()))
 		{
 			   throw new BadRequestException(AppConstant.CATEGORY_TAKEN);	

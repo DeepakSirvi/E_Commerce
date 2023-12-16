@@ -1,7 +1,7 @@
 package com.ecommerce.service.impl;
 
-import java.net.http.HttpResponse.ResponseInfo;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -21,6 +21,7 @@ import com.ecommerce.exception.BadRequestException;
 import com.ecommerce.model.Category;
 import com.ecommerce.model.Product;
 import com.ecommerce.model.ProductDescription;
+import com.ecommerce.model.RoleName;
 import com.ecommerce.model.Status;
 import com.ecommerce.model.SubCategory;
 import com.ecommerce.model.User;
@@ -32,13 +33,16 @@ import com.ecommerce.payload.ProductResponse;
 import com.ecommerce.payload.UserResponse;
 import com.ecommerce.repository.ProductRepo;
 import com.ecommerce.repository.SubCategoryRepo;
+import com.ecommerce.repository.UserRepo;
 import com.ecommerce.service.ProductService;
 import com.ecommerce.util.AppConstant;
 import com.ecommerce.util.AppUtils;
 
 @Service
 public class ProductServiceImpl implements ProductService {
-
+	
+	@Autowired
+	private UserRepo userRepo;
 	@Autowired
 	private ProductRepo productRepo; 
 
@@ -174,6 +178,19 @@ public class ProductServiceImpl implements ProductService {
 			}
 		ProductResponse productResponse = productToProductResponse(product);
 		return productResponse;
+	}
+
+	@Override
+	public PageResponse<ProductResponse> getProductByVendorId(Long vendorId, Integer page, Integer size) {
+	    User user = userRepo.findById(vendorId).orElseThrow(()->new BadRequestException(AppConstant.USER_NOT_FOUND));
+	    
+	    boolean flag = user.getUserRole().stream()
+	            .anyMatch(userRole -> userRole.getRole().getRoleName().equals(RoleName.VENDOR));
+	    
+	    if(!flag) {
+	    	throw new BadRequestException(AppConstant.VENDOR_NOT_FOUND);
+	    }
+	    return null;
 	}
 
 }

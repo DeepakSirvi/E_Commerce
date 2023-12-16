@@ -27,13 +27,13 @@ public class VarientRequest {
 	private Float price;
 	private Integer stock;
 	
-	private ProductRequest product;
+	private Long productId;
 	
 	private Status status;
 	
 	private Set<VarientCategoryJoinRequest> categoryJoins=new HashSet<>();
 	
-	private Set<ProductImageRequest> productImage=new HashSet<>();
+//	private Set<ProductImageRequest> productImage=new HashSet<>();
 	
 	
 }
