@@ -97,6 +97,7 @@ public class UserServiceImpl implements UserService,UserDetailsService{
 
 	@Override
 	public UserDetails loadUserByUsername(String username) {
+		System.out.println("Load By User Method");
 		Optional<User> findByUserName = userRepo.findByUserMobile(username);
 		 if(findByUserName.isPresent())
 		    {

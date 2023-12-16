@@ -23,7 +23,7 @@ import com.ecommerce.util.AppConstant;
 
 @RestController
 @RequestMapping("/ecommerce/product")
-@CrossOrigin
+@CrossOrigin("*")
 public class ProductController {
 
 	@Autowired
@@ -59,5 +59,16 @@ public class ProductController {
 	public ResponseEntity<ProductResponse> getProductById(@PathVariable(value = "productId") Long productId){
 		return new ResponseEntity<ProductResponse>(productService.getProduct(productId) ,HttpStatus.OK);
 	}
+	
+	@GetMapping("/vendor/{vendorId}")
+	public ResponseEntity<PageResponse<ProductResponse>> getAllProductByCategory(
+			@PathVariable(value = "vendorId") Long vendorId,
+			@RequestParam(value = "page", required = false, defaultValue =  AppConstant.DEFAULT_PAGE_NUMBER) Integer page,
+			@RequestParam(value = "size", required = false, defaultValue = AppConstant.DEFAULT_PAGE_SIZE) Integer size)
+	{
+		PageResponse<ProductResponse> pageResponse=productService.getProductByVendorId(vendorId,page,size);
+		return new ResponseEntity<>(pageResponse,HttpStatus.OK);
+	}
+	
 	
 }

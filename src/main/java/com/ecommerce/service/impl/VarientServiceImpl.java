@@ -46,6 +46,7 @@ public class VarientServiceImpl implements VarientService {
         }
 		Varient varient= modelMapper.map(varientRequest,Varient.class);
         varient.setStatus(Status.DEACTIVE);
+        varient.setProduct(new Product(varientRequest.getProductId()));
            	
 		for(MultipartFile file:image)
 		{

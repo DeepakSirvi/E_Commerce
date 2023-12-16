@@ -16,5 +16,7 @@ public interface ProductService {
 	public PageResponse<ProductResponse> getAllProduct(Integer page, Integer size,ProductRequest productRequest);
 
 	public ProductResponse getProduct(Long productId);
+
+	public PageResponse<ProductResponse> getProductByVendorId(Long vendorId, Integer page, Integer size);
 	
 }

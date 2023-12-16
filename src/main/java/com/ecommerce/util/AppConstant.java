@@ -93,5 +93,8 @@ public class AppConstant {
 	public static final String STATUS_UPDATE = "Status is sucessfully update";
 	
 	
+	public static final String VENDOR_NOT_FOUND = "Vendor is not found";
+	
+	
 
 }
