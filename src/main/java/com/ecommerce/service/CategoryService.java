@@ -10,22 +10,24 @@ import com.ecommerce.payload.SubCategoryResponse;
 
 public interface CategoryService {
 
-   public ApiResponse addCategory(CategoryRequest categoryRequest);
+	public ApiResponse addCategory(CategoryRequest categoryRequest);
 
-   public ApiResponse addSubCategory(SubCategoryRequest subCategoryRequest);
+	public ApiResponse addSubCategory(SubCategoryRequest subCategoryRequest);
 
-   public CategoryResponse getCategoryById(Long id);
+	public CategoryResponse getCategoryById(Long id);
 
-   public SubCategoryResponse getSubCategoryById(Long id);
+	public SubCategoryResponse getSubCategoryById(Long id);
 
-   public ApiResponse deleteSubCategoryById(Long id);
+	public ApiResponse deleteSubCategoryById(Long id);
 
-    public ApiResponse updateCategory(CategoryRequest categoryRequest);
+	public ApiResponse updateCategory(CategoryRequest categoryRequest);
 
-    public ApiResponse updateSubCategory(SubCategoryRequest subCategoryRequest);
+	public ApiResponse updateSubCategory(SubCategoryRequest subCategoryRequest);
 
-    public ApiResponse deleteCategoryById(Long id);
+	public ApiResponse deleteCategoryById(Long id);
 
-public Map<String, Object> getCategory();
+	public Map<String, Object> getAllCategory();
+
+	public Map<String, Object> getCategory(String search, Integer pageIndex, Integer pageSize, String sortDir);
 
 }

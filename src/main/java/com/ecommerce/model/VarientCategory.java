@@ -20,7 +20,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class VarientCategory {
+public class VarientCategory extends Audit {
 	
 	public VarientCategory(Long id) {
 		this.id=id;
@@ -37,7 +37,5 @@ public class VarientCategory {
 	
 	@ManyToOne
 	private User user;
-
-
 
 }

@@ -8,11 +8,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,8 +22,15 @@ import lombok.Setter;
 @Entity
 public class Role{
 
+	public Role(RoleName roleName) {
+		this.roleName=roleName;
+	}
+
+	public Role(int i) {
+		id=i;
+	}
+
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 	@Column(unique = true,length=30)
 	@Enumerated(EnumType.STRING)

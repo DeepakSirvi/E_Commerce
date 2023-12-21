@@ -15,6 +15,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
@@ -92,7 +93,8 @@ public class User {
 	@OneToMany(mappedBy = "user")
 	private Set<ProductSaveForLater> saveLater;
 	
-	@OneToMany(mappedBy = "user")
+	@OneToMany
+	@JoinColumn(name = "user_id")
 	private Set<Notifications> notification;
 	
 	@OneToMany(mappedBy = "user")

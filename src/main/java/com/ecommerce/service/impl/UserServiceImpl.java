@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import com.ecommerce.exception.BadRequestException;
+import com.ecommerce.exception.ResourceNotFoundException;
 import com.ecommerce.model.Login;
 import com.ecommerce.model.Role;
 import com.ecommerce.model.RoleName;
@@ -25,10 +26,8 @@ import com.ecommerce.model.UserRole;
 import com.ecommerce.payload.ApiResponse;
 import com.ecommerce.payload.LoginRequest;
 import com.ecommerce.payload.OtpResponse;
-import com.ecommerce.payload.RoleResponse;
 import com.ecommerce.payload.UserRequest;
 import com.ecommerce.payload.UserResponse;
-import com.ecommerce.payload.UserRoleResponse;
 import com.ecommerce.repository.LoginRepo;
 import com.ecommerce.repository.UserRepo;
 import com.ecommerce.service.LoginService;
@@ -64,11 +63,11 @@ public class UserServiceImpl implements UserService,UserDetailsService{
 	public ApiResponse addUser(UserRequest userRequest)
 	{
 		if (userRepo.existsByUserMobile(userRequest.getUserMobile())) {
-			throw new BadRequestException(AppConstant.NUMBER_ALREADY_TAKEN +" " +userRequest.getUserMobile());
+			throw new BadRequestException(new ApiResponse(Boolean.FALSE,AppConstant.NUMBER_ALREADY_TAKEN));
 		}
 
 		if (userRepo.existsByUserEmail(userRequest.getUserEmail())) {
-			throw new BadRequestException(AppConstant.EMAIL_ALREADY_TAKEN+" "+userRequest.getUserEmail());
+			throw new BadRequestException(new ApiResponse(Boolean.FALSE,AppConstant.EMAIL_ALREADY_TAKEN));
 		}
 		
 		 Role role = new Role();
@@ -117,8 +116,8 @@ public class UserServiceImpl implements UserService,UserDetailsService{
 	}
 
 	@Override
-	public UserResponse getUserById() {
-       User user = userRepo.findByIdAndStatus(appUtils.getUserId(),Status.ACTIVE).orElseThrow(()->new BadRequestException(AppConstant.USER_NOT_FOUND));
+	public UserResponse getUserById(Long userId) {
+       User user = userRepo.findByIdAndStatus(userId,Status.ACTIVE).orElseThrow(()->new ResourceNotFoundException(AppConstant.USER,AppConstant.ID,userId));
        UserResponse userResponse =loginServiceImpl.userToUserResponse(user);           
        return userResponse;  
 	}
@@ -140,17 +139,17 @@ public class UserServiceImpl implements UserService,UserDetailsService{
 				}
 				else
 				{
-					   throw new BadRequestException( AppConstant.OTP_EXPERED);	
+					   throw new BadRequestException( new ApiResponse(Boolean.FALSE,AppConstant.OTP_EXPERED));
 				}	
 			}
 			else
 			{
-				   throw new BadRequestException(AppConstant.INVALID_OTP);	
+				   throw new BadRequestException(new ApiResponse(Boolean.FALSE,AppConstant.INVALID_OTP));	
 			}	
 		}
 		else
 		{
-			   throw new BadRequestException(AppConstant.INVALID_PHONE_NUMBER);
+			   throw new BadRequestException(new ApiResponse(Boolean.FALSE,AppConstant.INVALID_PHONE_NUMBER));
 		}
 		return new ApiResponse(Boolean.TRUE,AppConstant.ACCOUNT_DEACTIVATE); 
 	}

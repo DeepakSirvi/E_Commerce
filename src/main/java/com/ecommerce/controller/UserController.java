@@ -17,6 +17,7 @@ import com.ecommerce.payload.UserRequest;
 import com.ecommerce.payload.UserResponse;
 import com.ecommerce.service.LoginService;
 import com.ecommerce.service.UserService;
+import com.ecommerce.util.AppUtils;
 
 
 @RestController
@@ -26,6 +27,9 @@ public class UserController {
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private AppUtils appUtils;
 	
 	
 	
@@ -44,6 +48,6 @@ public class UserController {
 	@GetMapping("/")
 	public ResponseEntity<UserResponse> getUser() 
 	{
-		return new ResponseEntity<UserResponse>(userService.getUserById(),HttpStatus.OK);
+		return new ResponseEntity<UserResponse>(userService.getUserById(appUtils.getUserId()),HttpStatus.OK);
 	}
 }

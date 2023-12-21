@@ -37,22 +37,25 @@ public class ProductController {
 	@GetMapping("/ByCategory/{categoryId}/{subCategoryId}")
 	public ResponseEntity<PageResponse<ProductResponse>> getAllProductByCategory(
 			@PathVariable(value = "categoryId") Long id,@PathVariable(value = "subCategoryId") Long subId,
-			@RequestParam(value = "page", required = false, defaultValue =  AppConstant.DEFAULT_PAGE_NUMBER) Integer page,
-			@RequestParam(value = "size", required = false, defaultValue = AppConstant.DEFAULT_PAGE_SIZE) Integer size)
+			@RequestParam(value = "pageIndex", required = false, defaultValue =  AppConstant.DEFAULT_PAGE_NUMBER) Integer pageIndex,
+			@RequestParam(value = "pageSize", required = false, defaultValue = AppConstant.DEFAULT_PAGE_SIZE) Integer pageSize,
+			@RequestParam(value = "sortDir", required = false, defaultValue = AppConstant.DEFAULT_SORT_DIR) String sortDir)
 	{
 		
-		PageResponse<ProductResponse> pageResponse=productService.getProductBySubCategory(id,subId,page,size);
+		PageResponse<ProductResponse> pageResponse=productService.getProductBySubCategory(id,subId,pageIndex,pageSize,sortDir);
 		return new ResponseEntity<>(pageResponse,HttpStatus.OK);
 	}
 	
 	@GetMapping("/")
-	public ResponseEntity<PageResponse<ProductResponse>> getAllProduct(@RequestBody ProductRequest productRequest,
-			@RequestParam(value = "page", required = false, defaultValue =  AppConstant.DEFAULT_PAGE_NUMBER) Integer page,
-			@RequestParam(value = "size", required = false, defaultValue = AppConstant.DEFAULT_PAGE_SIZE) Integer size)
-	{
+	public ResponseEntity<?> getAllProduct(
+			@RequestParam(value = "productSearch", required = false ) String search,
+			@RequestParam(value = "pageIndex", required = false, defaultValue =  AppConstant.DEFAULT_PAGE_NUMBER) Integer pageIndex,
+			@RequestParam(value = "pageSize", required = false, defaultValue = AppConstant.DEFAULT_PAGE_SIZE) Integer pageSize,
+			@RequestParam(value = "sortDir", required = false, defaultValue = AppConstant.DEFAULT_SORT_DIR) String sortDir)
+	{ 
 		
-		PageResponse<ProductResponse> pageResponse=productService.getAllProduct(page,size,productRequest);
-		return new ResponseEntity<>(pageResponse,HttpStatus.OK);
+		
+		return new ResponseEntity<Map<String,Object>>(productService.getAllProduct(search,pageIndex,pageSize,sortDir),HttpStatus.OK);
 	}
 	
 	@GetMapping("/{productId}")
@@ -61,7 +64,7 @@ public class ProductController {
 	}
 	
 	@GetMapping("/vendor/{vendorId}")
-	public ResponseEntity<PageResponse<ProductResponse>> getAllProductByCategory(
+	public ResponseEntity<PageResponse<ProductResponse>> getAllProductOfVender(
 			@PathVariable(value = "vendorId") Long vendorId,
 			@RequestParam(value = "page", required = false, defaultValue =  AppConstant.DEFAULT_PAGE_NUMBER) Integer page,
 			@RequestParam(value = "size", required = false, defaultValue = AppConstant.DEFAULT_PAGE_SIZE) Integer size)

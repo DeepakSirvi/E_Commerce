@@ -11,11 +11,9 @@ import org.springframework.stereotype.Service;
 
 import com.ecommerce.exception.BadRequestException;
 import com.ecommerce.model.Cart;
-import com.ecommerce.model.Product;
 import com.ecommerce.model.User;
 import com.ecommerce.model.Varient;
 import com.ecommerce.payload.CartResponse;
-import com.ecommerce.payload.ProductResponse;
 import com.ecommerce.repository.CartRepo;
 import com.ecommerce.service.CartService;
 import com.ecommerce.util.AppConstant;
