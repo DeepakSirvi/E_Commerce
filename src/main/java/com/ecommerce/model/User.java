@@ -107,5 +107,10 @@ public class User {
 		this.id=id;		
 	}
 
+	public WishListProduct getWishlist() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	
 }

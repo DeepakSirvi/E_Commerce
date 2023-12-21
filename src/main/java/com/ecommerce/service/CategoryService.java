@@ -30,4 +30,5 @@ public interface CategoryService {
 
 	public Map<String, Object> getCategory(String search, Integer pageIndex, Integer pageSize, String sortDir);
 
+
 }
