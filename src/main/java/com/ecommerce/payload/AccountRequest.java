@@ -1,7 +1,6 @@
 package com.ecommerce.payload;
 
 import com.ecommerce.model.Status;
-import com.ecommerce.model.User;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 

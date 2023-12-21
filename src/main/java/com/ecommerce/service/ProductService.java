@@ -11,12 +11,13 @@ public interface ProductService {
 
 	public Map<String, Object> addProduct(ProductRequest productRequest);
 
-	public PageResponse<ProductResponse> getProductBySubCategory(Long id, Long subId, Integer page, Integer size);
-
-	public PageResponse<ProductResponse> getAllProduct(Integer page, Integer size,ProductRequest productRequest);
+	public PageResponse<ProductResponse> getProductBySubCategory(Long id, Long subId, Integer page, Integer size,String sortDir);
 
 	public ProductResponse getProduct(Long productId);
 
 	public PageResponse<ProductResponse> getProductByVendorId(Long vendorId, Integer page, Integer size);
+
+	public Map<String, Object> getAllProduct(String search, Integer pageIndex, Integer pageSize,
+			String sortDir);
 	
 }

@@ -1,12 +1,18 @@
 package com.ecommerce.util;
 
+import lombok.NonNull;
+
 public class AppConstant {
 	
 	public static final String DEFAULT_PAGE_NUMBER = "0";
-	public static final String DEFAULT_PAGE_SIZE = "1"; 
+	public static final String DEFAULT_PAGE_SIZE = "10"; 
 	public static final Integer MAX_PAGE_SIZE = 10;
+	public static final String DEFAULT_SORT_DIR = "DESC";
 	
 	public static final String RESPONSE_MESSAGE="response";
+	public static final String UNAUTHORIZED="You don't have permission to make this operation";
+	
+	
 	
 	public static final String RESGISTRATION_SUCCESSFULLY = "User resgistration successfully";
 	public static final String INVALID_PHONE_NUMBER = "Invalid mobile number";
@@ -92,8 +98,22 @@ public class AppConstant {
 	public static final String VARIENT_NOT_FOUND = "Varient not found";
 	public static final String STATUS_UPDATE = "Status is sucessfully update";
 	
+	public static final String NOTIFICATION_TITLE_TAKEN = "Title is already use";
+	public static final String NOTIFICATION_ADDED = "Notification send";
+	public static final String NOTIFICATION_DELETED = "Notification deleted successfully";
+	public static final String NOTIFICATION_UPDATE = "Notification updated";
 	
 	public static final String VENDOR_NOT_FOUND = "Vendor is not found";
+	public static final String MOBILE = "Mobile";
+	public static final String USER = "User";
+	public static final String ID = "Id";
+	public static final String NOTIFICATION = "Notification";
+	public static final String VARIENT = "Varient";
+	public static final String VARIENTCATEGORY = "Varient category";
+	public static final String VARIENTCATEGORYATTRIBUTE = "Varient category attribute";
+	
+	
+	
 	
 	
 

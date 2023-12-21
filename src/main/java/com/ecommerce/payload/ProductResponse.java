@@ -2,6 +2,7 @@ package com.ecommerce.payload;
 
 import java.util.Set;
 
+import com.ecommerce.model.Status;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -15,11 +16,12 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(Include.NON_NULL)
-public class ProductResponse {
+public class ProductResponse extends AuditResponse {
 	
 	private Long id;
 	private String productName;
 	private Boolean listingStatus;
+	private Status verified;
 	private String brand;
 	private String fullfillmentBy;
 	private String shippingProvider;
