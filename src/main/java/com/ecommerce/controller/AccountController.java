@@ -1,6 +1,8 @@
 package com.ecommerce.controller;
 
+
 import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,9 +54,9 @@ public class AccountController {
 		
 		return new  ResponseEntity<Map<String, Object>>(accountService.getAccountByStatusAndUserId(userId, status),HttpStatus.OK);
 }
-	 @PutMapping("/updateDetails/{accountId}")  
-	    public ResponseEntity<Map<String, Object>> updateAccountDetailsById(@PathVariable Long accountId, @RequestBody Account updatedDetails) {
-	        Map<String, Object> response = accountService.updateAccountDetailsById(accountId, updatedDetails);
+	 @PutMapping("/updateDetails")  
+	    public ResponseEntity<Map<String, Object>> updateAccountDetailsById( @RequestBody Account updatedDetails) {
+	        Map<String, Object> response = accountService.updateAccountDetailsById( updatedDetails);
 	        return ResponseEntity.ok(response);
 	    }
 }

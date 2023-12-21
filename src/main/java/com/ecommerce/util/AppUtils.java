@@ -1,22 +1,26 @@
 package com.ecommerce.util;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Collection;
 import java.util.Objects;
 import java.util.Random;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ecommerce.exception.BadRequestException;
-import com.ecommerce.model.Status;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -30,6 +34,7 @@ public class AppUtils {
 	@Value("${app.path}")
 	private String path;
 	
+	private static final String GLOBAL_DIR = System.getProperty("user.dir");
    
 	public Integer generateOtp() {
 		Random r = new Random();
@@ -41,14 +46,15 @@ public class AppUtils {
 		if(httpRequest!=null)
 		{
 		   String token = httpRequest.getParameter("Authorization");
-		   return jwtUtils.getUserIdFromToken(token);
-		   
+		   return jwtUtils.getUserIdFromToken(token); 
 		}
 		else
 		{
 			   throw new BadRequestException(AppConstant.INVALID_REQUEST);
 		}
 	}
+	
+	
 	
      public static final void validatePageAndSize(Integer page, Integer size) {
 		
@@ -66,7 +72,7 @@ public class AppUtils {
 	}
      
      public String uploadImage(MultipartFile file,String dir,String uuid) {
- 		String currentDir = System.getProperty("user.dir") + path +File.separator+dir + File.separator;
+ 		String currentDir = GLOBAL_DIR + path + File.separator + dir + File.separator;
  	    String originalFilename = StringUtils.cleanPath(file.getOriginalFilename());
  	    if(!Objects.nonNull(uuid))
  	   	uuid = UUID.randomUUID().toString();
@@ -80,13 +86,14 @@ public class AppUtils {
  		return dir+File.separator+randomName;
  	}
      
-     public void validateStatusTransition(Status currentStatus, Status newStatus) {
-	        if ((currentStatus == Status.ACTIVE && newStatus == Status.ACTIVE) ||
-	            (currentStatus == Status.DEACTIVE && newStatus == Status.DEACTIVE)) {
-	            throw new BadRequestException("Invalid status transition");
-	        }
-	 }
-
+     public InputStream getImages(String fileName){
+ 	 	try {
+ 			return new FileInputStream(GLOBAL_DIR + path + File.separator+fileName);
+ 	} catch (FileNotFoundException e) {
+ 		e.printStackTrace();
+ 	}
+ 	return null;
+ }
 
 	
 }

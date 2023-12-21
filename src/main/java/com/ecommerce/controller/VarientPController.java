@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,10 +34,9 @@ public class VarientPController {
 	private VarientService varientService;
 	
 	@PostMapping(path="/")
-	public ResponseEntity<Map<String, Object>> addProductVarient(@RequestParam(value = "varientRequest") String varientRequest,
+	public ResponseEntity<Map<String, Object>> addProductVarient(@RequestPart(value = "varientRequest") String varientRequest,
 		
-			@RequestParam(value="file[]",required = false) List<MultipartFile> multipartFiles){
-		
+			@RequestPart(value="file",required = false) List<MultipartFile> multipartFiles){
 		VarientRequest request=null;
 		ObjectMapper mapper = new ObjectMapper();
 		try {
@@ -49,7 +46,6 @@ public class VarientPController {
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}
-				System.out.println(request.getVarientName());
 		return new ResponseEntity<Map<String,Object>>(varientService.createVarient(request,multipartFiles),HttpStatus.CREATED);
 	}
 	

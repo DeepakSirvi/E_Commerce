@@ -18,6 +18,10 @@ import lombok.Setter;
 @JsonInclude(Include.NON_NULL)
 public class RoleResponse extends Audit {
 	
+	public RoleResponse(Integer id2, RoleName roleName2) {
+		this.id=id2;
+		this.roleName=roleName2;
+	}
 	private Integer id;
 	private RoleName roleName;
 	private String description;

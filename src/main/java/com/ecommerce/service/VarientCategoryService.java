@@ -2,6 +2,7 @@ package com.ecommerce.service;
 
 import java.util.Map;
 
+import com.ecommerce.payload.CategoryRequest;
 import com.ecommerce.payload.VarientCategoryAttributeRequest;
 import com.ecommerce.payload.VarientCategoryRequest;
 
@@ -24,5 +25,8 @@ public interface VarientCategoryService {
 	public Map<String,Object> getVarientCategoryById(Long id);
 
 	public Map<String, Object> getAllVarient();
+
+	public Map<String, Object> getAllVarientCategory(String search, Integer pageIndex,
+			Integer pageSize, String sortDir);
 
 }

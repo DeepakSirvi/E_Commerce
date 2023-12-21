@@ -1,7 +1,5 @@
 package com.ecommerce.service.impl;
 
-
-
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
@@ -18,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import com.ecommerce.exception.BadRequestException;
+import com.ecommerce.exception.ResourceNotFoundException;
 import com.ecommerce.model.Login;
 import com.ecommerce.model.Role;
 import com.ecommerce.model.RoleName;
@@ -27,10 +26,8 @@ import com.ecommerce.model.UserRole;
 import com.ecommerce.payload.ApiResponse;
 import com.ecommerce.payload.LoginRequest;
 import com.ecommerce.payload.OtpResponse;
-import com.ecommerce.payload.RoleResponse;
 import com.ecommerce.payload.UserRequest;
 import com.ecommerce.payload.UserResponse;
-import com.ecommerce.payload.UserRoleResponse;
 import com.ecommerce.repository.LoginRepo;
 import com.ecommerce.repository.UserRepo;
 import com.ecommerce.service.LoginService;
@@ -47,6 +44,9 @@ public class UserServiceImpl implements UserService,UserDetailsService{
 	@Autowired
 	private LoginService loginService;
 	
+	@Autowired
+	private LoginServiceImpl loginServiceImpl;
+	
 	@Autowired 
 	private ModelMapper mapper;
 	
@@ -59,14 +59,15 @@ public class UserServiceImpl implements UserService,UserDetailsService{
 	
 	private  ApiResponse apiResponse=null;
 	
-	public ApiResponse  addUser(UserRequest userRequest)
+	@Override
+	public ApiResponse addUser(UserRequest userRequest)
 	{
 		if (userRepo.existsByUserMobile(userRequest.getUserMobile())) {
-			throw new BadRequestException(AppConstant.NUMBER_ALREADY_TAKEN +" " +userRequest.getUserMobile());
+			throw new BadRequestException(new ApiResponse(Boolean.FALSE,AppConstant.NUMBER_ALREADY_TAKEN));
 		}
 
 		if (userRepo.existsByUserEmail(userRequest.getUserEmail())) {
-			throw new BadRequestException(AppConstant.EMAIL_ALREADY_TAKEN+" "+userRequest.getUserEmail());
+			throw new BadRequestException(new ApiResponse(Boolean.FALSE,AppConstant.EMAIL_ALREADY_TAKEN));
 		}
 		
 		 Role role = new Role();
@@ -81,14 +82,13 @@ public class UserServiceImpl implements UserService,UserDetailsService{
 		 Set<UserRole> userRoles = new HashSet<>();
 		 userRoles.add(userRole);
 		 
-		 
 		 user.setUserRole(userRoles);
 		 user.setStatus(Status.ACTIVE);
 		 user.setCreatedAt(LocalDateTime.now());
 		 user.setUpdatedAt(LocalDateTime.now());
-		 User user1 = userRepo.save(user);
-		
-		 if(user1.getId()!=null) {
+		 
+		 user = userRepo.save(user);
+		 if(user.getId()!=null) {
 		  apiResponse = new ApiResponse(Boolean.TRUE, AppConstant.RESGISTRATION_SUCCESSFULLY);
 		 }
 		return apiResponse;
@@ -96,6 +96,7 @@ public class UserServiceImpl implements UserService,UserDetailsService{
 
 	@Override
 	public UserDetails loadUserByUsername(String username) {
+		System.out.println("Load By User Method");
 		Optional<User> findByUserName = userRepo.findByUserMobile(username);
 		 if(findByUserName.isPresent())
 		    {
@@ -115,42 +116,20 @@ public class UserServiceImpl implements UserService,UserDetailsService{
 	}
 
 	@Override
-	public UserResponse getUserById() {
-       User user = userRepo.findByIdAndStatus(appUtils.getUserId(),Status.ACTIVE).orElseThrow(()->new BadRequestException(AppConstant.USER_NOT_FOUND));
-       
-       
-       UserResponse userResponse = new UserResponse();
-       userResponse.setFirstName(user.getFirstName());
-       userResponse.setLastName(user.getLastName());
-       userResponse.setGender(user.getGender());
-       userResponse.setId(user.getId());
-       userResponse.setUserMobile(user.getUserMobile());
-       userResponse.setUserEmail(user.getUserEmail());
-       userResponse.setStatus(user.getStatus());
-       
-       Set<UserRole> userRoles = user.getUserRole();
-       
-       Set<UserRoleResponse> collect = userRoles.stream().map(userRole -> userRoleToUserRoleResponse(userRole)).collect(Collectors.toSet());
-       userResponse.setUserRole(collect);      
-       return userResponse;
-       
+	public UserResponse getUserById(Long userId) {
+       User user = userRepo.findByIdAndStatus(userId,Status.ACTIVE).orElseThrow(()->new ResourceNotFoundException(AppConstant.USER,AppConstant.ID,userId));
+       UserResponse userResponse =loginServiceImpl.userToUserResponse(user);           
+       return userResponse;  
 	}
 
-	private UserRoleResponse userRoleToUserRoleResponse(UserRole userRoles) {
-       UserRoleResponse response = new UserRoleResponse();
-       response.setId(userRoles.getId());
-       response.setRole(new RoleResponse(userRoles.getRole().getId(),userRoles.getRole().getRoleName(),userRoles.getRole().getDescription()));
-       return response;
-	}
+	
 
 	@Override
 	public ApiResponse deativateAccount(LoginRequest loginRequest) {
-		System.out.println(loginRequest.getMobileNumber());
 		if(loginRepo.existsByPhoneNumber(loginRequest.getMobileNumber()))
 		{
 			Optional<Login> login = loginRepo.findByPhoneNumberAndOtp(loginRequest.getMobileNumber(), loginRequest.getOtp());
 			if(login.isPresent()) {
-				
 				if(login.get().getExperiedAt().compareTo(LocalDateTime.now())>=0){
 			    
 				// Code to deactivte account
@@ -160,19 +139,17 @@ public class UserServiceImpl implements UserService,UserDetailsService{
 				}
 				else
 				{
-					   throw new BadRequestException( AppConstant.OTP_EXPERED);	
-				}
-				
+					   throw new BadRequestException( new ApiResponse(Boolean.FALSE,AppConstant.OTP_EXPERED));
+				}	
 			}
 			else
 			{
-				   throw new BadRequestException(AppConstant.INVALID_OTP);	
-			}
-			
+				   throw new BadRequestException(new ApiResponse(Boolean.FALSE,AppConstant.INVALID_OTP));	
+			}	
 		}
 		else
 		{
-			   throw new BadRequestException(AppConstant.INVALID_PHONE_NUMBER);
+			   throw new BadRequestException(new ApiResponse(Boolean.FALSE,AppConstant.INVALID_PHONE_NUMBER));
 		}
 		return new ApiResponse(Boolean.TRUE,AppConstant.ACCOUNT_DEACTIVATE); 
 	}

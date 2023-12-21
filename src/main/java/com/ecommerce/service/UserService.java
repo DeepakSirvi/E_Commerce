@@ -8,11 +8,11 @@ import com.ecommerce.payload.UserResponse;
 
 public interface UserService {
 
-	public ApiResponse  addUser(UserRequest userRequest);
+	public ApiResponse addUser(UserRequest userRequest);
 
 	public OtpResponse otpToDeativateAccount(UserRequest userRequest);
 	
-	public UserResponse getUserById();
+	public UserResponse getUserById(Long userId);
 
 	public ApiResponse deativateAccount(LoginRequest loginRequest);
 

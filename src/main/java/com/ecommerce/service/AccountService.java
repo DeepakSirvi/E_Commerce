@@ -20,7 +20,7 @@ public interface AccountService {
   
   public  Map<String, Object> getAccountByStatusAndUserId(Long userId, Status status);
   
-  public  Map<String, Object> updateAccountDetailsById(Long accountId, Account updatedDetails);
+  public  Map<String, Object> updateAccountDetailsById(Account updatedDetails);
  
   
   

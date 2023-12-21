@@ -1,14 +1,9 @@
 package com.ecommerce.payload;
 
-import java.util.Set;
-
-import com.ecommerce.model.Status;
 import com.ecommerce.model.Varient;
-import com.ecommerce.model.VarientCategoryJoin;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
-import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
