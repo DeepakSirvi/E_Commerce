@@ -30,9 +30,7 @@ public class ProductReview extends Audit {
 	
 	@OneToMany(mappedBy ="imageReview")
 	private Set<ReviewImage> image;
-	
-
-	
+		
 	@ManyToOne
 	private User user;
 	

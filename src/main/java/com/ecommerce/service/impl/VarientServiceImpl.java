@@ -65,13 +65,39 @@ public class VarientServiceImpl implements VarientService {
 				productImage.setVarientImage(varient);
 			}
 		}
-
 		Map<String, Object> response = new HashMap<>();
 		Varient save = varientRepo.save(varient);
 		response.put(AppConstant.RESPONSE_MESSAGE,
 				new ApiResponse(Boolean.TRUE, AppConstant.VARIENT_ADDED, HttpStatus.CREATED));
-		response.put("varient", varientToVarientResponse(save));
+		response.put("varient", new VarientResponse().varientToVarientResponse(save));
 		return response;
+	}
+
+	@Override
+	public Map<String, Object> updateVarientStatus(Long id) {
+
+		Varient varient = varientRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException(VARIENT, ID, id));
+		Map<String, Object> response = new HashMap<>();
+		if (userRepo.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleName.ADMIN))
+				|| varient.getCreatedBy().equals(appUtils.getUserId())) {
+			varient.setStatus(varient.getStatus() == Status.ACTIVE ? Status.DEACTIVE : Status.ACTIVE);
+			varientRepo.save(varient);
+			response.put("response", AppConstant.STATUS_UPDATE + id);
+			return response;
+		}
+		throw new UnauthorizedException(new ApiResponse(Boolean.FALSE, UNAUTHORIZED));
+	}
+	
+	@Override
+	public Map<String, Object> getVarient(Long id) {
+		Varient varient = varientRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException(VARIENT, ID, id));
+		if (userRepo.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleName.ADMIN))
+				|| varient.getCreatedBy().equals(appUtils.getUserId()) || varient.getStatus().equals(Status.ACTIVE)) {
+			Map<String, Object> response = new HashMap<>();
+			response.put("varient", new VarientResponse().varientToVarientResponse(varient));
+			return response;
+		}
+		throw new UnauthorizedException(new ApiResponse(Boolean.FALSE, UNAUTHORIZED));
 	}
 
 	@Override
@@ -81,45 +107,9 @@ public class VarientServiceImpl implements VarientService {
 	}
 
 	@Override
-	public Map<String, Object> getVarient(Long id) {
-
-		Varient varient = varientRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException(VARIENT, ID, id));
-		if (userRepo.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleName.ADMIN))
-				|| varient.getCreatedBy().equals(appUtils.getUserId()) || varient.getStatus().equals(Status.ACTIVE)) {
-			Map<String, Object> response = new HashMap<>();
-			VarientResponse varientResponse = varientToVarientResponse(varient);
-			response.put("varient", varientResponse);
-			return response;
-		}
-		throw new UnauthorizedException(new ApiResponse(Boolean.FALSE, UNAUTHORIZED));
-	}
-
-	private VarientResponse varientToVarientResponse(Varient varient) {
-		VarientResponse varientResponse = new VarientResponse();
-		varientResponse.setId(varient.getId());
-		return varientResponse;
-	}
-
-	@Override
 	public Map<String, Object> getAllVarientByProductId(Long id) {
-
 		return null;
 	}
 
-	@Override
-	public Map<String, Object> updateVarientStatus(Long id) {
-
-		Varient varient = varientRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException(VARIENT, ID, id));
-		Map<String, Object> response = new HashMap<>();
-		if (userRepo.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleName.ADMIN))
-				|| varient.getCreatedBy().equals(appUtils.getUserId())) 
-		{
-			varient.setStatus(varient.getStatus() == Status.ACTIVE ? Status.DEACTIVE : Status.ACTIVE);
-			varientRepo.save(varient);
-			response.put("response", AppConstant.STATUS_UPDATE + id);
-			return response;
-		}
-		throw new UnauthorizedException(new ApiResponse(Boolean.FALSE, UNAUTHORIZED));
-	}
 
 }

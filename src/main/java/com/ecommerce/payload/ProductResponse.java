@@ -1,7 +1,10 @@
 package com.ecommerce.payload;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
+import com.ecommerce.model.Product;
+import com.ecommerce.model.ProductDescription;
 import com.ecommerce.model.Status;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -37,5 +40,41 @@ public class ProductResponse extends AuditResponse {
 	private UserResponse vendor;
 	private SubCategoryResponse subCategory;
 	private Set<VarientResponse> varient;
-	private ProductDescriptionResponse description;
+	private ProductDescription description;
+	
+	public ProductResponse productToProductResponse(Product product) {
+		this.setId(product.getId());
+		this.setProductName(product.getProductName());
+		this.setListingStatus(product.getListingStatus());
+		this.setBrand(product.getBrand());
+		this.setFullfillmentBy(product.getFullfillmentBy());
+		this.setShippingProvider(product.getShippingProvider());
+		this.setDeliveryCharge(product.getDeliveryCharge());
+		this.setProductWeight(product.getProductWeight());
+		this.setProductHeight(product.getProductHeight());
+		this.setProductWidth(product.getProductWidth());
+		this.setProductLength(product.getProductLength());
+		this.setTaxCode(product.getTaxCode());
+		this.setCountryOfOrigin(product.getCountryOfOrigin());
+		this.setProductType(product.getProductType());
+		this.setVarient( product.getVarient().stream()
+				.map(varient-> {
+					VarientResponse varientResponse=new VarientResponse();
+				  return varientResponse.varientToVarientResponse(varient);
+				}).collect(Collectors.toSet()));
+		return this;
+	}
+	
+
+	  public ProductResponse productToProductResponseList(Product product) {
+		this.setId(product.getId());
+		this.setProductName(product.getProductName());
+		this.setListingStatus(product.getListingStatus());
+		this.setBrand(product.getBrand());
+		this.setCountryOfOrigin(product.getCountryOfOrigin());
+		this.setProductType(product.getProductType());
+		this.setCreatedAt(product.getCreatedAt());
+		this.setVerified(product.getVerified());
+		return this;
+	}
 }
