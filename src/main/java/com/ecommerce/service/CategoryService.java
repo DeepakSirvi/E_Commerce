@@ -26,6 +26,6 @@ public interface CategoryService {
 
     public ApiResponse deleteCategoryById(Long id);
 
-public Map<String, Object> getCategory();
+    public Map<String, Object> getCategory();
 
 }

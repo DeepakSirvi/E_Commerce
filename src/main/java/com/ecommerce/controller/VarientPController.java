@@ -45,10 +45,8 @@ public class VarientPController {
 		try {
 			request=mapper.readValue(varientRequest, VarientRequest.class);
 		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 				System.out.println(request.getVarientName());

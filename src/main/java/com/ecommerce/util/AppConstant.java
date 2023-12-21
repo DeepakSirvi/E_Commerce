@@ -89,6 +89,14 @@ public class AppConstant {
 	public static final String VARIENT_ADDED = "Varient added successfully";
 	public static final String VARIENT_NOT_FOUND = "Varient not found";
 	public static final String STATUS_UPDATE = "Status is sucessfully update";
+	public static final Object ADDWISHLIST = "Product add to wishlist";
+	public static final Object PRODUCT_ALREADY_IN_WISHLIST = "Product already add wishlist";
+	public static final Object REMOVE_FROM_WISHLIST_ = "remove from wishlist";
+	public static final String PRODUCT_NOT_ADD_WISHLIST = "product not add wishlist";
+	public static final String USER_ID_REQUIRED = "user Id Active";
+	public static final String ACTIVE_VARIENTS_IN_WISHLIST_NOT_FOUND = "Active varient in wishlist not found";
+	public static final Object ACTIVE_VARIENT_IN_WISHLIST_FOUND = "active varient in wishlist found";
+	public static final String WISHLIST_NOT_FOUND = "wishlist not fond";
 	
 	
 

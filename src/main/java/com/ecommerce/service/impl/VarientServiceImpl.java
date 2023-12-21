@@ -1,11 +1,10 @@
 package com.ecommerce.service.impl;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +22,7 @@ import com.ecommerce.repository.VarientRepo;
 import com.ecommerce.service.VarientService;
 import com.ecommerce.util.AppConstant;
 import com.ecommerce.util.AppUtils;
+
 @Service
 public class VarientServiceImpl implements VarientService {
 

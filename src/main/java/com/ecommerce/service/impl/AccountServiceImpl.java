@@ -171,7 +171,6 @@ public class AccountServiceImpl implements AccountService {
 		        account.setBankIFSCcode(updatedDetails.getBankIFSCcode());
 		        account.setVenderGSTnumber(updatedDetails.getVenderGSTnumber());
 		        account.setPanNumber(updatedDetails.getPanNumber());
-//		        account.setStatus(updatedDetails.getStatus());
 		        account.setUpdatedAt(updatedDetails.getCreatedAt());
 		        account.setUpdatedBy(updatedDetails.getCreatedBy());
 		        account.setUser(updatedDetails.getUser());
