@@ -3,6 +3,8 @@ package com.ecommerce.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.ecommerce.payload.VarientResponse;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -64,7 +66,4 @@ public class Varient extends Audit {
 	@OneToMany(mappedBy = "varient")
 	private Set<ProductSaveForLater> saveLater;
 	
-
-	
-
 }

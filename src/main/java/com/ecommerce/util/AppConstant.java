@@ -118,6 +118,7 @@ public class AppConstant {
 	public static final String NOTIFICATION = "Notification";
 	public static final String VARIENT = "Varient";
 	public static final String VARIENTCATEGORY = "Varient category";
+	public static final String PRODUCT = "Product";
 	public static final String VARIENTCATEGORYATTRIBUTE = "Varient category attribute";
 	
 	

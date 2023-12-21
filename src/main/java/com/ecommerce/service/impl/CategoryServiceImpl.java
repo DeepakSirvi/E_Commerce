@@ -182,7 +182,9 @@ public class CategoryServiceImpl implements CategoryService {
 		}
 		Pageable pageable = PageRequest.of(page, size,sort1);
 		Page<Category> findAll=null;
-		if(!search.equals(" ")) {
+		 search = search.trim();
+		if(!search.equals("")) {
+			System.out.println(search);
 		 findAll = categoryRepo.getAllCategorySearch(search,pageable);
 		}
 		else

@@ -57,7 +57,7 @@ public class Product extends Audit {
 	private SubCategory subCategory;
 
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "product_Id")
+	@JoinColumn(name = "description_Id",referencedColumnName = "id")
 	private ProductDescription description;
 	
 	@OneToMany(mappedBy = "product",cascade = CascadeType.ALL)

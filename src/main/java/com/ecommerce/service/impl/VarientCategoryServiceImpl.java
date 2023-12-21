@@ -237,8 +237,9 @@ public class VarientCategoryServiceImpl implements VarientCategoryService {
 			sort1 = Sort.by(Sort.Order.asc("updatedAt"));
 		}
 		Pageable pageable = PageRequest.of(pageIndex, pageSize,sort1);
+		search=search.trim();
 		Page<VarientCategory> findAll=null;
-		if(!search.equals(" ")) {
+		if(!search.equals("")) {
 		 findAll = varienCategoryRepo.getAllVarientList(search,pageable);
 		}
 		else
