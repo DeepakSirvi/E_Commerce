@@ -18,7 +18,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class SubCategory {
+public class SubCategory extends Audit {
 
 	public SubCategory(Long id2) {
 		this.id=id2;

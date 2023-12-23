@@ -62,7 +62,7 @@ public class CategoryController {
 				categoryService.getCategory(search, pageIndex, pageSize, sortDir), HttpStatus.OK);
 	}
 
-	@GetMapping("/admin")
+	@GetMapping
 	public ResponseEntity<Map<String, Object>> getAllCategoryList() {
 		return new ResponseEntity<Map<String, Object>>(categoryService.getAllCategory(), HttpStatus.OK);
 	}

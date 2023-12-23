@@ -60,12 +60,12 @@ public class LoginServiceImpl implements LoginService {
 				loginRepo.save(login);
 				otpResponse = new OtpResponse(otp, AppConstant.OTP_GENERATED);
 			} else if (user.get().getStatus().equals(Status.DEACTIVE)) {
-				throw new BadRequestException(new ApiResponse(Boolean.FALSE, AppConstant.USER_DEACTIVE));
+				throw new BadRequestException( AppConstant.USER_DEACTIVE);
 			} else if (user.get().getStatus().equals(Status.BLOCK)) {
-				throw new BadRequestException(new ApiResponse(Boolean.FALSE, AppConstant.USER_BLOCK));
+				throw new BadRequestException( AppConstant.USER_BLOCK);
 			}
 		} else {
-			throw new BadRequestException(new ApiResponse(Boolean.FALSE, AppConstant.NEW_USER));
+			throw new BadRequestException( AppConstant.NEW_USER);
 		}
 		return otpResponse;
 	}
@@ -87,20 +87,20 @@ public class LoginServiceImpl implements LoginService {
 						return currentUser;
 					}
 					else if (user.get().getStatus().equals(Status.DEACTIVE)) {
-						throw new BadRequestException(new ApiResponse(Boolean.FALSE, AppConstant.USER_DEACTIVE));
+						throw new BadRequestException( AppConstant.USER_DEACTIVE);
 					} 
 					else if (user.get().getStatus().equals(Status.BLOCK)) {
-						throw new BadRequestException(new ApiResponse(Boolean.FALSE, AppConstant.USER_BLOCK));
+						throw new BadRequestException( AppConstant.USER_BLOCK);
 					}
 				} else {
-					throw new BadRequestException(new ApiResponse(Boolean.FALSE,AppConstant.OTP_EXPERED));
+					throw new BadRequestException(AppConstant.OTP_EXPERED);
 				}
 			} else {
-				throw new BadRequestException(new ApiResponse(Boolean.FALSE,AppConstant.INVALID_OTP));
+				throw new BadRequestException(AppConstant.INVALID_OTP);
 			}
 
 		} else {
-			throw new BadRequestException(new ApiResponse(Boolean.FALSE,AppConstant.INVALID_PHONE_NUMBER));
+			throw new BadRequestException(AppConstant.INVALID_PHONE_NUMBER);
 		}
 		return null;
 

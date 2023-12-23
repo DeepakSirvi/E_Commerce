@@ -120,6 +120,7 @@ public class AppConstant {
 	public static final String VARIENTCATEGORY = "Varient category";
 	public static final String PRODUCT = "Product";
 	public static final String VARIENTCATEGORYATTRIBUTE = "Varient category attribute";
+	public static final String CATEGORY = "Product category";
 	
 	
 	

@@ -1,6 +1,7 @@
 package com.ecommerce.payload;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import com.ecommerce.model.VarientCategory;
@@ -25,6 +26,20 @@ public class VarientCategoryAttributeResponse {
 	private String attributeName;
 	private VarientCategoryReponse varientCategory;
 	private Set<VarientCategoryJoinResonse> categoryJoins = new HashSet<>();
+	
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        VarientCategoryAttributeResponse that = (VarientCategoryAttributeResponse) o;
+        return Objects.equals(id, that.id) && Objects.equals(attributeName, that.attributeName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, attributeName);
+    }
 	
 	public VarientCategoryAttributeResponse vatAttributeToResponse(VarientCategoryAttribute attribute) {
 		this.setAttributeName(attribute.getAttributeName());

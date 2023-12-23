@@ -18,9 +18,9 @@ import com.ecommerce.payload.ApiResponse;
 public class GlobalExceptionHandler {
 
 	@ExceptionHandler(BadRequestException.class)
-	public ResponseEntity<ApiResponse> resolveException(BadRequestException exception) {
-		ApiResponse apiResponse = exception.getApiResponse();
-		return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+	public ResponseEntity<ExceptionResponse> resolveException(BadRequestException exception) {
+		ExceptionResponse exceptionResponse = exception.getExceptionResponse();
+		return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
 	}
 
 	
@@ -39,16 +39,16 @@ public class GlobalExceptionHandler {
 	
 	
 	@ExceptionHandler(ResourceNotFoundException.class)
-	public ResponseEntity<ApiResponse> resolveException(ResourceNotFoundException exception) {
-		ApiResponse apiResponse = exception.getApiResponse();
-		return new ResponseEntity<>(apiResponse, HttpStatus.NOT_FOUND);
+	public ResponseEntity<ExceptionResponse> resolveException(ResourceNotFoundException exception) {
+		ExceptionResponse exceptionResponse = exception.getExceptionResponse();
+		return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
 	}
 	
 	@ExceptionHandler(UnauthorizedException.class)
-	public ResponseEntity<ApiResponse> resolveException(UnauthorizedException exception) {
+	public ResponseEntity<ExceptionResponse> resolveException(UnauthorizedException exception) {
 
-		ApiResponse apiResponse = exception.getApiResponse();
+		ExceptionResponse exceptionResponse = exception.getExceptionResponse();
 
-		return new ResponseEntity<>(apiResponse, HttpStatus.UNAUTHORIZED);
+		return new ResponseEntity<>(exceptionResponse, HttpStatus.UNAUTHORIZED);
 	}
 }

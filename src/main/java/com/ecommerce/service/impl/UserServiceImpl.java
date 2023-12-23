@@ -63,11 +63,11 @@ public class UserServiceImpl implements UserService,UserDetailsService{
 	public ApiResponse addUser(UserRequest userRequest)
 	{
 		if (userRepo.existsByUserMobile(userRequest.getUserMobile())) {
-			throw new BadRequestException(new ApiResponse(Boolean.FALSE,AppConstant.NUMBER_ALREADY_TAKEN));
+			throw new BadRequestException(AppConstant.NUMBER_ALREADY_TAKEN);
 		}
 
 		if (userRepo.existsByUserEmail(userRequest.getUserEmail())) {
-			throw new BadRequestException(new ApiResponse(Boolean.FALSE,AppConstant.EMAIL_ALREADY_TAKEN));
+			throw new BadRequestException(AppConstant.EMAIL_ALREADY_TAKEN);
 		}
 		
 		 Role role = new Role();
@@ -89,7 +89,7 @@ public class UserServiceImpl implements UserService,UserDetailsService{
 		 
 		 user = userRepo.save(user);
 		 if(user.getId()!=null) {
-		  apiResponse = new ApiResponse(Boolean.TRUE, AppConstant.RESGISTRATION_SUCCESSFULLY);
+		  apiResponse = new ApiResponse(AppConstant.RESGISTRATION_SUCCESSFULLY);
 		 }
 		return apiResponse;
 	}
@@ -139,18 +139,18 @@ public class UserServiceImpl implements UserService,UserDetailsService{
 				}
 				else
 				{
-					   throw new BadRequestException( new ApiResponse(Boolean.FALSE,AppConstant.OTP_EXPERED));
+					   throw new BadRequestException(AppConstant.OTP_EXPERED);
 				}	
 			}
 			else
 			{
-				   throw new BadRequestException(new ApiResponse(Boolean.FALSE,AppConstant.INVALID_OTP));	
+				   throw new BadRequestException(AppConstant.INVALID_OTP);	
 			}	
 		}
 		else
 		{
-			   throw new BadRequestException(new ApiResponse(Boolean.FALSE,AppConstant.INVALID_PHONE_NUMBER));
+			   throw new BadRequestException(AppConstant.INVALID_PHONE_NUMBER);
 		}
-		return new ApiResponse(Boolean.TRUE,AppConstant.ACCOUNT_DEACTIVATE); 
+		return new ApiResponse(AppConstant.ACCOUNT_DEACTIVATE); 
 	}
 }

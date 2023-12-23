@@ -67,7 +67,7 @@ public class NotificationServiceImpl implements NotificationService {
 	public Map<String, Object> addNotification(NotificationRequest notificationRequest) {
 		Map<String, Object> response = new HashMap<>();
 		if (notificationRepo.existsByTitle(notificationRequest.getTitle())) {
-			throw new BadRequestException(new ApiResponse(Boolean.FALSE, NOTIFICATION_TITLE_TAKEN));
+			throw new BadRequestException( NOTIFICATION_TITLE_TAKEN);
 		}
 		Notifications notifications = modelMapper.map(notificationRequest, Notifications.class);
 		notifications.setUser(new User(appUtils.getUserId()));
@@ -82,7 +82,7 @@ public class NotificationServiceImpl implements NotificationService {
 	public Map<String, Object> updateNotification(NotificationRequest notificationRequest) {
 		Map<String, Object> response = new HashMap<>();
 		if (notificationRepo.existsByTitle(notificationRequest.getTitle())) {
-			throw new BadRequestException(new ApiResponse(Boolean.FALSE, NOTIFICATION_TITLE_TAKEN));
+			throw new BadRequestException( NOTIFICATION_TITLE_TAKEN);
 		}
 		Notifications notification = notificationRepo.findById(notificationRequest.getId())
 				.orElseThrow(() -> new ResourceNotFoundException(NOTIFICATION, ID, notificationRequest.getId()));
@@ -95,7 +95,7 @@ public class NotificationServiceImpl implements NotificationService {
 		response.put(RESPONSE_MESSAGE, NOTIFICATION_UPDATE);
 		return response;
 		}
-		throw new UnauthorizedException(new ApiResponse(Boolean.FALSE, UNAUTHORIZED));
+		throw new UnauthorizedException( UNAUTHORIZED);
 	}
 
 	@Override
@@ -110,7 +110,7 @@ public class NotificationServiceImpl implements NotificationService {
 			response.put(NOTIFICATION, notificationResponse);
 			return response;
 		}
-		throw new UnauthorizedException(new ApiResponse(Boolean.FALSE, UNAUTHORIZED));
+		throw new UnauthorizedException(UNAUTHORIZED);
 	}
 
 	@Override
@@ -120,13 +120,13 @@ public class NotificationServiceImpl implements NotificationService {
 				.orElseThrow(() -> new ResourceNotFoundException(NOTIFICATION, ID, id));
 
 		if (notification.getCreatedBy().equals(appUtils.getUserId())
-				|| userRepo.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleName.ADMIN))) {
+				|| userRepo.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleNameIdConstant.ADMIN))) {
 			notification.setStatus(Status.DEACTIVE);
 			notificationRepo.save(notification);
 			response.put(RESPONSE_MESSAGE, NOTIFICATION_DELETED);
 			return response;
 		}
-		throw new UnauthorizedException(new ApiResponse(Boolean.FALSE, UNAUTHORIZED));
+		throw new UnauthorizedException(UNAUTHORIZED);
 	}
 
 	@Override

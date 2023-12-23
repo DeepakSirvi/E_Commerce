@@ -5,9 +5,12 @@ import static com.ecommerce.util.AppConstant.PRODUCT;
 import static com.ecommerce.util.AppConstant.UNAUTHORIZED;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Random;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -33,6 +36,10 @@ import com.ecommerce.payload.PageResponse;
 import com.ecommerce.payload.ProductRequest;
 import com.ecommerce.payload.ProductResponse;
 import com.ecommerce.payload.UserResponse;
+import com.ecommerce.payload.VarientCategoryAttributeResponse;
+import com.ecommerce.payload.VarientCategoryJoinResonse;
+import com.ecommerce.payload.VarientCategoryReponse;
+import com.ecommerce.payload.VarientResponse;
 import com.ecommerce.repository.ProductRepo;
 import com.ecommerce.repository.SubCategoryRepo;
 import com.ecommerce.repository.UserRepo;
@@ -71,11 +78,12 @@ public class ProductServiceImpl implements ProductService {
 		}
 		Map<String, Object> response = new HashMap<>();
 		Product product = modelMapper.map(productRequest, Product.class);
+		product.getDescription().setId(new Random().nextLong());
 		product.setVerified(Status.UNVERIFIED);
 		product.setListingStatus(Boolean.FALSE);
 		product.setVendor(new User(appUtils.getUserId()));
 		Product product1 = productRepo.save(product);
-		ApiResponse apiResponse = new ApiResponse(Boolean.TRUE, AppConstant.PRODUCT_ADDED);
+		ApiResponse apiResponse = new ApiResponse( AppConstant.PRODUCT_ADDED);
 		response.put(AppConstant.RESPONSE_MESSAGE, apiResponse);
 		ProductResponse productResponse= new ProductResponse();
 		response.put("product", productResponse.productToProductResponse(product1));
@@ -128,10 +136,48 @@ public class ProductServiceImpl implements ProductService {
 			ProductResponse productResponse = new ProductResponse();
 			productResponse.setVendor(new UserResponse(appUtils.getUserId()));
 			productResponse.productToProductResponse(product);
+			
+			Map<String,Set<VarientCategoryAttributeResponse>> varientCat= new HashMap<>();
+			productResponse.getVarient().stream().map(
+					varient ->getVarienCatAndAttribute(varient,varientCat)
+					).collect(Collectors.toSet());
+			response.put("Var", varientCat);
 			response.put("Product", productResponse);
 			return response;
 		}
-		throw new UnauthorizedException(new ApiResponse(Boolean.FALSE, UNAUTHORIZED));
+		throw new UnauthorizedException(UNAUTHORIZED);
+	}
+
+	private Object getVarienCatAndAttribute(VarientResponse varient,
+			Map<String, Set<VarientCategoryAttributeResponse>> varientCat) {
+		  varient.getCategoryJoins().stream().map(catJoin -> setDataToVatCatAttribute(catJoin,varientCat)).collect(Collectors.toSet());
+		  return null;
+	}
+
+	private Object setDataToVatCatAttribute(VarientCategoryJoinResonse catJoin,Map<String, 
+			Set<VarientCategoryAttributeResponse>> varientCat) {
+		  String key=catJoin.getVarAttribute().getVarientCategory().getName();
+		  if(varientCat.containsKey(key))
+		  {
+			  Set<VarientCategoryAttributeResponse> set = varientCat.get(key);
+			  VarientCategoryAttributeResponse attributeResponse = new VarientCategoryAttributeResponse();
+			  attributeResponse.setId(catJoin.getVarAttribute().getId());
+			  attributeResponse.setAttributeName(catJoin.getVarAttribute().getAttributeName());
+			 
+			  if(!set.contains(attributeResponse)) {
+				  set.add(attributeResponse);
+			  }
+		  }
+		  else
+		  {
+			  VarientCategoryAttributeResponse attributeResponse = new VarientCategoryAttributeResponse();
+			  attributeResponse.setId(catJoin.getVarAttribute().getId());
+			  attributeResponse.setAttributeName(catJoin.getVarAttribute().getAttributeName());
+			  Set<VarientCategoryAttributeResponse> set = new HashSet<>();
+			  set.add(attributeResponse);
+			  varientCat.put(key, set);
+		  }
+		return null;
 	}
 
 	@Override
@@ -169,7 +215,7 @@ public class ProductServiceImpl implements ProductService {
 			response.put("AllProduct", pageResponse);
 			return response;
 		}
-		throw new UnauthorizedException(new ApiResponse(Boolean.FALSE, UNAUTHORIZED));
+		throw new UnauthorizedException( UNAUTHORIZED);
 	}
 
 }

@@ -33,7 +33,7 @@ public class VarientRequest {
 	
 	private Set<VarientCategoryJoinRequest> categoryJoins=new HashSet<>();
 	
-//	private Set<ProductImageRequest> productImage=new HashSet<>();
+	private Set<ProductImageRequest> productImage=new HashSet<>();
 	
 	
 }
