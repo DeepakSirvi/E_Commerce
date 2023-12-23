@@ -1,5 +1,7 @@
 package com.ecommerce.service.impl;
 
+import java.time.LocalDateTime;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +27,8 @@ public class RoleServiceImpl implements RoleService{
 			role.setId(roleRequest.getId());
 			role.setRoleName(roleRequest.getRoleName());
 			role.setDescription(roleRequest.getDescription());
+			role.setCreatedAt(LocalDateTime.now());
+			role.setUpdatedAt(LocalDateTime.now());
 		    role = roleRepo.save(role);
 			System.out.println(role.getRoleName());
 			

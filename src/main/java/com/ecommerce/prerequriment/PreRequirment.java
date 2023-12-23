@@ -15,7 +15,7 @@ public class PreRequirment implements CommandLineRunner {
 
 	@Autowired
 	private RoleService roleService;
-	
+
 	@Override
 	public void run(String... args) throws Exception {
 		// TODO Auto-generated method stub
@@ -24,10 +24,8 @@ public class PreRequirment implements CommandLineRunner {
 		role.setRoleName(RoleName.ADMIN);
 		role.setDescription("This role is for admin who have all authority");
 		try {
-		roleService.createRole(role);
-		}
-		catch(Exception e)
-		{
+			roleService.createRole(role);
+		} catch (Exception e) {
 			System.out.println(e);
 		}
 		role.setRoleName(RoleName.CUSTOMER);
@@ -35,24 +33,19 @@ public class PreRequirment implements CommandLineRunner {
 		role.setDescription("This role is for customer who is here for shopping");
 		try {
 			roleService.createRole(role);
-			}
-			catch(Exception e)
-			{
-				System.out.println(e);
-			}
-		
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+
 		role.setRoleName(RoleName.VENDOR);
 		role.setId(RoleNameIdConstant.VENDOR);
 		role.setDescription("This role is for vender who is here to sell his product");
 		try {
 			roleService.createRole(role);
-			}
-			catch(Exception e)
-			{
-				System.out.println(e);
-			}
-		
-		
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+
 	}
 
 }

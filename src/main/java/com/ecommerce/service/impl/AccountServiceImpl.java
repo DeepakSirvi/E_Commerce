@@ -54,7 +54,7 @@ public class AccountServiceImpl implements AccountService {
 		accountRequest.setStatus(Status.ACTIVE);
 		Account accountResponse=this.accountRepo.save(this.accountToAccountRequest(accountRequest));
 		
-		ApiResponse apiResponse = new ApiResponse(Boolean.TRUE,AppConstant.ADDRESS_ADDED);
+		ApiResponse apiResponse = new ApiResponse(AppConstant.ADDRESS_ADDED);
 	    return  apiResponse;
 	}
 
@@ -71,7 +71,7 @@ public class AccountServiceImpl implements AccountService {
                 accountRepo.save(account);
                 String statusMessage = newStatus == Status.ACTIVE ?
                         AppConstant.ACCOUNT_ACTIVATED : AppConstant.ACCOUNT_DEACTIVATED;
-                return new ApiResponse(Boolean.TRUE, statusMessage);
+                return new ApiResponse(statusMessage);
             } else {
             	throw new BadRequestException(AppConstant.ACCOUNT_NOT_FOUND);
             }

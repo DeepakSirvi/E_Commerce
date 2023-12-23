@@ -36,10 +36,14 @@ public class VarientResponse {
 		this.setPrice(varient.getPrice());
 		this.setStock(varient.getStock());
 		this.setVarientName(varient.getVarientName());
+		
+		
 		this.setProductImage(varient.getProductImage().stream().map(productImage -> {
 			ProductImageRespone imageRespone = new ProductImageRespone();
 			return imageRespone.imageToImageResponse(productImage);
 		}).collect(Collectors.toSet()));
+		
+		
 		this.setCategoryJoins(varient.getCategoryJoins().stream().map(catJoin -> {
 					VarientCategoryJoinResonse joinResonse=new VarientCategoryJoinResonse();
 					return joinResonse.varientJoinToResponse(catJoin);

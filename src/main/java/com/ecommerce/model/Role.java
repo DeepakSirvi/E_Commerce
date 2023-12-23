@@ -4,8 +4,13 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
@@ -21,14 +26,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 public class Role{
-
-	public Role(RoleName roleName) {
-		this.roleName=roleName;
-	}
-
-	public Role(int i) {
-		id=i;
-	}
 
 	@Id
 	private Integer id;
@@ -47,4 +44,12 @@ public class Role{
 	
 	@OneToMany(mappedBy = "role")
 	private Set<UserRole> userRole= new HashSet<>();
+	
+	public Role(RoleName roleName) {
+		this.roleName=roleName;
+	}
+
+	public Role(int i) {
+		id=i;
+	}
 }

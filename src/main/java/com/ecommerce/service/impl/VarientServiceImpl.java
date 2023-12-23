@@ -84,7 +84,7 @@ public class VarientServiceImpl implements VarientService {
 			response.put("response", AppConstant.STATUS_UPDATE + id);
 			return response;
 		}
-		throw new UnauthorizedException(new ApiResponse(Boolean.FALSE, UNAUTHORIZED));
+		throw new UnauthorizedException( UNAUTHORIZED);
 	}
 	
 	@Override
@@ -96,7 +96,7 @@ public class VarientServiceImpl implements VarientService {
 			response.put("varient", new VarientResponse().varientToVarientResponse(varient));
 			return response;
 		}
-		throw new UnauthorizedException(new ApiResponse(Boolean.FALSE, UNAUTHORIZED));
+		throw new UnauthorizedException( UNAUTHORIZED);
 	}
 
 	@Override

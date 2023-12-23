@@ -48,6 +48,7 @@ import com.ecommerce.repository.VarientCategoryRepo;
 import com.ecommerce.service.VarientCategoryService;
 import com.ecommerce.util.AppConstant;
 import com.ecommerce.util.AppUtils;
+import com.ecommerce.util.RoleNameIdConstant;
 
 @Service
 public class VarientCategoryServiceImpl implements VarientCategoryService {
@@ -55,6 +56,8 @@ public class VarientCategoryServiceImpl implements VarientCategoryService {
 	@Autowired
 	private VarientCategoryRepo varienCategoryRepo;
 
+	@Autowired
+	private UserRoleRepo userRoleRepo;
 	@Autowired
 	private VarientCategoryAttributeRepo attributeRepo;
 
@@ -110,14 +113,15 @@ public class VarientCategoryServiceImpl implements VarientCategoryService {
 			throw new BadRequestException(AppConstant.DELETE_ALL_ATTRIBUTE);
 		}
 
-		if (userRepo.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleName.ADMIN))) {
+		if (userRepo.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleName.ADMIN))
+			||	userRoleRepo.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleNameIdConstant.ADMIN))) {
 			Map<String, Object> response = new HashMap<>();
 			varienCategoryRepo.deleteById(id);
 			ApiResponse apiResonse = new ApiResponse(Boolean.TRUE, AppConstant.VARIENTCAT_DELETED, HttpStatus.OK);
 			response.put(AppConstant.RESPONSE_MESSAGE, apiResonse);
 			return response;
 		}
-		throw new UnauthorizedException(new ApiResponse(Boolean.FALSE, UNAUTHORIZED));
+		throw new UnauthorizedException(UNAUTHORIZED);
 	}
 
 	@Override
@@ -128,14 +132,15 @@ public class VarientCategoryServiceImpl implements VarientCategoryService {
 		if (categoryAttribute.getCategoryJoins().size() != 0) {
 			throw new BadRequestException(AppConstant.DELETE_ALL_PRODUCT);
 		}
-		if (userRepo.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleName.ADMIN))) {
+		if (userRepo.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleName.ADMIN))
+				|| userRoleRepo.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleNameIdConstant.ADMIN))) {
 		Map<String, Object> response = new HashMap<>();
 		attributeRepo.deleteById(id);
 		ApiResponse apiResonse = new ApiResponse(Boolean.TRUE, AppConstant.ATTRIBUTE_DELETED, HttpStatus.OK);
 		response.put(AppConstant.RESPONSE_MESSAGE, apiResonse);
 		return response;
 		}
-		throw new UnauthorizedException(new ApiResponse(Boolean.FALSE, UNAUTHORIZED));
+		throw new UnauthorizedException(UNAUTHORIZED);
 		
 	}
 
