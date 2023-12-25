@@ -92,6 +92,7 @@ public class AppConstant {
 	
 	
 	public static final String PRODUCT_NAME_TAKEN = "This product name is already taken";
+	public static final String Address_NOT_FOUND = "This product name is already taken";
 	public static final String VARIENT_TAKEN = "Varient Name is taken ";
 	public static final String PRODUCT_IMAGE_PATH = "productImage";
 	public static final String VARIENT_ADDED = "Varient added successfully";
