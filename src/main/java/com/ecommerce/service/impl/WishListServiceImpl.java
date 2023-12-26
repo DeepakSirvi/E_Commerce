@@ -84,7 +84,6 @@ public class WishListServiceImpl  implements WishListService   {
 	        response.put("response", AppConstant.PRODUCT_NOT_ADD_WISHLIST);
 	        throw new BadRequestException("Product is not add to wishlist.");
 	    }
-
 	    return response;
 	}
 

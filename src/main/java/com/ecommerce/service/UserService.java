@@ -1,5 +1,7 @@
 package com.ecommerce.service;
 
+import java.util.Map;
+
 import com.ecommerce.payload.ApiResponse;
 import com.ecommerce.payload.LoginRequest;
 import com.ecommerce.payload.OtpResponse;
@@ -15,5 +17,7 @@ public interface UserService {
 	public UserResponse getUserById(Long userId);
 
 	public ApiResponse deativateAccount(LoginRequest loginRequest);
+
+	public Map<String, Object> updateUser(UserRequest userRequest);
 
 }
