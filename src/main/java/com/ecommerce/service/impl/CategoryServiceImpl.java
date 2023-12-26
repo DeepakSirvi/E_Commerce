@@ -101,9 +101,7 @@ public class CategoryServiceImpl implements CategoryService {
 		CategoryResponse categoryResponse = new CategoryResponse();
 		categoryResponse.setId(category.getId());
 		categoryResponse.setCategoryName(category.getCategoryName());
-
 		Set<SubCategory> subCategories = category.getSubCategory();
-
 		Set<SubCategoryResponse> collect = subCategories.stream()
 				.map(subCat -> this.subCategoryToSubCategoryResponse(subCat)).collect(Collectors.toSet());
 		categoryResponse.setSubCategory(collect);
