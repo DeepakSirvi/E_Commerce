@@ -20,7 +20,7 @@ import lombok.Setter;
 @JsonInclude(Include.NON_NULL)
 public class CategoryRequest {
 	
-	  private Long id;
+	  private String id;
 	  @NotBlank
 	  @Size(min=1 , max=255)
 	 private String categoryName;

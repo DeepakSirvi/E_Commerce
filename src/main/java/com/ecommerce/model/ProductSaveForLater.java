@@ -16,7 +16,7 @@ import lombok.Setter;
 public class ProductSaveForLater {
 
 	@Id
-	private Long id;
+	private String id;
 	
 	@ManyToOne
 	private Varient varient;

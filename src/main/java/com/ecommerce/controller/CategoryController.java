@@ -43,12 +43,12 @@ public class CategoryController {
 	}
 
 	@GetMapping("/admin/{categoryId}")
-	public ResponseEntity<CategoryResponse> getCategory(@PathVariable(value = "categoryId") Long id) {
+	public ResponseEntity<CategoryResponse> getCategory(@PathVariable(value = "categoryId") String id) {
 		return new ResponseEntity<CategoryResponse>(categoryService.getCategoryById(id), HttpStatus.OK);
 	}
 
 	@GetMapping("/admin/subcategory/{subCategoryId}")
-	public ResponseEntity<SubCategoryResponse> getSubCategory(@PathVariable(value = "subCategoryId") Long id) {
+	public ResponseEntity<SubCategoryResponse> getSubCategory(@PathVariable(value = "subCategoryId") String id) {
 		return new ResponseEntity<SubCategoryResponse>(categoryService.getSubCategoryById(id), HttpStatus.OK);
 	}
 
@@ -78,12 +78,12 @@ public class CategoryController {
 	}
 
 	@DeleteMapping("/admin/{categoryId}")
-	public ResponseEntity<ApiResponse> deleteCategory(@PathVariable(value = "categoryId") Long id) {
+	public ResponseEntity<ApiResponse> deleteCategory(@PathVariable(value = "categoryId") String id) {
 		return new ResponseEntity<ApiResponse>(categoryService.deleteCategoryById(id), HttpStatus.OK);
 	}
 
 	@DeleteMapping("/admin/subcategory/{subCategoryId}")
-	public ResponseEntity<ApiResponse> deleteSubCategory(@PathVariable(value = "subCategoryId") Long id) {
+	public ResponseEntity<ApiResponse> deleteSubCategory(@PathVariable(value = "subCategoryId") String id) {
 		return new ResponseEntity<ApiResponse>(categoryService.deleteSubCategoryById(id), HttpStatus.OK);
 	}
 

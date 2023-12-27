@@ -56,19 +56,19 @@ public class VarientPController {
 	}
 	
 	@GetMapping("/{varientId}")
-	public ResponseEntity<Map<String, Object>> getProductVarient(@PathParam(value = "varientId") Long id){
+	public ResponseEntity<Map<String, Object>> getProductVarient(@PathParam(value = "varientId") String id){
 		
 		return new ResponseEntity<Map<String,Object>>(varientService.getVarient(id),HttpStatus.CREATED);
 	}
 	
 	@GetMapping("/AllVarient/{productId}")
-	public ResponseEntity<Map<String, Object>> getAllProductVarient(@PathParam(value = "productId") Long id){
+	public ResponseEntity<Map<String, Object>> getAllProductVarient(@PathParam(value = "productId") String id){
 		
 		return new ResponseEntity<Map<String,Object>>(varientService.getAllVarientByProductId(id),HttpStatus.CREATED);
 	}
 	
 	@PatchMapping("/{varientId}")
-	public ResponseEntity<Map<String, Object>> updateVarientStatus(@PathParam(value = "varientId") Long id){
+	public ResponseEntity<Map<String, Object>> updateVarientStatus(@PathParam(value = "varientId") String id){
 		
 		return new ResponseEntity<Map<String,Object>>(varientService.updateVarientStatus(id),HttpStatus.CREATED);
 	}

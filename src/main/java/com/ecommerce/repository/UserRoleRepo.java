@@ -6,7 +6,7 @@ import com.ecommerce.model.Role;
 import com.ecommerce.model.User;
 import com.ecommerce.model.UserRole;
 
-public interface UserRoleRepo extends JpaRepository<UserRole, Long> {
+public interface UserRoleRepo extends JpaRepository<UserRole, String> {
 	
 	public boolean existsByUserAndRole(User user, Role role);
 

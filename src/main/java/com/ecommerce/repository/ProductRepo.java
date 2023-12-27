@@ -14,7 +14,7 @@ import com.ecommerce.model.Status;
 import com.ecommerce.model.SubCategory;
 import com.ecommerce.model.VarientCategory;
 
-public interface ProductRepo extends JpaRepository<Product, Long> {
+public interface ProductRepo extends JpaRepository<Product, String> {
 
 	public Page<Product> findBySubCategoryAndListingStatus(SubCategory category, boolean b, Pageable pageable);
 

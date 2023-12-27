@@ -99,7 +99,7 @@ public class NotificationServiceImpl implements NotificationService {
 	}
 
 	@Override
-	public Map<String, Object> getNotificationById(Long id) {
+	public Map<String, Object> getNotificationById(String id) {
 		Map<String, Object> response = new HashMap<>();
 		Notifications notification = notificationRepo.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException(NOTIFICATION, ID, id));
@@ -114,7 +114,7 @@ public class NotificationServiceImpl implements NotificationService {
 	}
 
 	@Override
-	public Map<String, Object> deleteNotification(Long id) {
+	public Map<String, Object> deleteNotification(String id) {
 		Map<String, Object> response = new HashMap<>();
 		Notifications notification = notificationRepo.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException(NOTIFICATION, ID, id));
@@ -133,13 +133,9 @@ public class NotificationServiceImpl implements NotificationService {
 	public Map<String, Object> getAllNotification(Integer page, Integer size, String sort,
 			NotificationRequest notificationRequest) {
 		Map<String, Object> response = new HashMap<>();
-		ExampleMatcher exampleMatcher = ExampleMatcher.matching()
-				.withIgnoreNullValues()
-				.withStringMatcher(StringMatcher.EXACT.CONTAINING)
-				.withIgnoreCase()
-				.withMatcher("id", match->match.transform(value->value.map(id->(((Long)id).intValue()==0)?null:((Long)id).intValue())));
+		
 		Notifications notification = modelMapper.map(notificationRequest ,Notifications.class);
-		Example<Notifications> example = Example.of(notification,exampleMatcher);
+		Example<Notifications> example = Example.of(notification);
 		Sort sort1=null;
         if(sort.equals("DESC"))
         {

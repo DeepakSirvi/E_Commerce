@@ -8,10 +8,10 @@ import org.springframework.data.repository.query.Param;
 
 import com.ecommerce.model.Category;
 
-public interface CategoryRepo extends JpaRepository<Category, Long> {
+public interface CategoryRepo extends JpaRepository<Category, String> {
 	public Boolean existsByCategoryName(String categoryName);
 
-	public boolean existsByCategoryNameAndIdNot(String categoryName, Long id);
+	public boolean existsByCategoryNameAndIdNot(String categoryName, String id);
 
 
 	@Query("SELECT c FROM Category c LEFT JOIN c.subCategory s " +

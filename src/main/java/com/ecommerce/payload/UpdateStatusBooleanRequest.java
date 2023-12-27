@@ -13,6 +13,6 @@ import lombok.Setter;
 @Setter
 public class UpdateStatusBooleanRequest {
 
-	private Long id;
+	private String id;
 	private boolean status;
 }

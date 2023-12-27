@@ -25,8 +25,8 @@ import lombok.Setter;
 public class Category extends Audit{
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+	@GeneratedValue(strategy = GenerationType.UUID)
+	private String id;
 	
 	private String categoryName;
 	
@@ -37,7 +37,7 @@ public class Category extends Audit{
 	@ManyToOne
 	private User user;
 	
-	public Category(Long id){
+	public Category(String id){
 		this.id=id;
-		}
+	}
 }

@@ -20,14 +20,14 @@ import lombok.Setter;
 @Entity
 public class SubCategory extends Audit {
 
-	public SubCategory(Long id2) {
+	public SubCategory(String id2) {
 		this.id=id2;
 	}
 
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+	@GeneratedValue(strategy = GenerationType.UUID)
+	private String id;
 	
 	private String subCategory;
 	

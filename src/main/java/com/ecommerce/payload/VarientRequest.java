@@ -22,12 +22,12 @@ import lombok.ToString;
 public class VarientRequest {
 	
 	
-	private Long id;
+	private String id;
 	private String varientName;
 	private Float price;
 	private Integer stock;
 	
-	private Long productId;
+	private String productId;
 	
 	private Status status;
 	

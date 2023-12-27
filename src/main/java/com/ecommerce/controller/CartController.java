@@ -24,7 +24,7 @@ public class CartController {
 	
 	@PostMapping("/addTocart/{varientId}/{quantity}")
 	public ResponseEntity<?> addToCart(
-			@PathVariable(value = "varientId") Long id,
+			@PathVariable(value = "varientId") String id,
 			@PathVariable(value = "quantity") short quantity)
 	{
 	return new ResponseEntity<Map<String,Object>>(cartService.addProductToCart(id,quantity),HttpStatus.OK);	

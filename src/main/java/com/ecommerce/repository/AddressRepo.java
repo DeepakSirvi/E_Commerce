@@ -9,17 +9,17 @@ import org.springframework.data.jpa.repository.Query;
 import com.ecommerce.model.Address;
 import com.ecommerce.model.User;
 
-public interface AddressRepo extends JpaRepository<Address, Long> {
+public interface AddressRepo extends JpaRepository<Address, String> {
 
-	public Optional<Address> findByIdAndStatus(Long id, boolean b);
+	public Optional<Address> findByIdAndStatus(String id, boolean b);
 
 //	public Address findByUserAddress(User user);
 
 	
 
 	@Query("SELECT a FROM Address a WHERE a.userAddress.id=:uid")
-	public List<Address> findAddresssByuserId(Long uid);
+	public List<Address> findAddresssByuserId(String uid);
 
     @Query("SELECT a FROM Address a WHERE a.userAddress.id=:id AND a.status=true")
-	public List<Address> getActiveAddressOfUser(Long id);
+	public List<Address> getActiveAddressOfUser(String id);
 }

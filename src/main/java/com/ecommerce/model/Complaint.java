@@ -20,7 +20,7 @@ import lombok.Setter;
 public class Complaint extends Audit {
 	
 	@Id
-	private Long id;
+	private String id;
 	private String title;
 	
 	@Column(length = 1000)

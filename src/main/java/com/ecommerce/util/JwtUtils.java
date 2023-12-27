@@ -30,7 +30,7 @@ public class JwtUtils {
 	}
 	
 	
-	public String generateToken(String subject,Long userId)
+	public String generateToken(String subject,String userId)
 	{
 		Map<String,Object> claims= new HashMap<>();
 		claims.put("userId", userId);
@@ -50,9 +50,9 @@ public class JwtUtils {
 				.parseClaimsJws(token).getBody();
 		}
 	
-	public Long getUserIdFromToken(String token) {
+	public String getUserIdFromToken(String token) {
         Claims claims = getClaims(token);
-        return claims.get("userId",Long.class);
+        return claims.get("userId",String.class);
 	}
 	
 

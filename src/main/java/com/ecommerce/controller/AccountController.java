@@ -36,21 +36,21 @@ public class AccountController {
 		return new ResponseEntity<ApiResponse>(this.accountService.addaccount(accountRequest),HttpStatus.CREATED);
 	}
 	@PutMapping("/{accountId}")
-	 public ResponseEntity<ApiResponse> updateAccountStatus(@PathVariable Long accountId, @RequestParam(value = "newStatus") Status newStatus) {
+	 public ResponseEntity<ApiResponse> updateAccountStatus(@PathVariable String accountId, @RequestParam(value = "newStatus") Status newStatus) {
 		   System.out.println(newStatus);
 	        ApiResponse response = accountService.updateAccountStatus(accountId, newStatus);
 	        return ResponseEntity.ok(response);
 	    }
 	@GetMapping("/{accountById}")
-	public ResponseEntity<Map<String, Object>> getByAccountId(@PathVariable(value = "accountById") Long accountId) {
+	public ResponseEntity<Map<String, Object>> getByAccountId(@PathVariable(value = "accountById") String accountId) {
 		return  new ResponseEntity<Map<String, Object>>(accountService.getAccountById(accountId),HttpStatus.OK);
 	}
 	@GetMapping("/allAccount/{userId}")
-	public ResponseEntity<Map<String, Object>> getAllAccountsByUserId(@PathVariable Long userId) {
+	public ResponseEntity<Map<String, Object>> getAllAccountsByUserId(@PathVariable String userId) {
 		return new ResponseEntity<Map<String, Object>>(accountService.getAllAccountsByUserId(userId),HttpStatus.OK);
 	}
 	@GetMapping("/statusAccount/{userId}")
-	public ResponseEntity<Map<String, Object>> getAccountByStatusAndUserId(@PathVariable Long userId, @RequestParam(value="status")Status status) {
+	public ResponseEntity<Map<String, Object>> getAccountByStatusAndUserId(@PathVariable String userId, @RequestParam(value="status")Status status) {
 		
 		return new  ResponseEntity<Map<String, Object>>(accountService.getAccountByStatusAndUserId(userId, status),HttpStatus.OK);
 }

@@ -17,7 +17,7 @@ import lombok.Setter;
 public class TermDescription {
 	
 	@Id
-	private Long id;
+	private String id;
 
 	@Column(length=10000)
 	private String description;

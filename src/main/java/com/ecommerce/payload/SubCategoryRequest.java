@@ -15,7 +15,7 @@ import lombok.Setter;
 @JsonInclude(Include.NON_NULL)
 public class SubCategoryRequest {
 
-    private Long id;
+    private String id;
 	private String subCategory;
 	private CategoryRequest category;
 	

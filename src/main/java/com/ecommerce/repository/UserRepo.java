@@ -8,7 +8,7 @@ import com.ecommerce.model.Role;
 import com.ecommerce.model.Status;
 import com.ecommerce.model.User;
 
-public interface UserRepo extends JpaRepository<User, Long> {
+public interface UserRepo extends JpaRepository<User, String> {
 	
    public	Boolean existsByUserMobile( String userMobile);
 
@@ -16,7 +16,7 @@ public interface UserRepo extends JpaRepository<User, Long> {
 	
    public Optional<User> findByUserMobile(String userMobile);
 
-   public Optional<User> findByIdAndStatus(Long userId, Status active);
+   public Optional<User> findByIdAndStatus(String userId, Status active);
 
   
 

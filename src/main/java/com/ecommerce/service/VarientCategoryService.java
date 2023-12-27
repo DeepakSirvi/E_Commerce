@@ -12,17 +12,17 @@ public interface VarientCategoryService {
 
 	public Map<String,Object> addVarientCategoryAttribute(VarientCategoryAttributeRequest varientCategoryAttribute);
 
-	public Map<String,Object> deleteVarientCategoryAttributeById(Long id);
+	public Map<String,Object> deleteVarientCategoryAttributeById(String id);
 
 	public Map<String,Object> updateVarientCategoryAttribute(VarientCategoryAttributeRequest varientCategoryAttribute);
 
-	public Map<String,Object> deleteVarientCategoryById(Long id);
+	public Map<String,Object> deleteVarientCategoryById(String id);
 
 	public Map<String,Object> updateVarientCategory(VarientCategoryRequest varientCategory);
 
-	public Map<String,Object> getVarientCategoryAttributeById(Long id);
+	public Map<String,Object> getVarientCategoryAttributeById(String id);
 
-	public Map<String,Object> getVarientCategoryById(Long id);
+	public Map<String,Object> getVarientCategoryById(String id);
 
 	public Map<String, Object> getAllVarient();
 

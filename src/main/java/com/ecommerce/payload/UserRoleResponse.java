@@ -18,7 +18,7 @@ import lombok.Setter;
 public class UserRoleResponse {
 	
 
-	private Long id;
+	private String id;
 	
 
 	private RoleResponse role;

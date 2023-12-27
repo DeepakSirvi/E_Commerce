@@ -13,7 +13,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class CartResponse {
 	
-	private Long id;
+	private String id;
 	
 	private ProductResponse product;
 	

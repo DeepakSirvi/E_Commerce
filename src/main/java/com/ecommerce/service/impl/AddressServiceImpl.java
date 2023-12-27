@@ -83,20 +83,20 @@ public AddressResponse updateAddress(AddressRequest addressRequest) {
 }
 
 @Override
-public AddressResponse getbyId(Long id) {
+public AddressResponse getbyId(String id) {
 	Address address=this.addressRepo.findById(id).orElseThrow(()->new BadRequestException(AppConstant.ADDRESS_NOT_FOUND)) ;
 	return this.addressToAddressResponse(address);
 }
 
 @Override
-public boolean deleteAdress(Long id) {
+public boolean deleteAdress(String id) {
 	Address address=this.addressRepo.findByIdAndStatus(id,true).orElseThrow(()->new BadRequestException(AppConstant.ADDRESS_NOT_FOUND));
 	this.addressRepo.save(address);
 	return true;
 }
 
 @Override
-public List<AddressResponse> getAddressbyUserid(Long id) {
+public List<AddressResponse> getAddressbyUserid(String id) {
 	// TODO Auto-generated method stub
 	List<Address> listOfAddresses = this.addressRepo.findAddresssByuserId(id);
 	List<AddressResponse> list = listOfAddresses.stream().map(ar->addressToAddressResponse(ar)).collect(Collectors.toList());
@@ -104,7 +104,7 @@ public List<AddressResponse> getAddressbyUserid(Long id) {
 	return list;
 }
 @Override
-public List<AddressResponse> findByActiveStatus(Long id) {
+public List<AddressResponse> findByActiveStatus(String id) {
  Optional<User> user= this.userRepo.findById(id);
  List<Address> listOfActiveAddress= this.addressRepo.getActiveAddressOfUser(user.get().getId());
  List<AddressResponse> collect = listOfActiveAddress.stream().map(as->addressToAddressResponse(as)).collect(Collectors.toList());

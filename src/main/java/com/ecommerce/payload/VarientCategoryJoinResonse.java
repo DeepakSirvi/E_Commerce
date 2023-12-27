@@ -16,7 +16,7 @@ import lombok.Setter;
 @JsonInclude(Include.NON_NULL)
 public class VarientCategoryJoinResonse {
 
-	private Long id;
+	private String id;
 	private VarientCategoryAttributeResponse varAttribute;	
 	private VarientResponse varient;
 	
