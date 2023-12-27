@@ -76,14 +76,11 @@ public class WishListServiceImpl  implements WishListService   {
 		
 		Optional<WishListProduct> wishlistProductOptional = wishListRepo.findById(wishlistId);
 		if (wishlistProductOptional.isPresent()) {
-			
 			 wishListRepo.deleteById(wishlistId);
-			 
 			 response.put("response", AppConstant.REMOVE_FROM_WISHLIST_);
 		} else {
             throw new BadRequestException(AppConstant.REMOVE_NOT_FROM_WISHLIST_);
-        }
-
+    }
         return response;			
 	}
 	

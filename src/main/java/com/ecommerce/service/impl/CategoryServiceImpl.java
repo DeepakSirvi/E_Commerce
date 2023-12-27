@@ -1,27 +1,30 @@
 package com.ecommerce.service.impl;
 
+import static com.ecommerce.util.AppConstant.CATEGORY;
+import static com.ecommerce.util.AppConstant.ID;
+import static com.ecommerce.util.AppConstant.UNAUTHORIZED;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.ExampleMatcher.StringMatcher;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.ecommerce.exception.BadRequestException;
+import com.ecommerce.exception.ResourceNotFoundException;
+import com.ecommerce.exception.UnauthorizedException;
 import com.ecommerce.model.Category;
-import com.ecommerce.model.Product;
+import com.ecommerce.model.Role;
+import com.ecommerce.model.RoleName;
 import com.ecommerce.model.SubCategory;
 import com.ecommerce.model.User;
 import com.ecommerce.payload.ApiResponse;
@@ -33,9 +36,11 @@ import com.ecommerce.payload.SubCategoryResponse;
 import com.ecommerce.payload.UserResponse;
 import com.ecommerce.repository.CategoryRepo;
 import com.ecommerce.repository.SubCategoryRepo;
+import com.ecommerce.repository.UserRoleRepo;
 import com.ecommerce.service.CategoryService;
 import com.ecommerce.util.AppConstant;
 import com.ecommerce.util.AppUtils;
+import com.ecommerce.util.RoleNameIdConstant;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -51,10 +56,12 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Autowired
 	private ModelMapper modelMapper;
+	
+	@Autowired
+	private UserRoleRepo userRoleRepo;
 
 	@Override
 	public ApiResponse addCategory(CategoryRequest categoryRequest) {
-		System.out.println(categoryRequest.getId());
 		if (categoryRepo.existsByCategoryName(categoryRequest.getCategoryName())) {
 			throw new BadRequestException(AppConstant.CATEGORY_TAKEN);
 		}
@@ -94,9 +101,7 @@ public class CategoryServiceImpl implements CategoryService {
 		CategoryResponse categoryResponse = new CategoryResponse();
 		categoryResponse.setId(category.getId());
 		categoryResponse.setCategoryName(category.getCategoryName());
-
 		Set<SubCategory> subCategories = category.getSubCategory();
-
 		Set<SubCategoryResponse> collect = subCategories.stream()
 				.map(subCat -> this.subCategoryToSubCategoryResponse(subCat)).collect(Collectors.toSet());
 		categoryResponse.setSubCategory(collect);
@@ -124,12 +129,16 @@ public class CategoryServiceImpl implements CategoryService {
 	@Override
 	public ApiResponse deleteCategoryById(Long id) {
 		Category category = categoryRepo.findById(id)
-				.orElseThrow(() -> new BadRequestException(AppConstant.CATEGORY_NOT_FOUND));
-
+				.orElseThrow(() -> new ResourceNotFoundException(CATEGORY,ID,id));
 		if (category.getSubCategory().size() != 0)
 			throw new BadRequestException(AppConstant.DELETE_SUBCATEGORY);
+		
+		if(category.getCreatedBy().equals(appUtils.getUserId())
+				|| userRoleRepo.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleNameIdConstant.ADMIN))) {
 		categoryRepo.deleteById(id);
 		return new ApiResponse(Boolean.TRUE, AppConstant.CATEGORY_DELETED, HttpStatus.OK);
+		}
+		throw new UnauthorizedException(UNAUTHORIZED);
 	}
 
 	@Override
@@ -138,8 +147,12 @@ public class CategoryServiceImpl implements CategoryService {
 				.orElseThrow(() -> new BadRequestException(AppConstant.SUB_CATEGORY_NOT_FOUND));
 		if (subCategory.getProduct().size() != 0)
 			throw new BadRequestException(AppConstant.DELETE_PRODUCT);
+		if(subCategory.getCreatedBy().equals(appUtils.getUserId())
+				|| userRoleRepo.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleNameIdConstant.ADMIN))) {
 		subCategoryRepo.deleteById(id);
 		return new ApiResponse(Boolean.TRUE, AppConstant.SUBCATEGORY_DELETED, HttpStatus.OK);
+		}
+		throw new UnauthorizedException(UNAUTHORIZED);
 	}
 
 	@Override

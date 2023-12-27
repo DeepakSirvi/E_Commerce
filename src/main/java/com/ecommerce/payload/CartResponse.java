@@ -1,5 +1,7 @@
 package com.ecommerce.payload;
 
+import com.ecommerce.model.Cart;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,5 +20,11 @@ public class CartResponse {
 	private Integer quantity;
 	
 	private UserResponse user;
+	
+	public CartResponse cartToCartResponse(Cart cart) {
+		this.setId(cart.getId());
+		this.setQuantity(cart.getQuantity());
+		return this;
+	}
 
 }

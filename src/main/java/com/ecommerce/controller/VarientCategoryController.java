@@ -39,7 +39,7 @@ public class VarientCategoryController {
 		return new ResponseEntity<Map<String, Object>>(varientCategoryService.addVarientCategory(varientCategory),HttpStatus.CREATED);
 	}
 	
-	@PostMapping("/admin/varientAttributeibute")
+	@PostMapping("/admin/varientAttribute")
 	public ResponseEntity<Map<String, Object>> createVarientAttribute(@RequestBody VarientCategoryAttributeRequest varientCategoryAttribute)
 	{
 		return new ResponseEntity<Map<String, Object>>(varientCategoryService.addVarientCategoryAttribute(varientCategoryAttribute),HttpStatus.CREATED);
@@ -78,7 +78,7 @@ public class VarientCategoryController {
 		return new ResponseEntity<Map<String, Object>>(varientCategoryService.updateVarientCategory(varientCategory),HttpStatus.OK);
 	}
 	
-	@PutMapping("/admin/varientAttributeibute")
+	@PutMapping("/admin/varientAttribute")
 	public ResponseEntity<Map<String, Object>> updateVarientAttribute(@RequestBody VarientCategoryAttributeRequest varientCategoryAttribute)
 	{
 		return new ResponseEntity<Map<String, Object>>(varientCategoryService.updateVarientCategoryAttribute(varientCategoryAttribute),HttpStatus.OK);
@@ -90,9 +90,10 @@ public class VarientCategoryController {
 		return new ResponseEntity<Map<String, Object>>(varientCategoryService.deleteVarientCategoryById(id),HttpStatus.OK);
 	}
 	
-	@DeleteMapping("/admin/varientAttributeibute/{id}")
+	@DeleteMapping("/admin/varientAttribute/{id}")
 	public ResponseEntity<Map<String, Object>> deleteVarientAttribute(@PathVariable(value = "id") Long id)
 	{
+		System.out.println("dfdsfs");
 		return new ResponseEntity<Map<String, Object>>(varientCategoryService.deleteVarientCategoryAttributeById(id),HttpStatus.OK);
 	}
 	

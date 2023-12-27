@@ -17,13 +17,16 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@RequiredArgsConstructor
 @JsonInclude(Include.NON_NULL)
 public class ApiResponse {
 
-	@NonNull
 	private Boolean success;
-	@NonNull
 	private String message;
 	private HttpStatus status;
+	
+	public ApiResponse(String message) {
+		this.message=message;
+		this.success=Boolean.TRUE;
+		this.status=HttpStatus.OK;
+	}
 }

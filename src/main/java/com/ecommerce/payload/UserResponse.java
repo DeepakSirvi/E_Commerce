@@ -1,8 +1,11 @@
 package com.ecommerce.payload;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.ecommerce.model.Status;
+import com.ecommerce.model.User;
+import com.ecommerce.model.UserRole;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -39,5 +42,22 @@ public class UserResponse {
 	
 	public UserResponse(Long id) {
 		this.id=id;
+	}
+	
+	public UserResponse userToUserResponse(User user) {
+		this.setFirstName(user.getFirstName());
+		this.setLastName(user.getLastName());
+		this.setGender(user.getGender());
+		this.setId(user.getId());
+		this.setUserMobile(user.getUserMobile());
+		this.setUserEmail(user.getUserEmail());
+		this.setStatus(user.getStatus());
+		Set<UserRole> userRoles = user.getUserRole();
+		Set<UserRoleResponse> collect = userRoles.stream().map(userRole -> {
+			return new UserRoleResponse().userRoleToUserRoleResponse(userRole);
+		})
+				.collect(Collectors.toSet());
+		this.setUserRole(collect);
+		return this;
 	}
 }

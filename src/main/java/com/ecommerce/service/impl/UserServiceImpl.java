@@ -3,6 +3,7 @@ package com.ecommerce.service.impl;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -44,9 +45,6 @@ public class UserServiceImpl implements UserService,UserDetailsService{
 	@Autowired
 	private LoginService loginService;
 	
-	@Autowired
-	private LoginServiceImpl loginServiceImpl;
-	
 	@Autowired 
 	private ModelMapper mapper;
 	
@@ -63,11 +61,11 @@ public class UserServiceImpl implements UserService,UserDetailsService{
 	public ApiResponse addUser(UserRequest userRequest)
 	{
 		if (userRepo.existsByUserMobile(userRequest.getUserMobile())) {
-			throw new BadRequestException(new ApiResponse(Boolean.FALSE,AppConstant.NUMBER_ALREADY_TAKEN));
+			throw new BadRequestException(AppConstant.NUMBER_ALREADY_TAKEN);
 		}
 
 		if (userRepo.existsByUserEmail(userRequest.getUserEmail())) {
-			throw new BadRequestException(new ApiResponse(Boolean.FALSE,AppConstant.EMAIL_ALREADY_TAKEN));
+			throw new BadRequestException(AppConstant.EMAIL_ALREADY_TAKEN);
 		}
 		
 		 Role role = new Role();
@@ -89,7 +87,7 @@ public class UserServiceImpl implements UserService,UserDetailsService{
 		 
 		 user = userRepo.save(user);
 		 if(user.getId()!=null) {
-		  apiResponse = new ApiResponse(Boolean.TRUE, AppConstant.RESGISTRATION_SUCCESSFULLY);
+		  apiResponse = new ApiResponse(AppConstant.RESGISTRATION_SUCCESSFULLY);
 		 }
 		return apiResponse;
 	}
@@ -118,7 +116,8 @@ public class UserServiceImpl implements UserService,UserDetailsService{
 	@Override
 	public UserResponse getUserById(Long userId) {
        User user = userRepo.findByIdAndStatus(userId,Status.ACTIVE).orElseThrow(()->new ResourceNotFoundException(AppConstant.USER,AppConstant.ID,userId));
-       UserResponse userResponse =loginServiceImpl.userToUserResponse(user);           
+       UserResponse userResponse =new UserResponse();
+       userResponse.userToUserResponse(user);
        return userResponse;  
 	}
 
@@ -139,18 +138,24 @@ public class UserServiceImpl implements UserService,UserDetailsService{
 				}
 				else
 				{
-					   throw new BadRequestException( new ApiResponse(Boolean.FALSE,AppConstant.OTP_EXPERED));
+					   throw new BadRequestException(AppConstant.OTP_EXPERED);
 				}	
 			}
 			else
 			{
-				   throw new BadRequestException(new ApiResponse(Boolean.FALSE,AppConstant.INVALID_OTP));	
+				   throw new BadRequestException(AppConstant.INVALID_OTP);	
 			}	
 		}
 		else
 		{
-			   throw new BadRequestException(new ApiResponse(Boolean.FALSE,AppConstant.INVALID_PHONE_NUMBER));
+			   throw new BadRequestException(AppConstant.INVALID_PHONE_NUMBER);
 		}
-		return new ApiResponse(Boolean.TRUE,AppConstant.ACCOUNT_DEACTIVATE); 
+		return new ApiResponse(AppConstant.ACCOUNT_DEACTIVATE); 
+	}
+
+	@Override
+	public Map<String, Object> updateUser(UserRequest userRequest) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

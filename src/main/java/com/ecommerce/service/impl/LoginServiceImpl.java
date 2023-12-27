@@ -60,12 +60,12 @@ public class LoginServiceImpl implements LoginService {
 				loginRepo.save(login);
 				otpResponse = new OtpResponse(otp, AppConstant.OTP_GENERATED);
 			} else if (user.get().getStatus().equals(Status.DEACTIVE)) {
-				throw new BadRequestException(new ApiResponse(Boolean.FALSE, AppConstant.USER_DEACTIVE));
+				throw new BadRequestException( AppConstant.USER_DEACTIVE);
 			} else if (user.get().getStatus().equals(Status.BLOCK)) {
-				throw new BadRequestException(new ApiResponse(Boolean.FALSE, AppConstant.USER_BLOCK));
+				throw new BadRequestException( AppConstant.USER_BLOCK);
 			}
 		} else {
-			throw new BadRequestException(new ApiResponse(Boolean.FALSE, AppConstant.NEW_USER));
+			throw new BadRequestException( AppConstant.NEW_USER);
 		}
 		return otpResponse;
 	}
@@ -82,54 +82,32 @@ public class LoginServiceImpl implements LoginService {
 					Optional<User> user = userRepo.findByUserMobile(login.get().getPhoneNumber());
 					if(user.get().getStatus().equals(Status.ACTIVE))
 					{
-						UserResponse currentUser = userToUserResponse(user.get());
+						UserResponse currentUser = new UserResponse();
+						currentUser.userToUserResponse(user.get());
 						currentUser.setToken(jwtUtils.generateToken(login.get().getPhoneNumber(), currentUser.getId()));
 						return currentUser;
 					}
 					else if (user.get().getStatus().equals(Status.DEACTIVE)) {
-						throw new BadRequestException(new ApiResponse(Boolean.FALSE, AppConstant.USER_DEACTIVE));
+						throw new BadRequestException( AppConstant.USER_DEACTIVE);
 					} 
 					else if (user.get().getStatus().equals(Status.BLOCK)) {
-						throw new BadRequestException(new ApiResponse(Boolean.FALSE, AppConstant.USER_BLOCK));
+						throw new BadRequestException( AppConstant.USER_BLOCK);
 					}
 				} else {
-					throw new BadRequestException(new ApiResponse(Boolean.FALSE,AppConstant.OTP_EXPERED));
+					throw new BadRequestException(AppConstant.OTP_EXPERED);
 				}
 			} else {
-				throw new BadRequestException(new ApiResponse(Boolean.FALSE,AppConstant.INVALID_OTP));
+				throw new BadRequestException(AppConstant.INVALID_OTP);
 			}
 
 		} else {
-			throw new BadRequestException(new ApiResponse(Boolean.FALSE,AppConstant.INVALID_PHONE_NUMBER));
+			throw new BadRequestException(AppConstant.INVALID_PHONE_NUMBER);
 		}
 		return null;
 
-	}
+	
 
-	public UserResponse userToUserResponse(User user) {
-		UserResponse userResponse = new UserResponse();
-		userResponse.setFirstName(user.getFirstName());
-		userResponse.setLastName(user.getLastName());
-		userResponse.setGender(user.getGender());
-		userResponse.setId(user.getId());
-		userResponse.setUserMobile(user.getUserMobile());
-		userResponse.setUserEmail(user.getUserEmail());
-		userResponse.setStatus(user.getStatus());
-
-		Set<UserRole> userRoles = user.getUserRole();
-
-		Set<UserRoleResponse> collect = userRoles.stream().map(userRole -> userRoleToUserRoleResponse(userRole))
-				.collect(Collectors.toSet());
-		userResponse.setUserRole(collect);
-		return userResponse;
-	}
-
-	public UserRoleResponse userRoleToUserRoleResponse(UserRole userRoles) {
-		UserRoleResponse response = new UserRoleResponse();
-		response.setId(userRoles.getId());
-		response.setRole(new RoleResponse(userRoles.getRole().getId(), userRoles.getRole().getRoleName(),
-				userRoles.getRole().getDescription()));
-		return response;
+	
 	}
 
 }

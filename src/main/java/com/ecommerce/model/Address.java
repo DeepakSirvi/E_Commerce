@@ -48,15 +48,11 @@ public class Address extends Audit {
 	@Column(length=15)
 	private String addressType;
 	
-	@Column(nullable = false)
-	@Enumerated(EnumType.STRING)
-	private Status status;
+	private boolean status;
 	
 	@ManyToOne
 	private User userAddress;
 	
 	@OneToMany(mappedBy = "address")
 	private Set<Orders> order;
-	
-	
 }

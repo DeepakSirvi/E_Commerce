@@ -32,6 +32,4 @@ public class VarientCategoryAttribute {
 
 	@OneToMany(mappedBy = "varAttribute")
 	private Set<VarientCategoryJoin> categoryJoins = new HashSet<>();
-
-
 }

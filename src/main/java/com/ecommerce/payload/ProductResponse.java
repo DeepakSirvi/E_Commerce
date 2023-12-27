@@ -1,5 +1,6 @@
 package com.ecommerce.payload;
 
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -40,7 +41,11 @@ public class ProductResponse extends AuditResponse {
 	private UserResponse vendor;
 	private SubCategoryResponse subCategory;
 	private Set<VarientResponse> varient;
-	private ProductDescription description;
+	private ProductDescriptionResponse description=new ProductDescriptionResponse();
+	
+	private String productImage;
+	
+	private Float basicPrice;
 	
 	public ProductResponse productToProductResponse(Product product) {
 		this.setId(product.getId());
@@ -57,11 +62,20 @@ public class ProductResponse extends AuditResponse {
 		this.setTaxCode(product.getTaxCode());
 		this.setCountryOfOrigin(product.getCountryOfOrigin());
 		this.setProductType(product.getProductType());
+		this.getDescription().setDescription(product.getDescription().getDescription());
+		this.setBasicPrice(product.getBasicPrice());
+		
+		if(Objects.nonNull(product.getProductImage()))
+		{
+			this.setProductImage(product.getProductImage());
+		}
+		if(Objects.nonNull(product.getVarient())) {
 		this.setVarient( product.getVarient().stream()
 				.map(varient-> {
 					VarientResponse varientResponse=new VarientResponse();
 				  return varientResponse.varientToVarientResponse(varient);
 				}).collect(Collectors.toSet()));
+		}
 		return this;
 	}
 	
@@ -75,6 +89,11 @@ public class ProductResponse extends AuditResponse {
 		this.setProductType(product.getProductType());
 		this.setCreatedAt(product.getCreatedAt());
 		this.setVerified(product.getVerified());
+		if(Objects.nonNull(product.getProductImage()))
+		{
+			this.setProductImage(product.getProductImage());
+		}
+		this.setBasicPrice(product.getBasicPrice());
 		return this;
 	}
 }
