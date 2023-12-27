@@ -6,7 +6,7 @@ public class AppConstant {
 	
 	public static final String DEFAULT_PAGE_NUMBER = "0";
 	public static final String DEFAULT_PAGE_SIZE = "10"; 
-	public static final Integer MAX_PAGE_SIZE = 10;
+	public static final Integer MAX_PAGE_SIZE = 25;
 	public static final String DEFAULT_SORT_DIR = "DESC";
 	
 	public static final String RESPONSE_MESSAGE="response";
@@ -122,6 +122,7 @@ public class AppConstant {
 	public static final String PRODUCT = "Product";
 	public static final String VARIENTCATEGORYATTRIBUTE = "Varient category attribute";
 	public static final String CATEGORY = "Product category";
+	public static final String LISTING_STATUS_UPDATE = "Product Listing Status  ";
 	
 	
 	

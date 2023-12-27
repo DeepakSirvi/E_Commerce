@@ -33,5 +33,9 @@ public class ProductRequest {
 	private String productType;
     private SubCategoryRequest subCategory;
 	private ProductDescriptionRequest description;
+	
+	private String productImage;
+	
+	private Float basicPrice;
 
 }

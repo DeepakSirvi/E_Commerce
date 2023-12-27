@@ -46,7 +46,7 @@ public class SecurityConfig {
 		http.csrf()
 		.disable()  
 		.authorizeRequests()
-		.requestMatchers("ecommerce/auth/**","ecommerce/category").permitAll()
+		.requestMatchers("ecommerce/auth/**","ecommerce/category","ecommerce/image/**","ecommerce/product/").permitAll()
 		.requestMatchers("ecommerce/category/admin/**","ecommerce/varient/admin/**","ecommerce/product/admin/**")
 		.hasAuthority("ADMIN")
 		.anyRequest().authenticated()

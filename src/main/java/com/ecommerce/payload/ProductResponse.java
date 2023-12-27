@@ -43,6 +43,10 @@ public class ProductResponse extends AuditResponse {
 	private Set<VarientResponse> varient;
 	private ProductDescriptionResponse description=new ProductDescriptionResponse();
 	
+	private String productImage;
+	
+	private Float basicPrice;
+	
 	public ProductResponse productToProductResponse(Product product) {
 		this.setId(product.getId());
 		this.setProductName(product.getProductName());
@@ -59,6 +63,12 @@ public class ProductResponse extends AuditResponse {
 		this.setCountryOfOrigin(product.getCountryOfOrigin());
 		this.setProductType(product.getProductType());
 		this.getDescription().setDescription(product.getDescription().getDescription());
+		this.setBasicPrice(product.getBasicPrice());
+		
+		if(Objects.nonNull(product.getProductImage()))
+		{
+			this.setProductImage(product.getProductImage());
+		}
 		if(Objects.nonNull(product.getVarient())) {
 		this.setVarient( product.getVarient().stream()
 				.map(varient-> {
@@ -79,6 +89,11 @@ public class ProductResponse extends AuditResponse {
 		this.setProductType(product.getProductType());
 		this.setCreatedAt(product.getCreatedAt());
 		this.setVerified(product.getVerified());
+		if(Objects.nonNull(product.getProductImage()))
+		{
+			this.setProductImage(product.getProductImage());
+		}
+		this.setBasicPrice(product.getBasicPrice());
 		return this;
 	}
 }

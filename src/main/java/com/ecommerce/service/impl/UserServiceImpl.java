@@ -3,6 +3,7 @@ package com.ecommerce.service.impl;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -43,9 +44,6 @@ public class UserServiceImpl implements UserService,UserDetailsService{
 	
 	@Autowired
 	private LoginService loginService;
-	
-	@Autowired
-	private LoginServiceImpl loginServiceImpl;
 	
 	@Autowired 
 	private ModelMapper mapper;
@@ -118,7 +116,8 @@ public class UserServiceImpl implements UserService,UserDetailsService{
 	@Override
 	public UserResponse getUserById(Long userId) {
        User user = userRepo.findByIdAndStatus(userId,Status.ACTIVE).orElseThrow(()->new ResourceNotFoundException(AppConstant.USER,AppConstant.ID,userId));
-       UserResponse userResponse =loginServiceImpl.userToUserResponse(user);           
+       UserResponse userResponse =new UserResponse();
+       userResponse.userToUserResponse(user);
        return userResponse;  
 	}
 
@@ -152,5 +151,11 @@ public class UserServiceImpl implements UserService,UserDetailsService{
 			   throw new BadRequestException(AppConstant.INVALID_PHONE_NUMBER);
 		}
 		return new ApiResponse(AppConstant.ACCOUNT_DEACTIVATE); 
+	}
+
+	@Override
+	public Map<String, Object> updateUser(UserRequest userRequest) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

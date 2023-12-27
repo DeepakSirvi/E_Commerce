@@ -47,8 +47,7 @@ public class Address extends Audit {
 	
 	@Column(length=15)
 	private String addressType;
-	
-	
+
 	private boolean status;
 	
 	@ManyToOne
@@ -56,6 +55,4 @@ public class Address extends Audit {
 	
 	@OneToMany(mappedBy = "address")
 	private Set<Orders> order;
-	
-	
 }

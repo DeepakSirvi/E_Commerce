@@ -55,6 +55,10 @@ public class Product extends Audit {
 	
 	@ManyToOne
 	private SubCategory subCategory;
+	
+	private String productImage;
+	
+	private Float basicPrice;
 
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "description_Id",referencedColumnName = "id")

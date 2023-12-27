@@ -1,5 +1,6 @@
 package com.ecommerce.payload;
 
+import com.ecommerce.model.ProductImage;
 import com.ecommerce.model.Varient;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -22,6 +23,5 @@ public class ProductImageRequest {
 	
 	private String imageUrl;
 	
-	private Varient varientImage;
-
+//	private VarientRequest varientImage;
 }

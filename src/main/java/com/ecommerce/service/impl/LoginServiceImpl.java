@@ -82,7 +82,8 @@ public class LoginServiceImpl implements LoginService {
 					Optional<User> user = userRepo.findByUserMobile(login.get().getPhoneNumber());
 					if(user.get().getStatus().equals(Status.ACTIVE))
 					{
-						UserResponse currentUser = userToUserResponse(user.get());
+						UserResponse currentUser = new UserResponse();
+						currentUser.userToUserResponse(user.get());
 						currentUser.setToken(jwtUtils.generateToken(login.get().getPhoneNumber(), currentUser.getId()));
 						return currentUser;
 					}
@@ -104,32 +105,9 @@ public class LoginServiceImpl implements LoginService {
 		}
 		return null;
 
-	}
+	
 
-	public UserResponse userToUserResponse(User user) {
-		UserResponse userResponse = new UserResponse();
-		userResponse.setFirstName(user.getFirstName());
-		userResponse.setLastName(user.getLastName());
-		userResponse.setGender(user.getGender());
-		userResponse.setId(user.getId());
-		userResponse.setUserMobile(user.getUserMobile());
-		userResponse.setUserEmail(user.getUserEmail());
-		userResponse.setStatus(user.getStatus());
-
-		Set<UserRole> userRoles = user.getUserRole();
-
-		Set<UserRoleResponse> collect = userRoles.stream().map(userRole -> userRoleToUserRoleResponse(userRole))
-				.collect(Collectors.toSet());
-		userResponse.setUserRole(collect);
-		return userResponse;
-	}
-
-	public UserRoleResponse userRoleToUserRoleResponse(UserRole userRoles) {
-		UserRoleResponse response = new UserRoleResponse();
-		response.setId(userRoles.getId());
-		response.setRole(new RoleResponse(userRoles.getRole().getId(), userRoles.getRole().getRoleName(),
-				userRoles.getRole().getDescription()));
-		return response;
+	
 	}
 
 }

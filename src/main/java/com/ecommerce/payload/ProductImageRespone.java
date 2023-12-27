@@ -23,6 +23,8 @@ public class ProductImageRespone {
 	
 	private Varient varientImage;
 	
+   
+	
 	public ProductImageRespone imageToImageResponse(ProductImage productImage) {
 		this.setId(productImage.getId());
 		this.setImageUrl(productImage.getImageUrl());
