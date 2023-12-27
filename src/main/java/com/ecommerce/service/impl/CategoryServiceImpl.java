@@ -192,7 +192,7 @@ public class CategoryServiceImpl implements CategoryService {
 		findAll= categoryRepo.findAll(pageable);
 		}
 		Set<CategoryResponse> category = findAll.stream().map(categoryRe -> categoryToCategoryResponse(categoryRe))
-				.collect(Collectors.toSet());
+		 .collect(Collectors.toSet());
 		System.out.println(category);
 		PageResponse<CategoryResponse> pageResponse = new PageResponse<>();
 		pageResponse.setContent(category);

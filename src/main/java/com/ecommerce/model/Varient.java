@@ -65,5 +65,10 @@ public class Varient extends Audit {
 	
 	@OneToMany(mappedBy = "varient")
 	private Set<ProductSaveForLater> saveLater;
+
+	public boolean isActive() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 	
 }

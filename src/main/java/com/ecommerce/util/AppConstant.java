@@ -1,6 +1,6 @@
 package com.ecommerce.util;
 
-import lombok.NonNull;
+
 
 public class AppConstant {
 	
@@ -120,6 +120,9 @@ public class AppConstant {
 	public static final String VARIENTCATEGORY = "Varient category";
 	public static final String PRODUCT = "Product";
 	public static final String VARIENTCATEGORYATTRIBUTE = "Varient category attribute";
+	public static final String WishList_NOT_List_ = "wishlist not list";
+	public static final Object PRODUCT_ADD_TO_WISHLIST = "product add to wishlist";
+	public static final  String REMOVE_NOT_FROM_WISHLIST_ = "Remove not from wishlist";
 	
 	
 	
