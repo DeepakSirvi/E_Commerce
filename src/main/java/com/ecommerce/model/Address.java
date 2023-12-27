@@ -47,7 +47,7 @@ public class Address extends Audit {
 	
 	@Column(length=15)
 	private String addressType;
-	
+
 	private boolean status;
 	
 	@ManyToOne
