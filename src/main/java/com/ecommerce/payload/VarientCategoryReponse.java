@@ -18,7 +18,7 @@ import lombok.Setter;
 @JsonInclude(Include.NON_NULL)
 public class VarientCategoryReponse {
 	
-	private Long id;
+	private String id;
 	private String name;
 	private Set<VarientCategoryAttributeResponse> categoryAttributes;
 	private UserResponse user;

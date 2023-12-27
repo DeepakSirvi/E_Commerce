@@ -38,13 +38,13 @@ public class NotificationController {
 	
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<?> createNotification(@PathVariable(name = "id") Long id)
+	public ResponseEntity<?> createNotification(@PathVariable(name = "id") String id)
 	{
 		return new ResponseEntity<Map<String,Object>>(notificationService.getNotificationById(id),HttpStatus.CREATED);
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> deleteNotification(@PathVariable(name = "id") Long id)
+	public ResponseEntity<?> deleteNotification(@PathVariable(name = "id") String id)
 	{
 		return new ResponseEntity<Map<String,Object>>(notificationService.deleteNotification(id),HttpStatus.CREATED);
 	}

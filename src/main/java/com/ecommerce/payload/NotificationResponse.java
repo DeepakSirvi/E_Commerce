@@ -15,7 +15,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class NotificationResponse extends AuditResponse {
 
-	private Long id;
+	private String id;
 	private String title;
 	private String description;
 	@Enumerated(EnumType.STRING)

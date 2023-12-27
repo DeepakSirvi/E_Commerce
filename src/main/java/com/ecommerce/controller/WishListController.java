@@ -30,13 +30,13 @@ public class WishListController {
 	private  WishListService  wishlistService;
 	
 	@PostMapping("/add")
-    public ResponseEntity<Map<String, Object>> addToWishList( @RequestParam Long varientId,@RequestParam Long userId) {    
+    public ResponseEntity<Map<String, Object>> addToWishList( @RequestParam String varientId,@RequestParam String userId) {    
         Map<String, Object> response = wishlistService.addToWishList(varientId, userId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 	
 	@DeleteMapping("/remove")
-    public ResponseEntity<Map<String, Object>> removeFromWishList( @RequestParam Long varientId,@RequestParam Long userId)
+    public ResponseEntity<Map<String, Object>> removeFromWishList( @RequestParam String varientId,@RequestParam String userId)
              {
 		Map<String, Object> response = wishlistService.removeFromWishList(varientId, userId);
         return ResponseEntity.ok(response);
@@ -44,7 +44,7 @@ public class WishListController {
       }
 	
 	@GetMapping("/activeVarient/{userId}")
-    public ResponseEntity<Map<String, Object>> getActiveVarientInWishlistByUserId(@PathVariable Long userId) {
+    public ResponseEntity<Map<String, Object>> getActiveVarientInWishlistByUserId(@PathVariable String userId) {
         Map<String, Object> response = wishlistService.getActiveVarientInWishlistByUserId(userId);
         return  new ResponseEntity<>(response, HttpStatus.OK) ;
     }

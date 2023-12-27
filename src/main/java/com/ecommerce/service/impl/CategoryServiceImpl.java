@@ -86,7 +86,7 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
-	public CategoryResponse getCategoryById(Long id) {
+	public CategoryResponse getCategoryById(String id) {
 		Category category = categoryRepo.findById(id)
 				.orElseThrow(() -> new BadRequestException(AppConstant.CATEGORY_NOT_FOUND));
 		CategoryResponse categoryResponse = new CategoryResponse();
@@ -119,7 +119,7 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
-	public SubCategoryResponse getSubCategoryById(Long id) {
+	public SubCategoryResponse getSubCategoryById(String id) {
 		SubCategory subCategory = subCategoryRepo.findById(id)
 				.orElseThrow(() -> new BadRequestException(AppConstant.SUB_CATEGORY_NOT_FOUND));
 		SubCategoryResponse response = subCategoryToSubCategoryResponse(subCategory);
@@ -127,7 +127,7 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
-	public ApiResponse deleteCategoryById(Long id) {
+	public ApiResponse deleteCategoryById(String id) {
 		Category category = categoryRepo.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException(CATEGORY,ID,id));
 		if (category.getSubCategory().size() != 0)
@@ -142,7 +142,7 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
-	public ApiResponse deleteSubCategoryById(Long id) {
+	public ApiResponse deleteSubCategoryById(String id) {
 		SubCategory subCategory = subCategoryRepo.findById(id)
 				.orElseThrow(() -> new BadRequestException(AppConstant.SUB_CATEGORY_NOT_FOUND));
 		if (subCategory.getProduct().size() != 0)

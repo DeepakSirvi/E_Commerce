@@ -17,7 +17,7 @@ import lombok.Setter;
 @JsonInclude(Include.NON_NULL)
 public class CategoryResponse {
 	
-	private Long id;
+	private String id;
 	private String categoryName;
 	private Set<SubCategoryResponse> subCategory;
 	private UserResponse user;

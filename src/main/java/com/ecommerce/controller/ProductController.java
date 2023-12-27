@@ -64,7 +64,7 @@ public class ProductController {
 	
 	@GetMapping("/ByCategory/{categoryId}/{subCategoryId}")
 	public ResponseEntity<PageResponse<ProductResponse>> getAllProductByCategory(
-			@PathVariable(value = "categoryId") Long id,@PathVariable(value = "subCategoryId") Long subId,
+			@PathVariable(value = "categoryId") String id,@PathVariable(value = "subCategoryId") String subId,
 			@RequestParam(value = "pageIndex", required = false, defaultValue =  AppConstant.DEFAULT_PAGE_NUMBER) Integer pageIndex,
 			@RequestParam(value = "pageSize", required = false, defaultValue = AppConstant.DEFAULT_PAGE_SIZE) Integer pageSize,
 			@RequestParam(value = "sortDir", required = false, defaultValue = AppConstant.DEFAULT_SORT_DIR) String sortDir)
@@ -100,13 +100,13 @@ public class ProductController {
 	
 	
 	@GetMapping("/{productId}")
-	public ResponseEntity<?> getProductById(@PathVariable(value = "productId") Long productId){
+	public ResponseEntity<?> getProductById(@PathVariable(value = "productId") String productId){
 		return new ResponseEntity<Map<String, Object>>(productService.getProduct(productId) ,HttpStatus.OK);
 	}
 	
 	@GetMapping("/vendor/{vendorId}")
 	public ResponseEntity<PageResponse<ProductResponse>> getAllProductOfVender(
-			@PathVariable(value = "vendorId") Long vendorId,
+			@PathVariable(value = "vendorId") String vendorId,
 			@RequestParam(value = "page", required = false, defaultValue =  AppConstant.DEFAULT_PAGE_NUMBER) Integer page,
 			@RequestParam(value = "size", required = false, defaultValue = AppConstant.DEFAULT_PAGE_SIZE) Integer size)
 	{

@@ -16,7 +16,7 @@ import lombok.Setter;
 public class ReviewImage {
 	
 	@Id
-	private Long id;
+	private String id;
 
 	private String imageName;
 	

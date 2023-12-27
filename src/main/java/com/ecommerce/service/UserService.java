@@ -14,7 +14,7 @@ public interface UserService {
 
 	public OtpResponse otpToDeativateAccount(UserRequest userRequest);
 	
-	public UserResponse getUserById(Long userId);
+	public UserResponse getUserById(String userId);
 
 	public ApiResponse deativateAccount(LoginRequest loginRequest);
 

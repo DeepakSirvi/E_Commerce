@@ -20,6 +20,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -76,33 +77,7 @@ public class ProductServiceImpl implements ProductService {
 	private ModelMapper modelMapper;
 
 	@Override
-	public Map<String, Object> addProduct(ProductRequest productRequest, MultipartFile multipartFiles) {
-
-		if (productRepo.existsByProductName(productRequest.getProductName())) {
-			throw new BadRequestException(AppConstant.PRODUCT_NAME_TAKEN);
-		}
-		Map<String, Object> response = new HashMap<>();
-		Product product = modelMapper.map(productRequest, Product.class);
-		product.getDescription().setId(new Random().nextLong());
-
-		if (multipartFiles != null) {
-			String uploadImage = appUtils.uploadImage(multipartFiles, AppConstant.PRODUCT_IMAGE_PATH, null);
-			product.setProductImage(uploadImage);
-		}
-
-		product.setVerified(Status.UNVERIFIED);
-		product.setListingStatus(Boolean.FALSE);
-		product.setVendor(new User(appUtils.getUserId()));
-		Product product1 = productRepo.save(product);
-		ApiResponse apiResponse = new ApiResponse(AppConstant.PRODUCT_ADDED);
-		response.put(AppConstant.RESPONSE_MESSAGE, apiResponse);
-		ProductResponse productResponse = new ProductResponse();
-		response.put("product", productResponse.productToProductResponse(product1));
-		return response;
-	}
-
-	@Override
-	public PageResponse<ProductResponse> getProductBySubCategory(Long id, Long subId, Integer page, Integer size,
+	public PageResponse<ProductResponse> getProductBySubCategory(String id, String subId, Integer page, Integer size,
 			String sortDir) {
 		AppUtils.validatePageAndSize(page, size);
 		Pageable pageable = PageRequest.of(page, size);
@@ -124,7 +99,7 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public PageResponse<ProductResponse> getProductByVendorId(Long vendorId, Integer page, Integer size) {
+	public PageResponse<ProductResponse> getProductByVendorId(String vendorId, Integer page, Integer size) {
 		User user = userRepo.findById(vendorId).orElseThrow(() -> new BadRequestException(AppConstant.USER_NOT_FOUND));
 
 		boolean flag = user.getUserRole().stream()
@@ -134,27 +109,6 @@ public class ProductServiceImpl implements ProductService {
 			throw new BadRequestException(AppConstant.VENDOR_NOT_FOUND);
 		}
 		return null;
-	}
-
-	@Override
-	public Map<String, Object> getProduct(Long productId) {
-		Product product = productRepo.findById(productId)
-				.orElseThrow(() -> new ResourceNotFoundException(PRODUCT, ID, productId));
-		if (product.getListingStatus() || product.getCreatedBy().equals(appUtils.getUserId()) || userRoleRepo
-				.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleNameIdConstant.ADMIN))) {
-			Map<String, Object> response = new HashMap<>();
-			ProductResponse productResponse = new ProductResponse();
-			productResponse.setVendor(new UserResponse(appUtils.getUserId()));
-			productResponse.productToProductResponse(product);
-
-			Map<String, Set<VarientCategoryAttributeResponse>> varientCat = new HashMap<>();
-			productResponse.getVarient().stream().map(varient -> getVarienCatAndAttribute(varient, varientCat))
-					.collect(Collectors.toSet());
-			response.put("Var", varientCat);
-			response.put("Product", productResponse);
-			return response;
-		}
-		throw new UnauthorizedException(UNAUTHORIZED);
 	}
 
 	private Object getVarienCatAndAttribute(VarientResponse varient,
@@ -225,6 +179,29 @@ public class ProductServiceImpl implements ProductService {
 		throw new UnauthorizedException(UNAUTHORIZED);
 	}
 
+//	-------------------------------------------------------------------
+
+	@Override
+	public Map<String, Object> updateStatusProduct(UpdateStatusBooleanRequest statusRequest) {
+		Map<String, Object> response = new HashMap<>();
+		Product product = productRepo.findById(statusRequest.getId())
+				.orElseThrow(() -> new ResourceNotFoundException(PRODUCT, ID, statusRequest.getId()));
+		if (product.getCreatedBy().equals(appUtils.getUserId()) || userRoleRepo
+				.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleNameIdConstant.ADMIN))) {
+			if (!product.getVerified().equals(Status.VERIFIED)) {
+				throw new BadRequestException(AppConstant.PRODUCT_NOT_VERIFIED);
+			}
+//		  if(Objects.nonNull(product.getVa))
+
+			product.setListingStatus(statusRequest.isStatus());
+			productRepo.save(product);
+			response.put(AppConstant.RESPONSE_MESSAGE, AppConstant.LISTING_STATUS_UPDATE + statusRequest.isStatus());
+			return response;
+		}
+		throw new UnauthorizedException(UNAUTHORIZED);
+
+	}
+
 	@Override
 	public Map<String, Object> getAllActiveProduct(String search, Integer pageIndex, Integer pageSize, String sortDir,
 			boolean listingStatus, Status status) {
@@ -262,18 +239,50 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public Map<String, Object> updateStatusProduct(UpdateStatusBooleanRequest statusRequest) {
+	public Map<String, Object> addProduct(ProductRequest productRequest, MultipartFile multipartFiles) {
+
+		if (productRepo.existsByProductName(productRequest.getProductName())) {
+			throw new BadRequestException(AppConstant.PRODUCT_NAME_TAKEN);
+		}
 		Map<String, Object> response = new HashMap<>();
-		Product product = productRepo.findById(statusRequest.getId())
-				.orElseThrow(() -> new ResourceNotFoundException(PRODUCT, ID, statusRequest.getId()));
-		if (product.getCreatedBy().equals(appUtils.getUserId())) {
-			product.setListingStatus(statusRequest.isStatus());
-			productRepo.save(product);
-			response.put(AppConstant.RESPONSE_MESSAGE,AppConstant.LISTING_STATUS_UPDATE+statusRequest.isStatus());
+		Product product = modelMapper.map(productRequest, Product.class);
+		product.getDescription().setId(UUID.randomUUID().toString());
+
+		if (multipartFiles != null) {
+			String uploadImage = appUtils.uploadImage(multipartFiles, AppConstant.PRODUCT_IMAGE_PATH, null);
+			product.setProductImage(uploadImage);
+		}
+
+		product.setVerified(Status.UNVERIFIED);
+		product.setListingStatus(Boolean.FALSE);
+		product.setVendor(new User(appUtils.getUserId()));
+		Product product1 = productRepo.save(product);
+		ApiResponse apiResponse = new ApiResponse(Boolean.TRUE, AppConstant.PRODUCT_ADDED, HttpStatus.CREATED);
+		response.put(AppConstant.RESPONSE_MESSAGE, apiResponse);
+		ProductResponse productResponse = new ProductResponse();
+		response.put("product", productResponse.productToProductResponse(product1));
+		return response;
+	}
+
+	@Override
+	public Map<String, Object> getProduct(String productId) {
+		Product product = productRepo.findById(productId)
+				.orElseThrow(() -> new ResourceNotFoundException(PRODUCT, ID, productId));
+		if (product.getListingStatus() || product.getCreatedBy().equals(appUtils.getUserId()) || userRoleRepo
+				.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleNameIdConstant.ADMIN))) {
+			Map<String, Object> response = new HashMap<>();
+			ProductResponse productResponse = new ProductResponse();
+			productResponse.setVendor(new UserResponse(appUtils.getUserId()));
+			productResponse.productToProductResponse(product);
+
+			Map<String, Set<VarientCategoryAttributeResponse>> varientCat = new HashMap<>();
+			productResponse.getVarient().stream().map(varient -> getVarienCatAndAttribute(varient, varientCat))
+					.collect(Collectors.toSet());
+			response.put("Var", varientCat);
+			response.put("Product", productResponse);
 			return response;
 		}
 		throw new UnauthorizedException(UNAUTHORIZED);
-		
 	}
 
 }

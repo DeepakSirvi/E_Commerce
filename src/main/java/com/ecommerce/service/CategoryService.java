@@ -14,17 +14,17 @@ public interface CategoryService {
 
 	public ApiResponse addSubCategory(SubCategoryRequest subCategoryRequest);
 
-	public CategoryResponse getCategoryById(Long id);
+	public CategoryResponse getCategoryById(String id);
 
-	public SubCategoryResponse getSubCategoryById(Long id);
+	public SubCategoryResponse getSubCategoryById(String id);
 
-	public ApiResponse deleteSubCategoryById(Long id);
+	public ApiResponse deleteSubCategoryById(String id);
 
 	public ApiResponse updateCategory(CategoryRequest categoryRequest);
 
 	public ApiResponse updateSubCategory(SubCategoryRequest subCategoryRequest);
 
-	public ApiResponse deleteCategoryById(Long id);
+	public ApiResponse deleteCategoryById(String id);
 
 	public Map<String, Object> getAllCategory();
 

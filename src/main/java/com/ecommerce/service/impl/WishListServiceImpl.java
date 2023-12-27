@@ -36,7 +36,7 @@ public class WishListServiceImpl  implements WishListService   {
 	private UserRepo userRepo;
 
 	@Override
-	public Map<String, Object> addToWishList(Long varientId, Long userId) {
+	public Map<String, Object> addToWishList(String varientId, String userId) {
 		
 		 Map<String, Object> response = new HashMap<>();
 		 
@@ -68,7 +68,7 @@ public class WishListServiceImpl  implements WishListService   {
 	}
 
 	@Override
-	public Map<String, Object> removeFromWishList(Long varientId, Long userId) {
+	public Map<String, Object> removeFromWishList(String varientId, String userId) {
 		
 		 Map<String, Object> response = new HashMap<>();
 		 
@@ -90,7 +90,7 @@ public class WishListServiceImpl  implements WishListService   {
 
 
   @Override
-  public Map<String, Object> getActiveVarientInWishlistByUserId(Long userId) {
+  public Map<String, Object> getActiveVarientInWishlistByUserId(String userId) {
     Map<String, Object> response = new HashMap<>();
     
 

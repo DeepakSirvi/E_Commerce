@@ -15,7 +15,7 @@ import lombok.Setter;
 @JsonInclude(Include.NON_NULL)
 public class IdentityResponse {
 	
-	private Long id;
+	private String id;
 	private String idCardName;
 	private String idCardNumber;
 	private String description;

@@ -13,6 +13,6 @@ import lombok.Setter;
 @Setter
 public class UpdateStatusRequest {
 
-	private Long id;
+	private String id;
 	private Status status;
 }

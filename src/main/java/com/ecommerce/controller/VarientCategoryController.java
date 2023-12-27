@@ -61,13 +61,13 @@ public class VarientCategoryController {
 	}
 	
 	@GetMapping("/admin/{id}")
-	public ResponseEntity<Map<String, Object>> getVarientCategory(@PathVariable(value = "id") Long id)
+	public ResponseEntity<Map<String, Object>> getVarientCategory(@PathVariable(value = "id") String id)
 	{
 		return new ResponseEntity<Map<String, Object>>(varientCategoryService.getVarientCategoryById(id),HttpStatus.OK);
 	}
 	
 	@GetMapping("/admin/varientAttributeibute/{id}")
-	public ResponseEntity<Map<String, Object>> getVarientAttribute(@PathVariable(value = "id") Long id)
+	public ResponseEntity<Map<String, Object>> getVarientAttribute(@PathVariable(value = "id") String id)
 	{
 		return new ResponseEntity<Map<String, Object>>(varientCategoryService.getVarientCategoryAttributeById(id),HttpStatus.OK);
 	}
@@ -85,13 +85,13 @@ public class VarientCategoryController {
 	}
 	
 	@DeleteMapping("/admin/{id}")
-	public ResponseEntity<Map<String, Object>> deleteVarientCategory(@PathVariable(value = "id") Long id)
+	public ResponseEntity<Map<String, Object>> deleteVarientCategory(@PathVariable(value = "id") String id)
 	{
 		return new ResponseEntity<Map<String, Object>>(varientCategoryService.deleteVarientCategoryById(id),HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/admin/varientAttribute/{id}")
-	public ResponseEntity<Map<String, Object>> deleteVarientAttribute(@PathVariable(value = "id") Long id)
+	public ResponseEntity<Map<String, Object>> deleteVarientAttribute(@PathVariable(value = "id") String id)
 	{
 		System.out.println("dfdsfs");
 		return new ResponseEntity<Map<String, Object>>(varientCategoryService.deleteVarientCategoryAttributeById(id),HttpStatus.OK);

@@ -19,7 +19,7 @@ public class ProductDescription {
 	
 	@Id
 //	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+	private String id;
 
 	@Column(length = 10000)
 	private String description;

@@ -30,14 +30,14 @@ import lombok.Setter;
 @Entity
 public class Varient extends Audit {
 	
-	public Varient(Long id2) {
+	public Varient(String id2) {
 		this.id=id2;
 	}
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.UUID)
 
-	private Long id;
+	private String id;
 	@Column(unique = true)
 	private String varientName;
 	private Float price;

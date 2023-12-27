@@ -21,9 +21,9 @@ import lombok.Setter;
 public class VarientCategoryAttribute {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.UUID)
 
-	private Long id;
+	private String id;
 
 	private String attributeName;
 

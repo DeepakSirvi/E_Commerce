@@ -15,6 +15,6 @@ import lombok.Setter;
 public class BillingState {
 	
 	@Id
-	private Long billingStateId;
+	private String billingStateId;
 
 }

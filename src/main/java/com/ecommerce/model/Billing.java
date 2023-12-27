@@ -14,6 +14,6 @@ import lombok.Setter;
 @Entity
 public class Billing {
 	@Id
-	private Long id;
+	private String id;
 
 }

@@ -18,7 +18,7 @@ import lombok.Setter;
 @JsonInclude(Include.NON_NULL)
 public class VarientCategoryRequest {
 	
-	private Long id;
+	private String id;
 	private String name;
 	private Set<VarientCategoryAttributeRequest> categoryAttributes=new HashSet<>();
 

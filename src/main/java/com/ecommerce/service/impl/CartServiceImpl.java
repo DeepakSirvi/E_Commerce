@@ -29,7 +29,7 @@ public class CartServiceImpl implements CartService {
 	private AppUtils appUtils;
 
 	@Override
-	public Map<String, Object> addProductToCart(Long id, short quantity) {
+	public Map<String, Object> addProductToCart(String id, short quantity) {
 		Optional<Cart> cart = cartRepo.findByUserAndVarient(new User(appUtils.getUserId()), new Varient(id));
 		Cart cart2 = new Cart();
 		if (cart.isPresent()) {

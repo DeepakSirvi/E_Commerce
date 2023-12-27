@@ -10,10 +10,10 @@ public interface AddressService {
 
 	public AddressResponse createAdress(AddressRequest addressRequest);
 	public AddressResponse updateAddress(AddressRequest addressRequest);
-	public AddressResponse getbyId(Long id);
-	public boolean deleteAdress(Long id);
-	public List <AddressResponse >getAddressbyUserid(Long id);
-	public  List <AddressResponse>  findByActiveStatus( Long id); 
+	public AddressResponse getbyId(String id);
+	public boolean deleteAdress(String id);
+	public List <AddressResponse >getAddressbyUserid(String id);
+	public  List <AddressResponse>  findByActiveStatus( String id); 
 	
 	
 	

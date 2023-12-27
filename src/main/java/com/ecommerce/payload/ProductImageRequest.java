@@ -19,7 +19,7 @@ import lombok.ToString;
 @JsonInclude(Include.NON_NULL)
 public class ProductImageRequest {
 
-	private Long id;
+	private String id;
 	
 	private String imageUrl;
 	

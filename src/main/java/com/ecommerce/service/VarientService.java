@@ -13,10 +13,10 @@ public interface VarientService {
 
 	public Map<String, Object> updateVarient(VarientRequest varientRequest);
 
-	public Map<String, Object> getVarient(Long id);
+	public Map<String, Object> getVarient(String id);
 
-	public Map<String, Object> getAllVarientByProductId(Long id);
+	public Map<String, Object> getAllVarientByProductId(String id);
 
-	public Map<String, Object> updateVarientStatus(Long id);
+	public Map<String, Object> updateVarientStatus(String id);
 
 }

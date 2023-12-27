@@ -60,7 +60,7 @@ public class AccountServiceImpl implements AccountService {
 
 
 	@Override
-	public ApiResponse updateAccountStatus(Long accountId, Status newStatus) {
+	public ApiResponse updateAccountStatus(String accountId, Status newStatus) {
 		
             Optional<Account> optionalAccount = accountRepo.findById(accountId);
             if (optionalAccount.isPresent()) {
@@ -86,7 +86,7 @@ public class AccountServiceImpl implements AccountService {
 
 
 	@Override
-	public Map<String,Object> getAccountById(Long accountId) {
+	public Map<String,Object> getAccountById(String accountId) {
 		
 		   Optional<Account> optionalAccount = accountRepo.findById(accountId);
            if (optionalAccount.isPresent()) {
@@ -103,7 +103,7 @@ public class AccountServiceImpl implements AccountService {
 
 
 	@Override
-	public Map<String, Object> getAllAccountsByUserId(Long userId) {
+	public Map<String, Object> getAllAccountsByUserId(String userId) {
 	
             Map<String, Object> response = new HashMap<>();
             List<Account> accounts = accountRepo.findAllByUserId(userId);
@@ -116,7 +116,7 @@ public class AccountServiceImpl implements AccountService {
 
 
 	@Override
-	public Map<String, Object> getAccountByStatusAndUserId(Long userId, Status status) {
+	public Map<String, Object> getAccountByStatusAndUserId(String userId, Status status) {
 	   
 	        Map<String, Object> response = new HashMap<>();
 	        List<Account> activeAccounts = accountRepo.findByStatusAndUserId(status, userId);

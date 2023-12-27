@@ -114,7 +114,7 @@ public class UserServiceImpl implements UserService,UserDetailsService{
 	}
 
 	@Override
-	public UserResponse getUserById(Long userId) {
+	public UserResponse getUserById(String userId) {
        User user = userRepo.findByIdAndStatus(userId,Status.ACTIVE).orElseThrow(()->new ResourceNotFoundException(AppConstant.USER,AppConstant.ID,userId));
        UserResponse userResponse =new UserResponse();
        userResponse.userToUserResponse(user);

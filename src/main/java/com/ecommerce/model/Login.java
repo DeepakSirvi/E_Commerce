@@ -21,8 +21,8 @@ import lombok.Setter;
 public class Login {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+	@GeneratedValue(strategy = GenerationType.UUID)
+	private String id;
 	@Column(length=10)
 	private Integer otp;
 	private LocalDateTime createdAt;

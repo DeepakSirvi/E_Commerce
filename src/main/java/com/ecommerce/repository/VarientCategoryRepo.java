@@ -8,11 +8,11 @@ import org.springframework.data.repository.query.Param;
 
 import com.ecommerce.model.VarientCategory;
 
-public interface VarientCategoryRepo extends JpaRepository<VarientCategory, Long> {
+public interface VarientCategoryRepo extends JpaRepository<VarientCategory, String> {
 
 	public Boolean existsByName(String name);
 
-	public Object existsByNameAndIdNot(String name,Long id);
+	public Object existsByNameAndIdNot(String name,String id);
 	
 	public Page<VarientCategory> findByName(String search, Pageable pageable);
 

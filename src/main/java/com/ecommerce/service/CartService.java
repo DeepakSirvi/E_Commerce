@@ -4,7 +4,7 @@ import java.util.Map;
 
 public interface CartService {
 
-	public Map<String, Object> addProductToCart(Long id, short quantity);
+	public Map<String, Object> addProductToCart(String id, short quantity);
 
 
 }

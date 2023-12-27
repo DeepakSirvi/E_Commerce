@@ -16,7 +16,7 @@ import lombok.Setter;
 public class OrderItem {
 	
 	@Id
-	private Long id;
+	private String id;
 	
 	@ManyToOne
 	private Orders order;

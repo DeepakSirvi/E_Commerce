@@ -15,7 +15,7 @@ import lombok.Setter;
 @JsonInclude()
 public class WishListRequest {
 	
-	private Long id;
+	private String id;
 	
 	private Varient varient;
 

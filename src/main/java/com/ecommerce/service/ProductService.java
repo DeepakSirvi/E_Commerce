@@ -16,11 +16,11 @@ public interface ProductService {
 
 	public Map<String, Object> addProduct(ProductRequest productRequest, MultipartFile multipartFiles);
 	
-	public PageResponse<ProductResponse> getProductBySubCategory(Long id, Long subId, Integer page, Integer size,String sortDir);
+	public PageResponse<ProductResponse> getProductBySubCategory(String id, String subId, Integer page, Integer size,String sortDir);
 
-	public Map<String, Object> getProduct(Long productId);
+	public Map<String, Object> getProduct(String productId);
 
-	public PageResponse<ProductResponse> getProductByVendorId(Long vendorId, Integer page, Integer size);
+	public PageResponse<ProductResponse> getProductByVendorId(String vendorId, Integer page, Integer size);
 
 	public Map<String, Object> getAllProduct(String search, Integer pageIndex, Integer pageSize,
 			String sortDir);

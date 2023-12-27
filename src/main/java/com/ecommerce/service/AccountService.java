@@ -12,13 +12,13 @@ public interface AccountService {
 
   public ApiResponse addaccount(AccountRequest accountRequest);
   
-  public ApiResponse updateAccountStatus(Long accountId, Status newStatus);
+  public ApiResponse updateAccountStatus(String accountId, Status newStatus);
   
-  public Map<String, Object> getAccountById(Long accountId);
+  public Map<String, Object> getAccountById(String accountId);
   
-  public  Map<String, Object> getAllAccountsByUserId(Long userId);
+  public  Map<String, Object> getAllAccountsByUserId(String userId);
   
-  public  Map<String, Object> getAccountByStatusAndUserId(Long userId, Status status);
+  public  Map<String, Object> getAccountByStatusAndUserId(String userId, Status status);
   
   public  Map<String, Object> updateAccountDetailsById(Account updatedDetails);
  

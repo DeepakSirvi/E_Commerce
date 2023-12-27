@@ -22,7 +22,7 @@ import lombok.Setter;
 @JsonInclude(Include.NON_NULL)
 public class ProductResponse extends AuditResponse {
 	
-	private Long id;
+	private String id;
 	private String productName;
 	private Boolean listingStatus;
 	private Status verified;

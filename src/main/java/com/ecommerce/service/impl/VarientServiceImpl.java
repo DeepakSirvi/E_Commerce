@@ -74,7 +74,7 @@ public class VarientServiceImpl implements VarientService {
 	}
 
 	@Override
-	public Map<String, Object> updateVarientStatus(Long id) {
+	public Map<String, Object> updateVarientStatus(String id) {
 
 		Varient varient = varientRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException(VARIENT, ID, id));
 		Map<String, Object> response = new HashMap<>();
@@ -89,7 +89,7 @@ public class VarientServiceImpl implements VarientService {
 	}
 	
 	@Override
-	public Map<String, Object> getVarient(Long id) {
+	public Map<String, Object> getVarient(String id) {
 		Varient varient = varientRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException(VARIENT, ID, id));
 		if (userRepo.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleName.ADMIN))
 				|| varient.getCreatedBy().equals(appUtils.getUserId()) || varient.getStatus().equals(Status.ACTIVE)) {
@@ -107,7 +107,7 @@ public class VarientServiceImpl implements VarientService {
 	}
 
 	@Override
-	public Map<String, Object> getAllVarientByProductId(Long id) {
+	public Map<String, Object> getAllVarientByProductId(String id) {
 		return null;
 	}
 

@@ -15,7 +15,7 @@ import lombok.Setter;
 @JsonInclude(Include.NON_NULL)
 public class AddressResponse {
 	
-	private Long id;
+	private String id;
 	private String name;
 	private String mobile;
 	private Integer pincode;

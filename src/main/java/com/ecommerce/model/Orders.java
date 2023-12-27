@@ -18,7 +18,7 @@ import lombok.Setter;
 @Entity
 public class Orders extends Audit{
 	@Id
-	private Long id;
+	private String id;
 
 	@ManyToOne
 	private User user;

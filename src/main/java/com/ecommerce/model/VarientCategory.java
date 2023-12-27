@@ -22,13 +22,13 @@ import lombok.Setter;
 @Entity
 public class VarientCategory extends Audit {
 	
-	public VarientCategory(Long id) {
+	public VarientCategory(String id) {
 		this.id=id;
 	}
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+	@GeneratedValue(strategy = GenerationType.UUID)
+	private String id;
 	private String name;
 	
 	@OneToMany(cascade = CascadeType.ALL)

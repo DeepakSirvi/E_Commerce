@@ -17,9 +17,9 @@ import lombok.Setter;
 @JsonInclude(Include.NON_NULL)
 public class AuditResponse {
 
-	private Long createdBy;
+	private String createdBy;
 
-	private Long updatedBy;
+	private String updatedBy;
 
 	private LocalDateTime createdAt;
 

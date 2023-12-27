@@ -123,6 +123,7 @@ public class AppConstant {
 	public static final String VARIENTCATEGORYATTRIBUTE = "Varient category attribute";
 	public static final String CATEGORY = "Product category";
 	public static final String LISTING_STATUS_UPDATE = "Product Listing Status  ";
+	public static final String PRODUCT_NOT_VERIFIED = "Product is not verified please wait to get verification from admin";
 	
 	
 	

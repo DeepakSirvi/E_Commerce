@@ -21,8 +21,8 @@ import lombok.Setter;
 public class Identity extends Audit{
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+	@GeneratedValue(strategy = GenerationType.UUID)
+	private String id;
 	private String idCardName;
 	@Column(unique = true)
 	private String idCardNumber;

@@ -21,7 +21,7 @@ import lombok.Setter;
 @JsonInclude(Include.NON_NULL)
 public class VarientResponse {
 
-	private Long id;
+	private String id;
 	private String varientName;
 	private Float price;
 	private Integer stock;

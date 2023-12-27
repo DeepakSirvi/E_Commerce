@@ -104,7 +104,7 @@ public class VarientCategoryServiceImpl implements VarientCategoryService {
 	}
 
 	@Override
-	public Map<String, Object> deleteVarientCategoryById(Long id) {
+	public Map<String, Object> deleteVarientCategoryById(String id) {
 
 		VarientCategory varientCategory = varienCategoryRepo.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException(VARIENTCATEGORY, ID, id));
@@ -125,7 +125,7 @@ public class VarientCategoryServiceImpl implements VarientCategoryService {
 	}
 
 	@Override
-	public Map<String, Object> deleteVarientCategoryAttributeById(Long id) {
+	public Map<String, Object> deleteVarientCategoryAttributeById(String id) {
 
 		VarientCategoryAttribute categoryAttribute = attributeRepo.findById(id)
 				.orElseThrow(() ->new ResourceNotFoundException(VARIENTCATEGORYATTRIBUTE, ID, id));
@@ -179,7 +179,7 @@ public class VarientCategoryServiceImpl implements VarientCategoryService {
 	}
 
 	@Override
-	public Map<String, Object> getVarientCategoryAttributeById(Long id) {
+	public Map<String, Object> getVarientCategoryAttributeById(String id) {
 		VarientCategoryAttribute varientCategoryAttribute = attributeRepo.findById(id)
 				.orElseThrow(() -> new BadRequestException(AppConstant.VARIENT_ATTIBUTE_NOT_FOUND));
 		Map<String, Object> response = new HashMap<>();
@@ -189,7 +189,7 @@ public class VarientCategoryServiceImpl implements VarientCategoryService {
 	}
 
 	@Override
-	public Map<String, Object> getVarientCategoryById(Long id) {
+	public Map<String, Object> getVarientCategoryById(String id) {
 
 		VarientCategory varientCategory = varienCategoryRepo.findById(id)
 				.orElseThrow(() -> new BadRequestException(AppConstant.VARIENT_CATEGORY_NOT_FOUND));

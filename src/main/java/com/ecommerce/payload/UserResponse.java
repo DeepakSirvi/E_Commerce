@@ -22,7 +22,7 @@ import lombok.Setter;
 @JsonInclude(Include.NON_NULL)
 public class UserResponse {
 
-	private Long id;
+	private String id;
 	private String userMobile;
 
 	private String userEmail;
@@ -40,7 +40,7 @@ public class UserResponse {
 	
 	private String token;
 	
-	public UserResponse(Long id) {
+	public UserResponse(String id) {
 		this.id=id;
 	}
 	

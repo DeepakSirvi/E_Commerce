@@ -9,13 +9,13 @@ import com.ecommerce.model.User;
 import com.ecommerce.model.WishListProduct;
 
 
-public interface WishListRepo  extends JpaRepository< WishListProduct, Long>{
+public interface WishListRepo  extends JpaRepository< WishListProduct, String>{
 
-	boolean existsByVarientIdAndUserId(Long varientId, Long userId);
+	boolean existsByVarientIdAndUserId(String varientId, String userId);
 
-	void deleteByVarientIdAndUserId(Long varientId, Long userId);
+	void deleteByVarientIdAndUserId(String varientId, String userId);
 
-	WishListProduct findByUserId(Long userId);
+	WishListProduct findByUserId(String userId);
 
 	Optional<WishListProduct> findByUser(User user);
 

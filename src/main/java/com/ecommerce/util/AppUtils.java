@@ -41,7 +41,7 @@ public class AppUtils {
 		return r.nextInt(1000,9999);
 	}
 	
-	public Long getUserId() {
+	public String getUserId() {
 		HttpServletRequest  httpRequest = RequestContextHolder.getRequest();
 		if(httpRequest!=null)
 		{

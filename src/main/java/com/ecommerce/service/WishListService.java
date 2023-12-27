@@ -7,12 +7,12 @@ import com.ecommerce.model.WishListProduct;
 
 public interface WishListService {
 	
-	 public  Map<String, Object> addToWishList(Long variantId, Long userId); 
+	 public  Map<String, Object> addToWishList(String variantId, String userId); 
 	
 	
-	 public Map<String, Object> removeFromWishList(Long varientId, Long userId);  
+	 public Map<String, Object> removeFromWishList(String varientId, String userId);  
 	 
-	 public Map<String, Object> getActiveVarientInWishlistByUserId(Long userId);
+	 public Map<String, Object> getActiveVarientInWishlistByUserId(String userId);
 	 
 	
 	 
