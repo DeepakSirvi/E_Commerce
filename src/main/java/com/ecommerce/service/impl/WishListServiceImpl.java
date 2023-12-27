@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,8 +12,12 @@ import com.ecommerce.exception.BadRequestException;
 import com.ecommerce.model.User;
 import com.ecommerce.model.Varient;
 import com.ecommerce.model.WishListProduct;
-import com.ecommerce.payload.VarientResponse;
+
+
+
+
 import com.ecommerce.repository.UserRepo;
+
 import com.ecommerce.repository.WishListRepo;
 import com.ecommerce.service.WishListService;
 import com.ecommerce.util.AppConstant;
@@ -34,7 +37,9 @@ public class WishListServiceImpl  implements WishListService   {
 	@Autowired
 	
 	private UserRepo userRepo;
-
+	
+	
+	
 	@Override
 	public Map<String, Object> addToWishList(Long varientId, Long userId) {
 		
@@ -43,8 +48,8 @@ public class WishListServiceImpl  implements WishListService   {
 		 boolean productExists = wishListRepo.existsByVarientIdAndUserId(varientId, userId);
 		 
 		 if (productExists) {
-		        response.put("response", AppConstant.PRODUCT_ALREADY_IN_WISHLIST);
-		        throw new BadRequestException("Product is already add  wishlist.");
+		        response.put("response", AppConstant.PRODUCT_ADD_TO_WISHLIST);
+		        throw new BadRequestException(AppConstant.PRODUCT_NOT_ADD_WISHLIST);
 		    } else {
 
 		 Varient  varient  = new Varient();
@@ -63,70 +68,35 @@ public class WishListServiceImpl  implements WishListService   {
 		 return response;
 	}
 		
-
-	
 	}
-
 	@Override
-	public Map<String, Object> removeFromWishList(Long varientId, Long userId) {
+	public Map<String, Object> removeFromWishList(Long wishlistId) {
 		
-		 Map<String, Object> response = new HashMap<>();
-		 
-		 boolean productExists = wishListRepo.existsByVarientIdAndUserId(varientId, userId);
-               
-		 if (productExists) {
-			 
-			 
-		 wishListRepo.existsByVarientIdAndUserId(varientId, userId);
-	        response.put("response", AppConstant.REMOVE_FROM_WISHLIST_);
-	    } else {
-	       
-	        response.put("response", AppConstant.PRODUCT_NOT_ADD_WISHLIST);
-	        throw new BadRequestException("Product is not add to wishlist.");
-	    }
-	    return response;
+		Map<String, Object> response = new HashMap<>();
+		
+		Optional<WishListProduct> wishlistProductOptional = wishListRepo.findById(wishlistId);
+		if (wishlistProductOptional.isPresent()) {
+			 wishListRepo.deleteById(wishlistId);
+			 response.put("response", AppConstant.REMOVE_FROM_WISHLIST_);
+		} else {
+            throw new BadRequestException(AppConstant.REMOVE_NOT_FROM_WISHLIST_);
+    }
+        return response;			
+	}
+	
+	@Override
+	public List<WishListProduct>  getWishlistByUserId(Long userId) {
+         User u =this.userRepo.findById(userId).orElseThrow(() -> new BadRequestException(AppConstant.USER_NOT_FOUND));
+         {
+	     List<WishListProduct> wishListProduct = this.wishListRepo.findByUser(u);
+	     return wishListProduct;
+  }
+         
+		
 	}
 
-
-
-  @Override
-  public Map<String, Object> getActiveVarientInWishlistByUserId(Long userId) {
-    Map<String, Object> response = new HashMap<>();
-    
-
-    try {
-    	  Optional<User> userOptional = userRepo.findById(userId);
-    	  if (userOptional.isPresent()) {
-              User user = userOptional.get();
-             
-              Optional<WishListProduct> wishlist = wishListRepo.findByUser(new User(userId));
-             if (wishlist.isPresent()) {
-            	 
-                   
-               } else {
-                  response.put("responses", AppConstant.WISHLIST_NOT_FOUND);
-              }
-           } else {
-              response.put("responses", AppConstant.USER_NOT_FOUND);
-          }
-      } catch (Exception e) {
-          response.put("error", e.getMessage());
-      }
-
-      return response;
-    }
-
-     private VarientResponse varientToVarientResponse(Varient varient) {
-      VarientResponse varientResponse = new VarientResponse();
-      varientResponse.setId(varient.getId());
-      return varientResponse;
-  }
-      
+	
 }
-               
-	
-	
-
 
 	
 

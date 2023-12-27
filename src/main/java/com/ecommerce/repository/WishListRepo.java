@@ -1,7 +1,7 @@
 package com.ecommerce.repository;
 
 import java.util.List;
-import java.util.Optional;
+
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -15,9 +15,9 @@ public interface WishListRepo  extends JpaRepository< WishListProduct, Long>{
 
 	void deleteByVarientIdAndUserId(Long varientId, Long userId);
 
-	WishListProduct findByUserId(Long userId);
+	List<WishListProduct>  findByUser(User u);
 
-	Optional<WishListProduct> findByUser(User user);
+
 
 	
 	

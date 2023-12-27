@@ -110,10 +110,9 @@ public class ProductServiceImpl implements ProductService {
 				.orElseThrow(() -> new BadRequestException(AppConstant.SUB_CATEGORY_NOT_FOUND));
 		Page<Product> productSet = productRepo.findBySubCategoryAndListingStatus(category, true, pageable);
 
-//		Set<ProductResponse> productResponses = productSet.getContent().stream()
-//				.map(product -> productToProductResponse(product)).collect(Collectors.toSet());
+
 		PageResponse<ProductResponse> pageResponse = new PageResponse<>();
-//		pageResponse.setContent(productResponses);
+
 		pageResponse.setSize(size);
 		pageResponse.setPage(page);
 		pageResponse.setTotalElements(productSet.getNumberOfElements());
