@@ -11,10 +11,11 @@ public interface AddressService {
 	public AddressResponse createAdress(AddressRequest addressRequest);
 	public AddressResponse updateAddress(AddressRequest addressRequest);
 	public AddressResponse getbyId(Long id);
-	public List <AddressResponse >getAddressbyUserid(Long id);
-	 public  AddressResponse  findByActiveStatus(String string); 
-	
 	public boolean deleteAdress(Long id);
+	public List <AddressResponse >getAddressbyUserid(Long id);
+	public  List <AddressResponse>  findByActiveStatus( Long id); 
+	
+	
 	
 	
 	

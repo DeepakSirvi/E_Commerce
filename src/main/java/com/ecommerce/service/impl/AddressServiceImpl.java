@@ -2,6 +2,7 @@ package com.ecommerce.service.impl;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import com.ecommerce.exception.BadRequestException;
 import com.ecommerce.model.Address;
-import com.ecommerce.model.Status;
 import com.ecommerce.model.User;
 import com.ecommerce.payload.AddressRequest;
 import com.ecommerce.payload.AddressResponse;
@@ -54,14 +54,14 @@ public AddressResponse createAdress(AddressRequest addressRequest) {
 	user.setId(appUtils.getUserId());
 	
 	address.setUserAddress(user);
-	address.setStatus(Status.ACTIVE);
+	address.setStatus(Boolean.TRUE);
 	
 	return this.addressToAddressResponse(this.addressRepo.save(address));
 }
 @Override
 public AddressResponse updateAddress(AddressRequest addressRequest) {
 	
-	Optional<Address> address = Optional.of(this.addressRepo.findById(addressRequest.getId()).orElseThrow(()->new BadRequestException(AppConstant.Address_NOT_FOUND)));
+	Optional<Address> address = Optional.of(this.addressRepo.findById(addressRequest.getId()).orElseThrow(()->new BadRequestException(AppConstant.ADDRESS_NOT_FOUND)));
 	
 	Address address2 = address.get();
 	address2.setId(addressRequest.getId());
@@ -73,7 +73,7 @@ public AddressResponse updateAddress(AddressRequest addressRequest) {
 	address2.setAlternateMobile(addressRequest.getAlternateMobile());
 	address2.setName(addressRequest.getName());
 	address2.setState(addressRequest.getState());
-	address2.setStatus(Status.ACTIVE);
+	address2.setStatus(Boolean.TRUE);
 	User user=new User();
 	user.setId(appUtils.getUserId());
 	
@@ -84,32 +84,33 @@ public AddressResponse updateAddress(AddressRequest addressRequest) {
 
 @Override
 public AddressResponse getbyId(Long id) {
-	Address address=this.addressRepo.findById(id).orElseThrow(()->new BadRequestException(AppConstant.Address_NOT_FOUND)) ;
+	Address address=this.addressRepo.findById(id).orElseThrow(()->new BadRequestException(AppConstant.ADDRESS_NOT_FOUND)) ;
 	return this.addressToAddressResponse(address);
 }
 
 @Override
 public boolean deleteAdress(Long id) {
-	Address address=this.addressRepo.findByIdAndIsDeleted(id,true).orElseThrow(()->new BadRequestException(AppConstant.Address_NOT_FOUND));
+	Address address=this.addressRepo.findByIdAndStatus(id,true).orElseThrow(()->new BadRequestException(AppConstant.ADDRESS_NOT_FOUND));
 	this.addressRepo.save(address);
 	return true;
 }
+
 @Override
 public List<AddressResponse> getAddressbyUserid(Long id) {
-	User user =this.userRepo.findById(id).orElseThrow(()->new BadRequestException(AppConstant.Address_NOT_FOUND));
-     
-Address address= this.addressRepo.findByUser(user);
-return (List<AddressResponse>) this.addressToAddressResponse(this.addressRepo.save(address));
-	
+	// TODO Auto-generated method stub
+	List<Address> listOfAddresses = this.addressRepo.findAddresssByuserId(id);
+	List<AddressResponse> list = listOfAddresses.stream().map(ar->addressToAddressResponse(ar)).collect(Collectors.toList());
+			
+	return list;
 }
 @Override
-public AddressResponse findByActiveStatus(String string) {
-	
-////	Address address= this.addressRepo.findByStatus(string).orElseThrow(()->new BadRequestException(AppConstant.Address_NOT_FOUND));
-//	Address address2=this.addressRepo.save(address);
-//	return this.addressToAddressResponse((this.addressRepo.save(address)));
-return null;
+public List<AddressResponse> findByActiveStatus(Long id) {
+ Optional<User> user= this.userRepo.findById(id);
+ List<Address> listOfActiveAddress= this.addressRepo.getActiveAddressOfUser(user.get().getId());
+ List<AddressResponse> collect = listOfActiveAddress.stream().map(as->addressToAddressResponse(as)).collect(Collectors.toList());
+ return collect;
+}
 
-}	
+
 
 }
