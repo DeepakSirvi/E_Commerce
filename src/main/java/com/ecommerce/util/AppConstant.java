@@ -37,6 +37,7 @@ public class AppConstant {
 	public static final String PRODUCT_NOT_FOUND = "Product is not found";
 	public static final String PRODUCT_ADDED = "Product added succesfully";
 	public static final String PRODUCT_DEACTIVE = "This product is deactive to display";
+	public static final String PRODUCTSAVEFORLATER_NOT_FOUND = "This product is not found";
 
 	
 	
@@ -76,6 +77,7 @@ public class AppConstant {
 	public static final String AVAILABLE_STOCK = "Product is out of avalibility";
 	public static final Object PRODUCT_ADD_TO_CART = "This product is added to card ";
 	public static final Object PRODUCT_REMOVE = "Product successfully remove";
+	
 	
 	public static final String ACCOUNT_NUMBER_TAKEN ="Account number is already in use";
 	public static final String ACCOUNT_NOT_FOUND = "Account not found";
@@ -124,6 +126,10 @@ public class AppConstant {
 	public static final String CATEGORY = "Product category";
 	public static final String LISTING_STATUS_UPDATE = "Product Listing Status  ";
 	public static final String PRODUCT_NOT_VERIFIED = "Product is not verified please wait to get verification from admin";
+	public static final Object PRODUCT_SAVE_FOR_LATER = "Product is save for later";
+	public static final Object MESSAGE = "Message";
+	public static final Object DELETE_SUCCESS = "Delete Successfully";
+	
 	
 	
 	
