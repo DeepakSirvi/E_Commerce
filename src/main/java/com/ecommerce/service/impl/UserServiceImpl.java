@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -29,6 +30,7 @@ import com.ecommerce.payload.LoginRequest;
 import com.ecommerce.payload.OtpResponse;
 import com.ecommerce.payload.UserRequest;
 import com.ecommerce.payload.UserResponse;
+import com.ecommerce.payload.UserRoleResponse;
 import com.ecommerce.repository.LoginRepo;
 import com.ecommerce.repository.UserRepo;
 import com.ecommerce.service.LoginService;
@@ -57,6 +59,8 @@ public class UserServiceImpl implements UserService,UserDetailsService{
 	
 	private  ApiResponse apiResponse=null;
 	
+	
+//	To register as customer
 	@Override
 	public ApiResponse addUser(UserRequest userRequest)
 	{
@@ -87,7 +91,7 @@ public class UserServiceImpl implements UserService,UserDetailsService{
 		 
 		 user = userRepo.save(user);
 		 if(user.getId()!=null) {
-		  apiResponse = new ApiResponse(AppConstant.RESGISTRATION_SUCCESSFULLY);
+		  apiResponse = new ApiResponse(Boolean.TRUE,AppConstant.RESGISTRATION_SUCCESSFULLY,HttpStatus.CREATED);
 		 }
 		return apiResponse;
 	}
@@ -118,6 +122,11 @@ public class UserServiceImpl implements UserService,UserDetailsService{
        User user = userRepo.findByIdAndStatus(userId,Status.ACTIVE).orElseThrow(()->new ResourceNotFoundException(AppConstant.USER,AppConstant.ID,userId));
        UserResponse userResponse =new UserResponse();
        userResponse.userToUserResponse(user);
+       Set<UserRoleResponse> collect =  user.getUserRole().stream().map(userRole -> {
+			return new UserRoleResponse().userRoleToUserRoleResponse(userRole);
+		})
+				.collect(Collectors.toSet());
+       userResponse.setUserRole(collect);
        return userResponse;  
 	}
 

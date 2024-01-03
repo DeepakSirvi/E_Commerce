@@ -84,6 +84,12 @@ public class LoginServiceImpl implements LoginService {
 					{
 						UserResponse currentUser = new UserResponse();
 						currentUser.userToUserResponse(user.get());
+						Set<UserRoleResponse> collect =  user.get().getUserRole().stream().map(userRole -> {
+							return new UserRoleResponse().userRoleToUserRoleResponse(userRole);
+						})
+								.collect(Collectors.toSet());
+						currentUser.setUserRole(collect);
+						
 						currentUser.setToken(jwtUtils.generateToken(login.get().getPhoneNumber(), currentUser.getId()));
 						return currentUser;
 					}
@@ -104,10 +110,6 @@ public class LoginServiceImpl implements LoginService {
 			throw new BadRequestException(AppConstant.INVALID_PHONE_NUMBER);
 		}
 		return null;
-
-	
-
-	
 	}
 
 }

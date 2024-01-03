@@ -23,7 +23,6 @@ import lombok.Setter;
 public class UserRequest {
 	
 	public UserRequest(String userId2) {
-		// TODO Auto-generated constructor stub
 		this.userId=userId2;
 	}
 
