@@ -103,7 +103,9 @@ public class CategoryServiceImpl implements CategoryService {
 		categoryResponse.setCategoryName(category.getCategoryName());
 		Set<SubCategory> subCategories = category.getSubCategory();
 		Set<SubCategoryResponse> collect = subCategories.stream()
-				.map(subCat -> this.subCategoryToSubCategoryResponse(subCat)).collect(Collectors.toSet());
+				.map(subCat -> {
+				return new SubCategoryResponse().subCategoryToSubCategoryResponse(subCat);
+					}).collect(Collectors.toSet());
 		categoryResponse.setSubCategory(collect);
 
 		UserResponse user = new UserResponse(category.getUser().getId());
@@ -111,18 +113,14 @@ public class CategoryServiceImpl implements CategoryService {
 		return categoryResponse;
 	}
 
-	private SubCategoryResponse subCategoryToSubCategoryResponse(SubCategory s) {
-		SubCategoryResponse response = new SubCategoryResponse();
-		response.setId(s.getId());
-		response.setSubCategory(s.getSubCategory());
-		return response;
-	}
+
 
 	@Override
 	public SubCategoryResponse getSubCategoryById(String id) {
 		SubCategory subCategory = subCategoryRepo.findById(id)
 				.orElseThrow(() -> new BadRequestException(AppConstant.SUB_CATEGORY_NOT_FOUND));
-		SubCategoryResponse response = subCategoryToSubCategoryResponse(subCategory);
+		SubCategoryResponse response = new SubCategoryResponse();
+		response.subCategoryToSubCategoryResponse(subCategory);
 		return response;
 	}
 
@@ -206,7 +204,6 @@ public class CategoryServiceImpl implements CategoryService {
 		}
 		Set<CategoryResponse> category = findAll.stream().map(categoryRe -> categoryToCategoryResponse(categoryRe))
 				.collect(Collectors.toSet());
-		System.out.println(category);
 		PageResponse<CategoryResponse> pageResponse = new PageResponse<>();
 		pageResponse.setContent(category);
 		pageResponse.setSize(size);

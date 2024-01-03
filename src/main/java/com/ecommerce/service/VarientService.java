@@ -19,4 +19,8 @@ public interface VarientService {
 
 	public Map<String, Object> updateVarientStatus(String id);
 
+	public Map<String, Object> getActiveOneVarientByProductId(String id);
+
+	public Map<String, Object> getActiveVarientByCat(List<String> attributeJoinIds, String attributeId, String productId);
+
 }

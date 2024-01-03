@@ -24,7 +24,7 @@ import com.ecommerce.service.VarientService;
 import com.ecommerce.util.AppConstant;
 
 @RestController
-@RequestMapping("ecommerce/varient")
+@RequestMapping("ecommerce/varientCategory")
 @CrossOrigin
 public class VarientCategoryController {
 	
@@ -50,7 +50,7 @@ public class VarientCategoryController {
 	{
 		return new ResponseEntity<>(varientCategoryService.getAllVarient(),HttpStatus.OK);
 	}
-	@GetMapping("/admin/page")
+	@GetMapping("/admin/pagination")
 	public ResponseEntity<Map<String, Object>> getAllVarientCategory(@RequestParam(value = "varientSearch", required = false ) String search,
 			@RequestParam(value = "pageIndex", required = false, defaultValue =  AppConstant.DEFAULT_PAGE_NUMBER) Integer pageIndex,
 			@RequestParam(value = "pageSize", required = false, defaultValue = AppConstant.DEFAULT_PAGE_SIZE) Integer pageSize,
@@ -93,8 +93,10 @@ public class VarientCategoryController {
 	@DeleteMapping("/admin/varientAttribute/{id}")
 	public ResponseEntity<Map<String, Object>> deleteVarientAttribute(@PathVariable(value = "id") String id)
 	{
-		System.out.println("dfdsfs");
+		
 		return new ResponseEntity<Map<String, Object>>(varientCategoryService.deleteVarientCategoryAttributeById(id),HttpStatus.OK);
 	}
+	
+
 	
 }

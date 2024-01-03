@@ -62,6 +62,7 @@ public class NotificationServiceImpl implements NotificationService {
 	private UserRoleRepo userRepo;
 
 	
+//	For add notification
 
 	@Override
 	public Map<String, Object> addNotification(NotificationRequest notificationRequest) {
@@ -133,7 +134,6 @@ public class NotificationServiceImpl implements NotificationService {
 	public Map<String, Object> getAllNotification(Integer page, Integer size, String sort,
 			NotificationRequest notificationRequest) {
 		Map<String, Object> response = new HashMap<>();
-		
 		Notifications notification = modelMapper.map(notificationRequest ,Notifications.class);
 		Example<Notifications> example = Example.of(notification);
 		Sort sort1=null;

@@ -76,6 +76,12 @@ public class ProductResponse extends AuditResponse {
 				  return varientResponse.varientToVarientResponse(varient);
 				}).collect(Collectors.toSet()));
 		}
+		if(Objects.nonNull(product.getSubCategory()))
+		{
+			SubCategoryResponse categoryResponse=new SubCategoryResponse();
+			categoryResponse.subCategoryToResponseWithCategory(product.getSubCategory());
+			this.setSubCategory(categoryResponse);
+		}
 		return this;
 	}
 	

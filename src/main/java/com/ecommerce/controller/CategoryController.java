@@ -52,7 +52,8 @@ public class CategoryController {
 		return new ResponseEntity<SubCategoryResponse>(categoryService.getSubCategoryById(id), HttpStatus.OK);
 	}
 
-	@GetMapping("/admin/pages")
+	
+	@GetMapping("/admin")
 	public ResponseEntity<Map<String, Object>> getAllCategory(
 			@RequestParam(value = "categorySearch", required = false ) String search,
 			@RequestParam(value = "pageIndex", required = false, defaultValue = AppConstant.DEFAULT_PAGE_NUMBER) Integer pageIndex,
@@ -62,7 +63,7 @@ public class CategoryController {
 				categoryService.getCategory(search, pageIndex, pageSize, sortDir), HttpStatus.OK);
 	}
 
-	@GetMapping
+	@GetMapping("/permitAll")
 	public ResponseEntity<Map<String, Object>> getAllCategoryList() {
 		return new ResponseEntity<Map<String, Object>>(categoryService.getAllCategory(), HttpStatus.OK);
 	}

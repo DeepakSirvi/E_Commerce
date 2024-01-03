@@ -86,7 +86,7 @@ public class ProductController {
 		return new ResponseEntity<Map<String,Object>>(productService.getAllProduct(search,pageIndex,pageSize,sortDir),HttpStatus.OK);
 	}
 	
-	@GetMapping("/")
+	@GetMapping("/permitAll")
 	public ResponseEntity<?> getAllActiveProduct(
 			@RequestParam(value = "productSearch", required = false ) String search,
 			@RequestParam(value = "pageIndex", required = false, defaultValue =  AppConstant.DEFAULT_PAGE_NUMBER) Integer pageIndex,
@@ -95,11 +95,11 @@ public class ProductController {
 	{ 
 		
 		
-		return new ResponseEntity<Map<String,Object>>(productService.getAllActiveProduct(search,pageIndex,pageSize,sortDir,true,Status.VERIFIED),HttpStatus.OK);
+		return new ResponseEntity<Map<String,Object>>(productService.getProductListBasedOnStatus(search,pageIndex,pageSize,sortDir,true,Status.VERIFIED),HttpStatus.OK);
 	}
 	
 	
-	@GetMapping("/{productId}")
+	@GetMapping("/permitAll/{productId}")
 	public ResponseEntity<?> getProductById(@PathVariable(value = "productId") String productId){
 		return new ResponseEntity<Map<String, Object>>(productService.getProduct(productId) ,HttpStatus.OK);
 	}

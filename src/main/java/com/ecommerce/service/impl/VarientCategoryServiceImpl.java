@@ -70,6 +70,8 @@ public class VarientCategoryServiceImpl implements VarientCategoryService {
 	@Autowired
 	private UserRoleRepo userRepo;
 
+	
+//	To add varient category like size, Ram, Rom, Color
 	@Override
 	public Map<String, Object> addVarientCategory(VarientCategoryRequest varientCategory) {
 
@@ -88,6 +90,7 @@ public class VarientCategoryServiceImpl implements VarientCategoryService {
 		return response;
 	}
 
+//	To add varient attribute like black, bue, 8GB, 16 GB
 	@Override
 	public Map<String, Object> addVarientCategoryAttribute(VarientCategoryAttributeRequest varientCategoryAttribute) {
 
@@ -219,6 +222,7 @@ public class VarientCategoryServiceImpl implements VarientCategoryService {
 		return varientCategoryReponse;
 	}
 
+//	Get all varient category and its attribute
 	@Override
 	public Map<String, Object> getAllVarient() {
 		List<VarientCategory> findAll = varienCategoryRepo.findAll();
@@ -229,6 +233,8 @@ public class VarientCategoryServiceImpl implements VarientCategoryService {
 		return response;
 	}
 
+	
+//	Get all varient category and attribute with pagination
 	@Override
 	public Map<String, Object> getAllVarientCategory(String search, Integer pageIndex,
 			Integer pageSize, String sortDir) {
