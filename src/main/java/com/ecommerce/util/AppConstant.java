@@ -42,6 +42,7 @@ public class AppConstant {
 	public static final String LISTING_STATUS_UPDATE = "Product Listing Status  ";
 	public static final String PRODUCT_NOT_VERIFIED = "Product is not verified please wait to get verification from admin";
 	public static final String PRODUCT_NAME_TAKEN = "This product name is already taken";
+
 	
 //	Address Constant
 	public static final String ADDRESS_ADDED = "Address added succesfully";
@@ -75,7 +76,9 @@ public class AppConstant {
 	public static final String VARIENT_ATTIBUTE_NOT_FOUND = "Attribute is not found";
 	public static final String VARIENT_ATTRIBUTE_UPDATE = "Attribute updated";
 	
+
 //	Bank Account constant
+
 	public static final String ACCOUNT_NUMBER_TAKEN ="Account number is already in use";
 	public static final String ACCOUNT_NOT_FOUND = "Account not found";
 	public static final String ERROR_UPDATING_ACCOUNT_STATUS = "Error updating account status";
@@ -121,6 +124,7 @@ public class AppConstant {
 	public static final String PRODUCT = "Product";
 	public static final String VARIENTCATEGORYATTRIBUTE = "Varient category attribute";
 	public static final String CATEGORY = "Product category";
+
 	
 	
 	
