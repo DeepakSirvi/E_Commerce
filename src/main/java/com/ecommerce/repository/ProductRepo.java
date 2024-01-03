@@ -1,7 +1,5 @@
 package com.ecommerce.repository;
 
-
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -27,5 +25,15 @@ public interface ProductRepo extends JpaRepository<Product, String> {
 			boolean listingStatus, Status status);
 
 	public Page<Product> findByListingStatusAndVerified(Pageable pageable, boolean listingStatus, Status status);
+
+	@Query("SELECT p FROM Product p " +
+		       "WHERE p.verified = :verifiedStatus " +  // Note the space before AND
+		       "AND p.listingStatus = :listingStatus " +
+		       "AND p.subCategory.category.id = :categoryId")
+		Page<Product> findFeaturedProductsByCategoryId(
+		        @Param("categoryId") String categoryId,
+		        @Param("listingStatus") Boolean listingStatus,
+		        @Param("verifiedStatus") Status verifiedStatus,
+		        Pageable pageable);
 
 }

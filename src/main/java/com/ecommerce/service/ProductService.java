@@ -25,9 +25,12 @@ public interface ProductService {
 	public Map<String, Object> getAllProduct(String search, Integer pageIndex, Integer pageSize,
 			String sortDir);
 
-	public Map<String, Object> getProductListBasedOnStatus(String search, Integer pageIndex, Integer pageSize, String sortDir,boolean listingStatus,Status status);
+	public Map<String, Object> getProductListBasedOnStatus(String search, Integer pageIndex, Integer pageSize, String sortDir);
 
 	public Map<String, Object> updateStatusProduct(UpdateStatusBooleanRequest statusRequest);
+
+	public Map<String, Object> getProductByCategory(String id, Integer pageIndex, Integer pageSize,
+			String sortDir);
 
 	
 	
