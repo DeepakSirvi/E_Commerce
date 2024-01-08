@@ -37,5 +37,4 @@ public class ProductReview extends Audit {
 	@ManyToOne
 	private Product product;
 	
-
 }
