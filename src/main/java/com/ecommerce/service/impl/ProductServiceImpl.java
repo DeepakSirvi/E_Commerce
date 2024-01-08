@@ -61,7 +61,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Autowired
 	private UserRepo userRepo;
-	
+
 	@Autowired
 	private CategoryRepo categoryRepo;
 
@@ -81,14 +81,20 @@ public class ProductServiceImpl implements ProductService {
 	private ModelMapper modelMapper;
 
 	@Override
-	public PageResponse<ProductResponse> getProductBySubCategory(String id, String subId, Integer page, Integer size,
-			String sortDir) {
+	public Map<String, Object> getProductBySubCategory(String subId, Integer page, Integer size, String sortDir) {
+		Map<String, Object> response = new HashMap<>();
 		AppUtils.validatePageAndSize(page, size);
-		Pageable pageable = PageRequest.of(page, size);
-		SubCategory category = Optional.of(subCategoryRepo.findByIdAndCategory(subId, new Category(id)))
+		SubCategory category = subCategoryRepo.findById(subId)
 				.orElseThrow(() -> new BadRequestException(AppConstant.SUB_CATEGORY_NOT_FOUND));
-
-		Page<Product> productSet = productRepo.findBySubCategoryAndListingStatus(category, true, pageable);
+		Sort sort1 = null;
+		if (sortDir.equals("DESC")) {
+			sort1 = Sort.by(Sort.Order.desc("updatedAt"));
+		} else {
+			sort1 = Sort.by(Sort.Order.asc("updatedAt"));
+		}
+		Pageable pageable = PageRequest.of(page, size, sort1);
+		Page<Product> productSet = null;
+		productSet = productRepo.findFeaturedProductsBySubCategoryId(subId, Boolean.TRUE, Status.VERIFIED, pageable);		
 		Set<ProductResponse> productResponses = productSet.getContent().stream().map(product -> {
 			return new ProductResponse().productToProductResponseList(product);
 		}).collect(Collectors.toSet());
@@ -100,8 +106,10 @@ public class ProductServiceImpl implements ProductService {
 		pageResponse.setTotalPages(productSet.getTotalPages());
 		pageResponse.setLast(productSet.isLast());
 		pageResponse.setFirst(productSet.isFirst());
-		return pageResponse;
+		response.put("AllProduct", pageResponse);
+		return response;
 	}
+	
 
 	@Override
 	public PageResponse<ProductResponse> getProductByVendorId(String vendorId, Integer page, Integer size) {
@@ -196,11 +204,10 @@ public class ProductServiceImpl implements ProductService {
 		Pageable pageable = PageRequest.of(pageIndex, pageSize, sort1);
 		Page<Product> productSet = null;
 		if (Objects.nonNull(search) && !search.equals("")) {
-		
-			productSet = productRepo.findByProductNameAndListingStatusAndVerified(search, pageable, Boolean.TRUE,
-					Status.VERIFIED);
+			System.out.println(search+"non");
+			productSet = productRepo.findProductsByNameAndCriteria(search, Boolean.TRUE,
+					Status.VERIFIED,pageable);
 		} else {
-			
 			productSet = productRepo.findByListingStatusAndVerified(pageable, Boolean.TRUE, Status.VERIFIED);
 		}
 		Set<ProductResponse> productResponses = productSet.getContent().stream().map(products -> {
@@ -300,8 +307,7 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public Map<String, Object> getProductByCategory(String id, Integer pageIndex, Integer pageSize, String sortDir) {
 		Map<String, Object> response = new HashMap<>();
-		categoryRepo.findById(id)
-				.orElseThrow(() -> new BadRequestException(AppConstant.CATEGORY_NOT_FOUND));
+		categoryRepo.findById(id).orElseThrow(() -> new BadRequestException(AppConstant.CATEGORY_NOT_FOUND));
 		AppUtils.validatePageAndSize(pageIndex, pageSize);
 		Sort sort1 = null;
 		if (sortDir.equals("DESC")) {
@@ -311,7 +317,7 @@ public class ProductServiceImpl implements ProductService {
 		}
 		Pageable pageable = PageRequest.of(pageIndex, pageSize, sort1);
 		Page<Product> productSet = null;
-		productSet = productRepo.findFeaturedProductsByCategoryId(id,Boolean.TRUE,Status.VERIFIED ,pageable);
+		productSet = productRepo.findFeaturedProductsByCategoryId(id, Boolean.TRUE, Status.VERIFIED, pageable);
 		Set<ProductResponse> productResponses = productSet.getContent().stream().map(products -> {
 			ProductResponse productResponse = new ProductResponse();
 			return productResponse.productToProductResponseList(products);

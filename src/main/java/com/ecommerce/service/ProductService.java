@@ -2,6 +2,7 @@ package com.ecommerce.service;
 
 import java.util.Map;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ecommerce.model.Status;
@@ -16,7 +17,7 @@ public interface ProductService {
 
 	public Map<String, Object> addProduct(ProductRequest productRequest, MultipartFile multipartFiles);
 	
-	public PageResponse<ProductResponse> getProductBySubCategory(String id, String subId, Integer page, Integer size,String sortDir);
+	public Map<String, Object> getProductBySubCategory(String id, Integer page, Integer size,String sortDir);
 
 	public Map<String, Object> getProduct(String productId);
 
