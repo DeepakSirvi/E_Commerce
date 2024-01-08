@@ -18,4 +18,5 @@ public class RoleRequest {
 
 	private RoleName roleName;
 	private String description;
+	private Integer id;
 }

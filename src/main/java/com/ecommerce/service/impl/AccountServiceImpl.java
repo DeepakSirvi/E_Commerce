@@ -1,13 +1,10 @@
 package com.ecommerce.service.impl;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import javax.security.auth.login.AccountNotFoundException;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,14 +54,14 @@ public class AccountServiceImpl implements AccountService {
 		accountRequest.setStatus(Status.ACTIVE);
 		Account accountResponse=this.accountRepo.save(this.accountToAccountRequest(accountRequest));
 		
-		ApiResponse apiResponse = new ApiResponse(Boolean.TRUE,AppConstant.ADDRESS_ADDED);
+		ApiResponse apiResponse = new ApiResponse(AppConstant.ADDRESS_ADDED);
 	    return  apiResponse;
 	}
 
 
 	@Override
-	public ApiResponse updateAccountStatus(Long accountId, Status newStatus) {
-		try {
+	public ApiResponse updateAccountStatus(String accountId, Status newStatus) {
+		
             Optional<Account> optionalAccount = accountRepo.findById(accountId);
             if (optionalAccount.isPresent()) {
                 Account account = optionalAccount.get();
@@ -74,13 +71,11 @@ public class AccountServiceImpl implements AccountService {
                 accountRepo.save(account);
                 String statusMessage = newStatus == Status.ACTIVE ?
                         AppConstant.ACCOUNT_ACTIVATED : AppConstant.ACCOUNT_DEACTIVATED;
-                return new ApiResponse(Boolean.TRUE, statusMessage);
+                return new ApiResponse(statusMessage);
             } else {
-            	throw new AccountNotFoundException(AppConstant.ACCOUNT_NOT_FOUND);
+            	throw new BadRequestException(AppConstant.ACCOUNT_NOT_FOUND);
             }
-        } catch (Exception e) {
-        	throw new RuntimeException(AppConstant.ERROR_UPDATING_ACCOUNT_STATUS + e.getMessage());
-        }
+        
     }
 	 private void validateStatusTransition(Status currentStatus, Status newStatus) {
 	        if ((currentStatus == Status.ACTIVE && newStatus == Status.ACTIVE) ||
@@ -91,76 +86,54 @@ public class AccountServiceImpl implements AccountService {
 
 
 	@Override
-	public Map<String,Object> getAccountById(Long accountId) {
-		 try {
-			 Map<String,Object> response= new HashMap<>();
-	            Optional<Account> optionalAccount = accountRepo.findById(accountId);
-	            if (optionalAccount.isPresent()) {
-	                Account account = optionalAccount.get();
-	                AccountResponse accountResponse = accountToAccountResponse(account);
-	                response.put("message",AppConstant.ACCOUNT_FOUND );
-	                response.put("accoutDetail", accountResponse);
-	                return response ;
-	            } else {
-	            	throw new AccountNotFoundException(AppConstant.ACCOUNT_NOT_FOUND);
-	            }
-	        } catch (Exception e) {
-	            throw  new BadRequestException(e.getMessage());
-	        }
+	public Map<String,Object> getAccountById(String accountId) {
+		
+		   Optional<Account> optionalAccount = accountRepo.findById(accountId);
+           if (optionalAccount.isPresent()) {
+        	   Map<String,Object> response= new HashMap<>();
+               Account account = optionalAccount.get();
+               AccountResponse accountResponse = accountToAccountResponse(account);
+		       response.put("accoutDetail", accountResponse);
+		       return response ;
+           } else 
+               {
+            	throw new BadRequestException(AppConstant.ACCOUNT_NOT_FOUND);
+            	}
 	    }
 
 
 	@Override
-	public Map<String, Object> getAllAccountsByUserId(Long userId) {
-		try {
+	public Map<String, Object> getAllAccountsByUserId(String userId) {
+	
             Map<String, Object> response = new HashMap<>();
             List<Account> accounts = accountRepo.findAllByUserId(userId);
-            if (!accounts.isEmpty()) {
                 List<AccountResponse> accountResponses = accounts.stream()
                         .map(this::accountToAccountResponse)
                         .collect(Collectors.toList());
-                response.put("message", AppConstant.ACCOUNTS_FOUND);
                 response.put("accounts", accountResponses);
-
                 return response;
-            } else {
-            	throw new AccountNotFoundException(AppConstant.ACCOUNT_NOT_FOUND);
-            }
-        } catch (Exception e) {
-            throw new BadRequestException(e.getMessage());
-        }
     }
+
+
 	@Override
-	public Map<String, Object> getAccountByStatusAndUserId(Long userId, Status status) {
-	    try {
+	public Map<String, Object> getAccountByStatusAndUserId(String userId, Status status) {
+	   
 	        Map<String, Object> response = new HashMap<>();
-	        
 	        List<Account> activeAccounts = accountRepo.findByStatusAndUserId(status, userId);
 
-	        if (!activeAccounts.isEmpty()) {
+	        
 	            List<AccountResponse> accountResponses = activeAccounts.stream()
 	                    .map(this::accountToAccountResponse)
 	                    .collect(Collectors.toList());
-
-	            response.put("message", AppConstant.ACCOUNTS_FOUND);
 	            response.put("accounts", accountResponses);
-	        } else {
-	            response.put("message", AppConstant.NO_ACCOUNTS_FOUND);
-	            response.put("accounts", Collections.emptyList());
-	        }
-	       
 	        return response;
-	    } catch (Exception e) {
-	        throw new BadRequestException(e.getMessage());
-	    }
 	}
 
 	
 	@Override
-	public Map<String, Object> updateAccountDetailsById(Long accountId, Account updatedDetails) {
+	public Map<String, Object> updateAccountDetailsById(Account updatedDetails) {
 		        Map<String,Object> response = new HashMap<>();
-		        Account account = accountRepo.findById(accountId).orElseThrow(()->new BadRequestException(AppConstant.ACCOUNT_NOT_FOUND));
-		        try {
+		        Account account = accountRepo.findById(updatedDetails.getId()).orElseThrow(()->new BadRequestException(AppConstant.ACCOUNT_NOT_FOUND));
 		        if (!account.getAccountNumber().equals(updatedDetails.getAccountNumber()) &&
 		                accountRepo.existsByAccountNumber(updatedDetails.getAccountNumber())) {
 		            throw new BadRequestException(AppConstant.DUPLICATE_ACCOUNT_NUMBER);
@@ -170,22 +143,17 @@ public class AccountServiceImpl implements AccountService {
 		        account.setBankName(updatedDetails.getBankName());
 		        account.setBankIFSCcode(updatedDetails.getBankIFSCcode());
 		        account.setVenderGSTnumber(updatedDetails.getVenderGSTnumber());
-		        account.setPanNumber(updatedDetails.getPanNumber());
-//		        account.setStatus(updatedDetails.getStatus());
+		        account.setPanNumber(updatedDetails.getPanNumber());  
 		        account.setUpdatedAt(updatedDetails.getCreatedAt());
 		        account.setUpdatedBy(updatedDetails.getCreatedBy());
 		        account.setUser(updatedDetails.getUser());
 		        account.setVenderGSTnumber(updatedDetails.getVenderGSTnumber());
+		       
 		        this.accountRepo.save(account);
-		        response.put("dee", AppConstant.UPDATE_ACCOUNT);
+		        response.put(AppConstant.RESPONSE_MESSAGE, AppConstant.UPDATE_ACCOUNT);
 		        response.put("account", accountToAccountResponse(account));
 		        return response;
-		    } catch (BadRequestException e) {
-		        response.put("dee", AppConstant.DUPLICATE_ACCOUNT_NUMBER);
-		        response.put("message", e.getMessage());
-		        return response;
 		    }
-		}
 }
         
 		        		

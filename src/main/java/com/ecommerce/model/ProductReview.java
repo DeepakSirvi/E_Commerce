@@ -20,7 +20,7 @@ import lombok.Setter;
 public class ProductReview extends Audit {
 	
 	@Id
-	private Long id;
+	private String id;
 	
 	private Integer numberOfStar;
 	private String title;
@@ -30,9 +30,7 @@ public class ProductReview extends Audit {
 	
 	@OneToMany(mappedBy ="imageReview")
 	private Set<ReviewImage> image;
-	
-
-	
+		
 	@ManyToOne
 	private User user;
 	

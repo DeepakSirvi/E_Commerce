@@ -15,7 +15,7 @@ import lombok.Setter;
 @JsonInclude(Include.NON_NULL)
 public class AccountResponse {
 
-	private Long id;
+	private String id;
 	private String accountNumber;
 	private String accountHolderName;
 	private String bankName;

@@ -1,7 +1,12 @@
 package com.ecommerce.payload;
 
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
+import com.ecommerce.model.Product;
+import com.ecommerce.model.ProductDescription;
+import com.ecommerce.model.Status;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -15,11 +20,12 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(Include.NON_NULL)
-public class ProductResponse {
+public class ProductResponse extends AuditResponse {
 	
-	private Long id;
+	private String id;
 	private String productName;
 	private Boolean listingStatus;
+	private Status verified;
 	private String brand;
 	private String fullfillmentBy;
 	private String shippingProvider;
@@ -35,5 +41,65 @@ public class ProductResponse {
 	private UserResponse vendor;
 	private SubCategoryResponse subCategory;
 	private Set<VarientResponse> varient;
-	private ProductDescriptionResponse description;
+	private ProductDescriptionResponse description=new ProductDescriptionResponse();
+	
+	private String productImage;
+	
+	private Float basicPrice;
+	
+	public ProductResponse productToProductResponse(Product product) {
+		this.setId(product.getId());
+		this.setProductName(product.getProductName());
+		this.setListingStatus(product.getListingStatus());
+		this.setBrand(product.getBrand());
+		this.setFullfillmentBy(product.getFullfillmentBy());
+		this.setShippingProvider(product.getShippingProvider());
+		this.setDeliveryCharge(product.getDeliveryCharge());
+		this.setProductWeight(product.getProductWeight());
+		this.setProductHeight(product.getProductHeight());
+		this.setProductWidth(product.getProductWidth());
+		this.setProductLength(product.getProductLength());
+		this.setTaxCode(product.getTaxCode());
+		this.setCountryOfOrigin(product.getCountryOfOrigin());
+		this.setProductType(product.getProductType());
+		this.getDescription().setDescription(product.getDescription().getDescription());
+		this.setBasicPrice(product.getBasicPrice());
+		
+		if(Objects.nonNull(product.getProductImage()))
+		{
+			this.setProductImage(product.getProductImage());
+		}
+		if(Objects.nonNull(product.getVarient())) {
+		this.setVarient( product.getVarient().stream()
+				.map(varient-> {
+					VarientResponse varientResponse=new VarientResponse();
+				  return varientResponse.varientToVarientResponse(varient);
+				}).collect(Collectors.toSet()));
+		}
+		if(Objects.nonNull(product.getSubCategory()))
+		{
+			SubCategoryResponse categoryResponse=new SubCategoryResponse();
+			categoryResponse.subCategoryToResponseWithCategory(product.getSubCategory());
+			this.setSubCategory(categoryResponse);
+		}
+		return this;
+	}
+	
+
+	  public ProductResponse productToProductResponseList(Product product) {
+		this.setId(product.getId());
+		this.setProductName(product.getProductName());
+		this.setListingStatus(product.getListingStatus());
+		this.setBrand(product.getBrand());
+		this.setCountryOfOrigin(product.getCountryOfOrigin());
+		this.setProductType(product.getProductType());
+		this.setCreatedAt(product.getCreatedAt());
+		this.setVerified(product.getVerified());
+		if(Objects.nonNull(product.getProductImage()))
+		{
+			this.setProductImage(product.getProductImage());
+		}
+		this.setBasicPrice(product.getBasicPrice());
+		return this;
+	}
 }

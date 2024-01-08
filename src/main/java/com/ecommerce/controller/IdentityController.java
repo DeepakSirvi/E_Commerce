@@ -40,19 +40,19 @@ public class IdentityController {
 	}
 	
 	@GetMapping("/{identityId}")
-	public ResponseEntity<Map<String, Object>> getUserIdentity(@PathParam(value = "identityId") Long id){
+	public ResponseEntity<Map<String, Object>> getUserIdentity(@PathParam(value = "identityId") String id){
 		
 		return new ResponseEntity<Map<String,Object>>(identityService.getIdentity(id),HttpStatus.CREATED);
 	}
 	
 	@GetMapping("/allIdentity/{userId}")
-	public ResponseEntity<Map<String, Object>> getAllUserIdentity(@PathParam(value = "userId") Long id){
+	public ResponseEntity<Map<String, Object>> getAllUserIdentity(@PathParam(value = "userId") String id){
 		
 		return new ResponseEntity<Map<String,Object>>(identityService.getAllIdentityByUserId(id),HttpStatus.CREATED);
 	}
 	
 	@PatchMapping("/{identityId}")
-	public ResponseEntity<Map<String, Object>> updateIdentityStatus(@PathParam(value = "identityId") Long id){
+	public ResponseEntity<Map<String, Object>> updateIdentityStatus(@PathParam(value = "identityId") String id){
 		
 		return new ResponseEntity<Map<String,Object>>(identityService.updateIdentityStatus(id),HttpStatus.CREATED);
 	}

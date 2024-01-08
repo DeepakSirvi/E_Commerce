@@ -13,15 +13,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ecommerce.payload.CategoryRequest;
 import com.ecommerce.payload.VarientCategoryAttributeRequest;
 import com.ecommerce.payload.VarientCategoryRequest;
 import com.ecommerce.service.VarientCategoryService;
 import com.ecommerce.service.VarientService;
+import com.ecommerce.util.AppConstant;
 
 @RestController
-@RequestMapping("ecommerce/varient")
+@RequestMapping("ecommerce/varientCategory")
 @CrossOrigin
 public class VarientCategoryController {
 	
@@ -36,7 +39,7 @@ public class VarientCategoryController {
 		return new ResponseEntity<Map<String, Object>>(varientCategoryService.addVarientCategory(varientCategory),HttpStatus.CREATED);
 	}
 	
-	@PostMapping("/admin/varientAttributeibute")
+	@PostMapping("/admin/varientAttribute")
 	public ResponseEntity<Map<String, Object>> createVarientAttribute(@RequestBody VarientCategoryAttributeRequest varientCategoryAttribute)
 	{
 		return new ResponseEntity<Map<String, Object>>(varientCategoryService.addVarientCategoryAttribute(varientCategoryAttribute),HttpStatus.CREATED);
@@ -47,15 +50,24 @@ public class VarientCategoryController {
 	{
 		return new ResponseEntity<>(varientCategoryService.getAllVarient(),HttpStatus.OK);
 	}
+	@GetMapping("/admin/pagination")
+	public ResponseEntity<Map<String, Object>> getAllVarientCategory(@RequestParam(value = "varientSearch", required = false ) String search,
+			@RequestParam(value = "pageIndex", required = false, defaultValue =  AppConstant.DEFAULT_PAGE_NUMBER) Integer pageIndex,
+			@RequestParam(value = "pageSize", required = false, defaultValue = AppConstant.DEFAULT_PAGE_SIZE) Integer pageSize,
+			@RequestParam(value = "sortDir", required = false, defaultValue = AppConstant.DEFAULT_SORT_DIR) String sortDir)
+	{
+		System.out.println(search);
+		return new ResponseEntity<Map<String,Object>>(varientCategoryService.getAllVarientCategory(search,pageIndex,pageSize,sortDir),HttpStatus.OK);
+	}
 	
 	@GetMapping("/admin/{id}")
-	public ResponseEntity<Map<String, Object>> getVarientCategory(@PathVariable(value = "id") Long id)
+	public ResponseEntity<Map<String, Object>> getVarientCategory(@PathVariable(value = "id") String id)
 	{
 		return new ResponseEntity<Map<String, Object>>(varientCategoryService.getVarientCategoryById(id),HttpStatus.OK);
 	}
 	
 	@GetMapping("/admin/varientAttributeibute/{id}")
-	public ResponseEntity<Map<String, Object>> getVarientAttribute(@PathVariable(value = "id") Long id)
+	public ResponseEntity<Map<String, Object>> getVarientAttribute(@PathVariable(value = "id") String id)
 	{
 		return new ResponseEntity<Map<String, Object>>(varientCategoryService.getVarientCategoryAttributeById(id),HttpStatus.OK);
 	}
@@ -66,21 +78,22 @@ public class VarientCategoryController {
 		return new ResponseEntity<Map<String, Object>>(varientCategoryService.updateVarientCategory(varientCategory),HttpStatus.OK);
 	}
 	
-	@PutMapping("/admin/varientAttributeibute")
+	@PutMapping("/admin/varientAttribute")
 	public ResponseEntity<Map<String, Object>> updateVarientAttribute(@RequestBody VarientCategoryAttributeRequest varientCategoryAttribute)
 	{
 		return new ResponseEntity<Map<String, Object>>(varientCategoryService.updateVarientCategoryAttribute(varientCategoryAttribute),HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/admin/{id}")
-	public ResponseEntity<Map<String, Object>> deleteVarientCategory(@PathVariable(value = "id") Long id)
+	public ResponseEntity<Map<String, Object>> deleteVarientCategory(@PathVariable(value = "id") String id)
 	{
 		return new ResponseEntity<Map<String, Object>>(varientCategoryService.deleteVarientCategoryById(id),HttpStatus.OK);
 	}
 	
-	@DeleteMapping("/admin/varientAttributeibute/{id}")
-	public ResponseEntity<Map<String, Object>> deleteVarientAttribute(@PathVariable(value = "id") Long id)
+	@DeleteMapping("/admin/varientAttribute/{id}")
+	public ResponseEntity<Map<String, Object>> deleteVarientAttribute(@PathVariable(value = "id") String id)
 	{
+		
 		return new ResponseEntity<Map<String, Object>>(varientCategoryService.deleteVarientCategoryAttributeById(id),HttpStatus.OK);
 	}
 }

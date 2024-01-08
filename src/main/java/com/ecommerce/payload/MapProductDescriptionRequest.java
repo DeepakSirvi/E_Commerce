@@ -17,7 +17,7 @@ import lombok.Setter;
 @JsonInclude(Include.NON_NULL)
 public class MapProductDescriptionRequest {
 
-    private Long id;
+    private String id;
 	private String title;
     private Map<String, String> details;
 }

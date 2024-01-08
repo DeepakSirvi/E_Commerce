@@ -17,7 +17,7 @@ import lombok.ToString;
 @JsonInclude(Include.NON_NULL)
 public class VarientCategoryJoinRequest {
 
-	private Long id;
+	private String id;
 	private VarientCategoryAttributeRequest varAttribute;	
 	private VarientRequest varient;
 	

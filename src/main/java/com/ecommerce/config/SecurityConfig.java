@@ -42,10 +42,11 @@ public class SecurityConfig {
 	// Authorization
 	@Bean
 	public SecurityFilterChain configuraPaths(HttpSecurity http) throws Exception {
+		
 		http.csrf()
 		.disable()  
 		.authorizeRequests()
-		.requestMatchers("ecommerce/auth/**").permitAll()
+		.requestMatchers("ecommerce/auth/**","ecommerce/image/**","**/permitAll/**").permitAll()
 		.requestMatchers("ecommerce/category/admin/**","ecommerce/varient/admin/**","ecommerce/product/admin/**")
 		.hasAuthority("ADMIN")
 		.anyRequest().authenticated()

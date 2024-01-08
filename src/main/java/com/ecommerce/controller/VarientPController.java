@@ -4,18 +4,18 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,9 +31,10 @@ import jakarta.websocket.server.PathParam;
 @RequestMapping("ecommerce/productVarient")
 @CrossOrigin
 public class VarientPController {
-	
+
 	@Autowired
 	private VarientService varientService;
+
 	
 	@PostMapping(path="/")
 	public ResponseEntity<Map<String, Object>> addProductVarient(@RequestPart(value = "varientRequest") String varientRequest,
@@ -59,30 +60,44 @@ public class VarientPController {
 		}
 				System.out.println(request.getVarientName());
 		return new ResponseEntity<Map<String,Object>>(varientService.createVarient(request,multipartFiles),HttpStatus.CREATED);
+
 	}
-	
+
 	@PutMapping("/")
-	public ResponseEntity<Map<String, Object>> updateProductVarient(@RequestBody VarientRequest varientRequest){
-		
-		return new ResponseEntity<Map<String,Object>>(varientService.updateVarient(varientRequest),HttpStatus.CREATED);
+	public ResponseEntity<Map<String, Object>> updateProductVarient(@RequestBody VarientRequest varientRequest) {
+
+		return new ResponseEntity<Map<String, Object>>(varientService.updateVarient(varientRequest),
+				HttpStatus.CREATED);
 	}
-	
+
 	@GetMapping("/{varientId}")
-	public ResponseEntity<Map<String, Object>> getProductVarient(@PathParam(value = "varientId") Long id){
-		
-		return new ResponseEntity<Map<String,Object>>(varientService.getVarient(id),HttpStatus.CREATED);
+	public ResponseEntity<Map<String, Object>> getProductVarient(@PathParam(value = "varientId") String id) {
+
+		return new ResponseEntity<Map<String, Object>>(varientService.getVarient(id), HttpStatus.CREATED);
 	}
-	
+
 	@GetMapping("/AllVarient/{productId}")
-	public ResponseEntity<Map<String, Object>> getAllProductVarient(@PathParam(value = "productId") Long id){
-		
-		return new ResponseEntity<Map<String,Object>>(varientService.getAllVarientByProductId(id),HttpStatus.CREATED);
+	public ResponseEntity<Map<String, Object>> getAllProductVarient(@PathParam(value = "productId") String id) {
+
+		return new ResponseEntity<Map<String, Object>>(varientService.getAllVarientByProductId(id), HttpStatus.CREATED);
+	}
+
+	@PatchMapping("/{varientId}")
+	public ResponseEntity<Map<String, Object>> updateVarientStatus(@PathParam(value = "varientId") String id) {
+
+		return new ResponseEntity<Map<String, Object>>(varientService.updateVarientStatus(id), HttpStatus.CREATED);
+	}
+
+	@GetMapping("/permitAll/varientByProduct/{productId}")
+	public ResponseEntity<Map<String, Object>> getActiveVarientByProductId(@PathVariable(value = "productId") String productId) {
+		return new ResponseEntity<Map<String, Object>>(varientService.getActiveOneVarientByProductId(productId), HttpStatus.CREATED);
 	}
 	
-	@PatchMapping("/{varientId}")
-	public ResponseEntity<Map<String, Object>> updateVarientStatus(@PathParam(value = "varientId") Long id){
-		
-		return new ResponseEntity<Map<String,Object>>(varientService.updateVarientStatus(id),HttpStatus.CREATED);
+	@PostMapping("/permitAll/catJoin/{attributeId}/{productId}")
+	public ResponseEntity<Map<String, Object>> getActiveVarientByCatJoin(@RequestBody List<String> attributeJoin,
+			@PathVariable(name = "attributeId") String attributeId,
+			@PathVariable(name = "productId") String productId) {
+		return new ResponseEntity<Map<String, Object>>(varientService.getActiveVarientByCat(attributeJoin,attributeId,productId), HttpStatus.CREATED);
 	}
 
 }

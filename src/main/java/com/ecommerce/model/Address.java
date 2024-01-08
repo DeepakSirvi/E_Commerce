@@ -25,8 +25,8 @@ public class Address extends Audit {
 	
 	@Id
 	
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+	@GeneratedValue(strategy = GenerationType.UUID)
+	private String id;
 	
 	@Column(length=50)
 	private String name;
@@ -47,16 +47,12 @@ public class Address extends Audit {
 	
 	@Column(length=15)
 	private String addressType;
-	
-	@Column(nullable = false)
-	@Enumerated(EnumType.STRING)
-	private Status status;
+
+	private boolean status;
 	
 	@ManyToOne
 	private User userAddress;
 	
 	@OneToMany(mappedBy = "address")
 	private Set<Orders> order;
-	
-	
 }

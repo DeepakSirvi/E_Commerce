@@ -22,11 +22,11 @@ public class Audit {
 	
 	@CreatedBy
 	@Column(updatable = false)
-	private Long createdBy;
+	private String createdBy;
 	
 	@LastModifiedBy
 	@Column()
-	private Long updatedBy;
+	private String updatedBy;
 	
 	@CreatedDate
 	@Column(updatable = false,nullable = false)

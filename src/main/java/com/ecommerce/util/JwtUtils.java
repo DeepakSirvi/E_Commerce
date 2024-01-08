@@ -1,11 +1,16 @@
 package com.ecommerce.util;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
@@ -25,7 +30,7 @@ public class JwtUtils {
 	}
 	
 	
-	public String generateToken(String subject,Long userId)
+	public String generateToken(String subject,String userId)
 	{
 		Map<String,Object> claims= new HashMap<>();
 		claims.put("userId", userId);
@@ -45,8 +50,8 @@ public class JwtUtils {
 				.parseClaimsJws(token).getBody();
 		}
 	
-	public Long getUserIdFromToken(String token) {
+	public String getUserIdFromToken(String token) {
         Claims claims = getClaims(token);
-        return claims.get("userId",Long.class);
+        return claims.get("userId",String.class);
 	}
 }

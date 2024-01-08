@@ -20,8 +20,8 @@ import lombok.ToString;
 public class VarientCategoryJoin {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO )
-	private Long id;
+	@GeneratedValue(strategy = GenerationType.UUID )
+	private String id;
 	
 	@ManyToOne
 	private VarientCategoryAttribute varAttribute;

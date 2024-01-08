@@ -15,16 +15,13 @@ import com.ecommerce.util.JwtUtils;
 
 import io.jsonwebtoken.Jwts;
 
-public class SpringSecurityAuditAwareImpl implements AuditorAware<Long> {
-	
-	@Autowired
-	private UserRepo userRepo; 
+public class SpringSecurityAuditAwareImpl implements AuditorAware<String> {
 	
 	@Autowired
 	private AppUtils appUtils;
 
 	@Override
-	public Optional<Long> getCurrentAuditor() {
+	public Optional<String> getCurrentAuditor() {
 		
 		return Optional.ofNullable(appUtils.getUserId());
 	}

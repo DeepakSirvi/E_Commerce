@@ -18,7 +18,7 @@ import lombok.Setter;
 public class PromoCode extends Audit {
 	
 	@Id
-	private Long id;
+	private String id;
 	
 	private String code;
 	private Integer discountPrice;

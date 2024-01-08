@@ -18,7 +18,7 @@ import lombok.Setter;
 @Entity
 public class TermsAndCondition extends Audit {
 	@Id
-	private Long id;
+	private String id;
 	
 	private String title;
 	

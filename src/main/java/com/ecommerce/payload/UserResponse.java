@@ -1,8 +1,11 @@
 package com.ecommerce.payload;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.ecommerce.model.Status;
+import com.ecommerce.model.User;
+import com.ecommerce.model.UserRole;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -19,7 +22,7 @@ import lombok.Setter;
 @JsonInclude(Include.NON_NULL)
 public class UserResponse {
 
-	private Long id;
+	private String id;
 	private String userMobile;
 
 	private String userEmail;
@@ -37,7 +40,18 @@ public class UserResponse {
 	
 	private String token;
 	
-	public UserResponse(Long id) {
+	public UserResponse(String id) {
 		this.id=id;
+	}
+	
+	public UserResponse userToUserResponse(User user) {
+		this.setFirstName(user.getFirstName());
+		this.setLastName(user.getLastName());
+		this.setGender(user.getGender());
+		this.setId(user.getId());
+		this.setUserMobile(user.getUserMobile());
+		this.setUserEmail(user.getUserEmail());
+		this.setStatus(user.getStatus());
+		return this;
 	}
 }

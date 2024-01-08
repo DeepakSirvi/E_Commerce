@@ -7,6 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
@@ -19,20 +20,22 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class VarientCategory {
+public class VarientCategory extends Audit {
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	public VarientCategory(String id) {
+		this.id=id;
+	}
 
-	private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.UUID)
+	private String id;
 	private String name;
 	
-	@OneToMany(mappedBy = "varientCategory",cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "varient_Category_Id")
 	private Set<VarientCategoryAttribute> categoryAttributes = new HashSet<>();
 	
 	@ManyToOne
 	private User user;
-
-
 
 }

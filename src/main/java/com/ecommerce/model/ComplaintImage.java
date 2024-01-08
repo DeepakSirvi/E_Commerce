@@ -16,7 +16,7 @@ import lombok.Setter;
 public class ComplaintImage {
 	
 	@Id
-	private Long id;
+	private String id;
 	private String imageName;
 	
 	@ManyToOne

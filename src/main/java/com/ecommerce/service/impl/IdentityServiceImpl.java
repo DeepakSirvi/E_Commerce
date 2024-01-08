@@ -11,19 +11,19 @@ import com.ecommerce.service.IdentityService;
 public class IdentityServiceImpl implements IdentityService {
 
 	@Override
-	public Map<String, Object> updateIdentityStatus(Long id) {
+	public Map<String, Object> updateIdentityStatus(String id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Map<String, Object> getAllIdentityByUserId(Long id) {
+	public Map<String, Object> getAllIdentityByUserId(String id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Map<String, Object> getIdentity(Long id) {
+	public Map<String, Object> getIdentity(String id) {
 		// TODO Auto-generated method stub
 		return null;
 	}

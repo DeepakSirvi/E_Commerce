@@ -10,7 +10,7 @@ import com.ecommerce.model.Product;
 import com.ecommerce.model.User;
 import com.ecommerce.model.Varient;
 
-public interface CartRepo extends JpaRepository<Cart, Long> {
+public interface CartRepo extends JpaRepository<Cart, String> {
 
 	public Optional<Cart> findByUserAndVarient(User user, Varient varient);
 

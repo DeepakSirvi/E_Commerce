@@ -8,12 +8,14 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Collection;
 import java.util.Objects;
 import java.util.Random;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,19 +41,20 @@ public class AppUtils {
 		return r.nextInt(1000,9999);
 	}
 	
-	public Long getUserId() {
+	public String getUserId() {
 		HttpServletRequest  httpRequest = RequestContextHolder.getRequest();
 		if(httpRequest!=null)
 		{
 		   String token = httpRequest.getParameter("Authorization");
-		   return jwtUtils.getUserIdFromToken(token);
-		   
+		   return jwtUtils.getUserIdFromToken(token); 
 		}
 		else
 		{
 			   throw new BadRequestException(AppConstant.INVALID_REQUEST);
 		}
 	}
+	
+	
 	
      public static final void validatePageAndSize(Integer page, Integer size) {
 		

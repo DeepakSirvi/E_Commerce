@@ -17,8 +17,8 @@ import lombok.Setter;
 public class UserGroup {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+	@GeneratedValue(strategy = GenerationType.UUID)
+	private String id;
 	
 
 	

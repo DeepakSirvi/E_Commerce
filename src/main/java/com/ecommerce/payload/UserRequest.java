@@ -9,11 +9,14 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
+@ToString
 @Getter
 @Setter
 @AllArgsConstructor
@@ -21,13 +24,12 @@ import lombok.Setter;
 @JsonInclude(Include.NON_NULL)
 public class UserRequest {
 	
-	public UserRequest(Long userId2) {
-		// TODO Auto-generated constructor stub
+	public UserRequest(String userId2) {
 		this.userId=userId2;
 	}
 
 
-	private Long userId;
+	private String userId;
 
 	@NotBlank
 	private String userMobile;
@@ -40,16 +42,10 @@ public class UserRequest {
 	private String gender;
 	
 	@NotBlank
+	@Size(min=4,max=255)
 	private String firstName;
-	
-	@NotBlank
-	private String LastName;
-	
+	private String LastName;	
 	private Status status;
-	
-
 	private LocalDateTime createdAt;
-	
-
 	private LocalDateTime updatedAt;
 }

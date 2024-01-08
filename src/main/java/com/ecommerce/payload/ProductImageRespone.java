@@ -1,8 +1,6 @@
 package com.ecommerce.payload;
 
-import java.util.Set;
-
-import com.ecommerce.model.Status;
+import com.ecommerce.model.ProductImage;
 import com.ecommerce.model.Varient;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -19,10 +17,18 @@ import lombok.Setter;
 @JsonInclude(Include.NON_NULL)
 public class ProductImageRespone {
 	
-    private Long id;
+    private String id;
 	
 	private String imageUrl;
 	
 	private Varient varientImage;
+	
+   
+	
+	public ProductImageRespone imageToImageResponse(ProductImage productImage) {
+		this.setId(productImage.getId());
+		this.setImageUrl(productImage.getImageUrl());
+		return this;
+	}
 
 }

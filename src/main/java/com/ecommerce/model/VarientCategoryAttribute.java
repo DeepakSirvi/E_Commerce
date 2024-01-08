@@ -12,7 +12,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 @Setter
 @Getter
@@ -22,9 +21,9 @@ import lombok.ToString;
 public class VarientCategoryAttribute {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.UUID)
 
-	private Long id;
+	private String id;
 
 	private String attributeName;
 
@@ -33,6 +32,4 @@ public class VarientCategoryAttribute {
 
 	@OneToMany(mappedBy = "varAttribute")
 	private Set<VarientCategoryJoin> categoryJoins = new HashSet<>();
-
-
 }

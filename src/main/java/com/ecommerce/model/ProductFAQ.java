@@ -17,7 +17,7 @@ import lombok.Setter;
 public class ProductFAQ {
 	
 	@Id
-	private Long id;
+	private String id;
 	
 	@Column(length = 1000)
 	private String question;
