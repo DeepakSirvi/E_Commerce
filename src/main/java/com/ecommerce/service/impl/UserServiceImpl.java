@@ -1,6 +1,7 @@
 package com.ecommerce.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +29,7 @@ import com.ecommerce.model.UserRole;
 import com.ecommerce.payload.ApiResponse;
 import com.ecommerce.payload.LoginRequest;
 import com.ecommerce.payload.OtpResponse;
+import com.ecommerce.payload.UpdateUserRequest;
 import com.ecommerce.payload.UserRequest;
 import com.ecommerce.payload.UserResponse;
 import com.ecommerce.payload.UserRoleResponse;
@@ -163,8 +165,26 @@ public class UserServiceImpl implements UserService,UserDetailsService{
 	}
 
 	@Override
-	public Map<String, Object> updateUser(UserRequest userRequest) {
-		// TODO Auto-generated method stub
-		return null;
+	public Map<String, Object> updateUser(UpdateUserRequest userRequest) {
+		Map<String, Object> response = new HashMap<>();
+		System.err.println(userRequest.getId());
+		Optional<User> userOpt = userRepo.findById(userRequest.getId());
+		if(userOpt.isPresent()) {
+			User user = userOpt.get();
+			if(userRequest.getFirstName().trim() != "")
+				user.setFirstName(userRequest.getFirstName());
+			
+			if(userRequest.getLastName().trim() != "")
+				user.setLastName(userRequest.getLastName());
+			
+			if(userRequest.getGender().trim() != "")
+				user.setGender(userRequest.getGender());
+			
+			user = userRepo.save(user);
+			response.put(AppConstant.MESSAGE, AppConstant.UPDATE_SUCCESSFULLY);
+			return response;
+		}
+		response.put(AppConstant.MESSAGE, AppConstant.UPDATE_FAILED);
+		return response;
 	}
 }
