@@ -54,6 +54,4 @@ public class JwtUtils {
         Claims claims = getClaims(token);
         return claims.get("userId",String.class);
 	}
-	
-
 }

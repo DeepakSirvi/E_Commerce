@@ -9,7 +9,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -29,7 +28,6 @@ import com.ecommerce.exception.ResourceNotFoundException;
 import com.ecommerce.exception.UnauthorizedException;
 import com.ecommerce.model.Category;
 import com.ecommerce.model.Product;
-import com.ecommerce.model.ProductImage;
 import com.ecommerce.model.Role;
 import com.ecommerce.model.RoleName;
 import com.ecommerce.model.Status;
@@ -40,12 +38,10 @@ import com.ecommerce.payload.PageResponse;
 import com.ecommerce.payload.ProductRequest;
 import com.ecommerce.payload.ProductResponse;
 import com.ecommerce.payload.UpdateStatusBooleanRequest;
-import com.ecommerce.payload.UpdateStatusRequest;
-import com.ecommerce.payload.UserResponse;
 import com.ecommerce.payload.VarientCategoryAttributeResponse;
 import com.ecommerce.payload.VarientCategoryJoinResonse;
-import com.ecommerce.payload.VarientCategoryReponse;
 import com.ecommerce.payload.VarientResponse;
+import com.ecommerce.repository.CategoryRepo;
 import com.ecommerce.repository.ProductRepo;
 import com.ecommerce.repository.SubCategoryRepo;
 import com.ecommerce.repository.UserRepo;
@@ -60,6 +56,9 @@ public class ProductServiceImpl implements ProductService {
 
 	@Autowired
 	private UserRepo userRepo;
+
+	@Autowired
+	private CategoryRepo categoryRepo;
 
 	@Autowired
 	private UserRoleRepo userRoleRepo;
@@ -77,26 +76,35 @@ public class ProductServiceImpl implements ProductService {
 	private ModelMapper modelMapper;
 
 	@Override
-	public PageResponse<ProductResponse> getProductBySubCategory(String id, String subId, Integer page, Integer size,
-			String sortDir) {
+	public Map<String, Object> getProductBySubCategory(String subId, Integer page, Integer size, String sortDir) {
+		Map<String, Object> response = new HashMap<>();
 		AppUtils.validatePageAndSize(page, size);
-		Pageable pageable = PageRequest.of(page, size);
-		SubCategory category = Optional.of(subCategoryRepo.findByIdAndCategory(subId, new Category(id)))
+		SubCategory category = subCategoryRepo.findById(subId)
 				.orElseThrow(() -> new BadRequestException(AppConstant.SUB_CATEGORY_NOT_FOUND));
-		Page<Product> productSet = productRepo.findBySubCategoryAndListingStatus(category, true, pageable);
-
-//		Set<ProductResponse> productResponses = productSet.getContent().stream()
-//				.map(product -> productToProductResponse(product)).collect(Collectors.toSet());
+		Sort sort1 = null;
+		if (sortDir.equals("DESC")) {
+			sort1 = Sort.by(Sort.Order.desc("updatedAt"));
+		} else {
+			sort1 = Sort.by(Sort.Order.asc("updatedAt"));
+		}
+		Pageable pageable = PageRequest.of(page, size, sort1);
+		Page<Product> productSet = null;
+		productSet = productRepo.findFeaturedProductsBySubCategoryId(subId, Boolean.TRUE, Status.VERIFIED, pageable);		
+		Set<ProductResponse> productResponses = productSet.getContent().stream().map(product -> {
+			return new ProductResponse().productToProductResponseList(product);
+		}).collect(Collectors.toSet());
 		PageResponse<ProductResponse> pageResponse = new PageResponse<>();
-//		pageResponse.setContent(productResponses);
+		pageResponse.setContent(productResponses);
 		pageResponse.setSize(size);
 		pageResponse.setPage(page);
 		pageResponse.setTotalElements(productSet.getNumberOfElements());
 		pageResponse.setTotalPages(productSet.getTotalPages());
 		pageResponse.setLast(productSet.isLast());
 		pageResponse.setFirst(productSet.isFirst());
-		return pageResponse;
+		response.put("AllProduct", pageResponse);
+		return response;
 	}
+	
 
 	@Override
 	public PageResponse<ProductResponse> getProductByVendorId(String vendorId, Integer page, Integer size) {
@@ -107,36 +115,6 @@ public class ProductServiceImpl implements ProductService {
 
 		if (!flag) {
 			throw new BadRequestException(AppConstant.VENDOR_NOT_FOUND);
-		}
-		return null;
-	}
-
-	private Object getVarienCatAndAttribute(VarientResponse varient,
-			Map<String, Set<VarientCategoryAttributeResponse>> varientCat) {
-		varient.getCategoryJoins().stream().map(catJoin -> setDataToVatCatAttribute(catJoin, varientCat))
-				.collect(Collectors.toSet());
-		return null;
-	}
-
-	private Object setDataToVatCatAttribute(VarientCategoryJoinResonse catJoin,
-			Map<String, Set<VarientCategoryAttributeResponse>> varientCat) {
-		String key = catJoin.getVarAttribute().getVarientCategory().getName();
-		if (varientCat.containsKey(key)) {
-			Set<VarientCategoryAttributeResponse> set = varientCat.get(key);
-			VarientCategoryAttributeResponse attributeResponse = new VarientCategoryAttributeResponse();
-			attributeResponse.setId(catJoin.getVarAttribute().getId());
-			attributeResponse.setAttributeName(catJoin.getVarAttribute().getAttributeName());
-
-			if (!set.contains(attributeResponse)) {
-				set.add(attributeResponse);
-			}
-		} else {
-			VarientCategoryAttributeResponse attributeResponse = new VarientCategoryAttributeResponse();
-			attributeResponse.setId(catJoin.getVarAttribute().getId());
-			attributeResponse.setAttributeName(catJoin.getVarAttribute().getAttributeName());
-			Set<VarientCategoryAttributeResponse> set = new HashSet<>();
-			set.add(attributeResponse);
-			varientCat.put(key, set);
 		}
 		return null;
 	}
@@ -181,6 +159,7 @@ public class ProductServiceImpl implements ProductService {
 
 //	-------------------------------------------------------------------
 
+//	For updateing the lisiting status of product
 	@Override
 	public Map<String, Object> updateStatusProduct(UpdateStatusBooleanRequest statusRequest) {
 		Map<String, Object> response = new HashMap<>();
@@ -188,23 +167,27 @@ public class ProductServiceImpl implements ProductService {
 				.orElseThrow(() -> new ResourceNotFoundException(PRODUCT, ID, statusRequest.getId()));
 		if (product.getCreatedBy().equals(appUtils.getUserId()) || userRoleRepo
 				.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleNameIdConstant.ADMIN))) {
-			if (!product.getVerified().equals(Status.VERIFIED)) {
-				throw new BadRequestException(AppConstant.PRODUCT_NOT_VERIFIED);
-			}
-//		  if(Objects.nonNull(product.getVa))
 
+			if (statusRequest.isStatus()) {
+				if (!product.getVerified().equals(Status.VERIFIED)) {
+					throw new BadRequestException(AppConstant.PRODUCT_NOT_VERIFIED);
+				}
+				if (Objects.nonNull(product.getVarient()) || product.getVarient().isEmpty()) {
+					throw new BadRequestException(AppConstant.NO_ACTIVE_VARIENT);
+				}
+			}
 			product.setListingStatus(statusRequest.isStatus());
 			productRepo.save(product);
 			response.put(AppConstant.RESPONSE_MESSAGE, AppConstant.LISTING_STATUS_UPDATE + statusRequest.isStatus());
 			return response;
 		}
 		throw new UnauthorizedException(UNAUTHORIZED);
-
 	}
 
+//	get all listing based on verification and listing status product to display customer also based on searching
 	@Override
-	public Map<String, Object> getAllActiveProduct(String search, Integer pageIndex, Integer pageSize, String sortDir,
-			boolean listingStatus, Status status) {
+	public Map<String, Object> getProductListBasedOnStatus(String search, Integer pageIndex, Integer pageSize,
+			String sortDir) {
 		Map<String, Object> response = new HashMap<>();
 		AppUtils.validatePageAndSize(pageIndex, pageSize);
 		Sort sort1 = null;
@@ -216,16 +199,17 @@ public class ProductServiceImpl implements ProductService {
 		Pageable pageable = PageRequest.of(pageIndex, pageSize, sort1);
 		Page<Product> productSet = null;
 		if (Objects.nonNull(search) && !search.equals("")) {
-			productSet = productRepo.findByProductNameAndListingStatusAndVerified(search, pageable, listingStatus,
-					status);
+			System.out.println(search+"non");
+			productSet = productRepo.findProductsByNameAndCriteria(search, Boolean.TRUE,
+					Status.VERIFIED,pageable);
 		} else {
-			productSet = productRepo.findByListingStatusAndVerified(pageable, listingStatus, status);
+			productSet = productRepo.findByListingStatusAndVerified(pageable, Boolean.TRUE, Status.VERIFIED);
 		}
 		Set<ProductResponse> productResponses = productSet.getContent().stream().map(products -> {
 			ProductResponse productResponse = new ProductResponse();
 			return productResponse.productToProductResponseList(products);
 		}).collect(Collectors.toSet());
-
+		System.err.println(productResponses);
 		PageResponse<ProductResponse> pageResponse = new PageResponse<>();
 		pageResponse.setContent(productResponses);
 		pageResponse.setSize(pageSize);
@@ -238,6 +222,7 @@ public class ProductServiceImpl implements ProductService {
 		return response;
 	}
 
+//	Add product by vendor or admin with non listing and Unverified Status
 	@Override
 	public Map<String, Object> addProduct(ProductRequest productRequest, MultipartFile multipartFiles) {
 
@@ -252,7 +237,6 @@ public class ProductServiceImpl implements ProductService {
 			String uploadImage = appUtils.uploadImage(multipartFiles, AppConstant.PRODUCT_IMAGE_PATH, null);
 			product.setProductImage(uploadImage);
 		}
-
 		product.setVerified(Status.UNVERIFIED);
 		product.setListingStatus(Boolean.FALSE);
 		product.setVendor(new User(appUtils.getUserId()));
@@ -260,10 +244,14 @@ public class ProductServiceImpl implements ProductService {
 		ApiResponse apiResponse = new ApiResponse(Boolean.TRUE, AppConstant.PRODUCT_ADDED, HttpStatus.CREATED);
 		response.put(AppConstant.RESPONSE_MESSAGE, apiResponse);
 		ProductResponse productResponse = new ProductResponse();
-		response.put("product", productResponse.productToProductResponse(product1));
+//		response.put("product", productResponse.productToProductResponse(product1));
+
 		return response;
 	}
 
+	// Get product with its Id whose status is true or and edit by as User or User
+	// is admin
+	// In response we get Product detail and VarientCategory and attribute set
 	@Override
 	public Map<String, Object> getProduct(String productId) {
 		Product product = productRepo.findById(productId)
@@ -272,7 +260,6 @@ public class ProductServiceImpl implements ProductService {
 				.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleNameIdConstant.ADMIN))) {
 			Map<String, Object> response = new HashMap<>();
 			ProductResponse productResponse = new ProductResponse();
-			productResponse.setVendor(new UserResponse(appUtils.getUserId()));
 			productResponse.productToProductResponse(product);
 
 			Map<String, Set<VarientCategoryAttributeResponse>> varientCat = new HashMap<>();
@@ -283,6 +270,67 @@ public class ProductServiceImpl implements ProductService {
 			return response;
 		}
 		throw new UnauthorizedException(UNAUTHORIZED);
+	}
+
+	private Object getVarienCatAndAttribute(VarientResponse varient,
+			Map<String, Set<VarientCategoryAttributeResponse>> varientCat) {
+		varient.getCategoryJoins().stream().map(catJoin -> setDataToVatCatAttribute(catJoin, varientCat))
+				.collect(Collectors.toSet());
+		return null;
+	}
+
+	private Object setDataToVatCatAttribute(VarientCategoryJoinResonse catJoin,
+			Map<String, Set<VarientCategoryAttributeResponse>> varientCat) {
+		String key = catJoin.getVarAttribute().getVarientCategory().getName();
+		if (varientCat.containsKey(key)) {
+			Set<VarientCategoryAttributeResponse> set = varientCat.get(key);
+			VarientCategoryAttributeResponse attributeResponse = new VarientCategoryAttributeResponse();
+			attributeResponse.setId(catJoin.getVarAttribute().getId());
+			attributeResponse.setAttributeName(catJoin.getVarAttribute().getAttributeName());
+
+			if (!set.contains(attributeResponse)) {
+				set.add(attributeResponse);
+			}
+		} else {
+			VarientCategoryAttributeResponse attributeResponse = new VarientCategoryAttributeResponse();
+			attributeResponse.setId(catJoin.getVarAttribute().getId());
+			attributeResponse.setAttributeName(catJoin.getVarAttribute().getAttributeName());
+			Set<VarientCategoryAttributeResponse> set = new HashSet<>();
+			set.add(attributeResponse);
+			varientCat.put(key, set);
+		}
+		return null;
+	}
+
+	@Override
+	public Map<String, Object> getProductByCategory(String id, Integer pageIndex, Integer pageSize, String sortDir) {
+		Map<String, Object> response = new HashMap<>();
+		categoryRepo.findById(id).orElseThrow(() -> new BadRequestException(AppConstant.CATEGORY_NOT_FOUND));
+		AppUtils.validatePageAndSize(pageIndex, pageSize);
+		Sort sort1 = null;
+		if (sortDir.equals("DESC")) {
+			sort1 = Sort.by(Sort.Order.desc("updatedAt"));
+		} else {
+			sort1 = Sort.by(Sort.Order.asc("updatedAt"));
+		}
+		Pageable pageable = PageRequest.of(pageIndex, pageSize, sort1);
+		Page<Product> productSet = null;
+		productSet = productRepo.findFeaturedProductsByCategoryId(id, Boolean.TRUE, Status.VERIFIED, pageable);
+		Set<ProductResponse> productResponses = productSet.getContent().stream().map(products -> {
+			ProductResponse productResponse = new ProductResponse();
+			return productResponse.productToProductResponseList(products);
+		}).collect(Collectors.toSet());
+		PageResponse<ProductResponse> pageResponse = new PageResponse<>();
+		pageResponse.setContent(productResponses);
+		pageResponse.setSize(pageSize);
+		pageResponse.setPage(pageIndex);
+		pageResponse.setTotalElements(productSet.getTotalElements());
+		pageResponse.setTotalPages(productSet.getTotalPages());
+		pageResponse.setLast(productSet.isLast());
+		pageResponse.setFirst(productSet.isFirst());
+		response.put("AllProduct", pageResponse);
+		return response;
+
 	}
 
 }

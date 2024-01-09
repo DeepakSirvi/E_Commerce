@@ -27,7 +27,6 @@ public class UserRoleResponse {
 	private UserResponse user;
 	
 	public UserRoleResponse userRoleToUserRoleResponse(UserRole userRoles) {
-		
 		this.setId(userRoles.getId());
 		this.setRole(new RoleResponse(userRoles.getRole().getId(), userRoles.getRole().getRoleName(),
 				userRoles.getRole().getDescription()));

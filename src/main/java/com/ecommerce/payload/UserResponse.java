@@ -52,12 +52,6 @@ public class UserResponse {
 		this.setUserMobile(user.getUserMobile());
 		this.setUserEmail(user.getUserEmail());
 		this.setStatus(user.getStatus());
-		Set<UserRole> userRoles = user.getUserRole();
-		Set<UserRoleResponse> collect = userRoles.stream().map(userRole -> {
-			return new UserRoleResponse().userRoleToUserRoleResponse(userRole);
-		})
-				.collect(Collectors.toSet());
-		this.setUserRole(collect);
 		return this;
 	}
 }

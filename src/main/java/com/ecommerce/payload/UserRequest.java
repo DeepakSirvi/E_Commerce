@@ -14,7 +14,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
+@ToString
 @Getter
 @Setter
 @AllArgsConstructor
@@ -23,7 +25,6 @@ import lombok.Setter;
 public class UserRequest {
 	
 	public UserRequest(String userId2) {
-		// TODO Auto-generated constructor stub
 		this.userId=userId2;
 	}
 

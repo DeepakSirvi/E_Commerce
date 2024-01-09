@@ -44,9 +44,10 @@ public class SecurityFilter extends OncePerRequestFilter {
 					authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 					SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 				}
-			} else {
+			 else {
 				System.out.println("Invalid token");
-			}
+			 }
+		}
 			filterChain.doFilter(request, response);
 		} finally {
 			RequestContextHolder.clear();

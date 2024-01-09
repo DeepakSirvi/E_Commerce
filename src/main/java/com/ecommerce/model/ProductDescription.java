@@ -18,7 +18,6 @@ import lombok.Setter;
 public class ProductDescription {
 	
 	@Id
-//	@GeneratedValue(strategy = GenerationType.AUTO)
 	private String id;
 
 	@Column(length = 10000)

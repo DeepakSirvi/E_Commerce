@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ecommerce.model.Category;
 import com.ecommerce.payload.ApiResponse;
 import com.ecommerce.payload.CategoryRequest;
 import com.ecommerce.payload.CategoryResponse;
@@ -52,7 +53,8 @@ public class CategoryController {
 		return new ResponseEntity<SubCategoryResponse>(categoryService.getSubCategoryById(id), HttpStatus.OK);
 	}
 
-	@GetMapping("/admin/pages")
+	
+	@GetMapping("/admin")
 	public ResponseEntity<Map<String, Object>> getAllCategory(
 			@RequestParam(value = "categorySearch", required = false ) String search,
 			@RequestParam(value = "pageIndex", required = false, defaultValue = AppConstant.DEFAULT_PAGE_NUMBER) Integer pageIndex,
@@ -62,13 +64,13 @@ public class CategoryController {
 				categoryService.getCategory(search, pageIndex, pageSize, sortDir), HttpStatus.OK);
 	}
 
-	@GetMapping
+	@GetMapping("/permitAll")
 	public ResponseEntity<Map<String, Object>> getAllCategoryList() {
 		return new ResponseEntity<Map<String, Object>>(categoryService.getAllCategory(), HttpStatus.OK);
 	}
 
 	@PutMapping("/admin")
-	public ResponseEntity<ApiResponse> updateCategory(@RequestBody CategoryRequest categoryRequest) {
+	public ResponseEntity<ApiResponse> updateCategory(@RequestBody Category categoryRequest) {
 		return new ResponseEntity<ApiResponse>(categoryService.updateCategory(categoryRequest), HttpStatus.OK);
 	}
 
