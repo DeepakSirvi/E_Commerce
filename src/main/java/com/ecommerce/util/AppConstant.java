@@ -124,6 +124,13 @@ public class AppConstant {
 	public static final String CATEGORY = "Product category";
 	public static final String LISTING_STATUS_UPDATE = "Product Listing Status  ";
 	public static final String PRODUCT_NOT_VERIFIED = "Product is not verified please wait to get verification from admin";
+	public static final Object REMOVE_FROM_WISHLIST = "remove from wishlist";
+	public static final String WISHLIST = "";
+	public static final String BRAND_NAME_TAKEN = "Brand Name is taken ";
+	public static final String BRAND_IMAGE_PATH = "brandImage";
+	public static final Object BRAND_ADD_SUCCES = "Add Brand";
+	public static final String STATUS = "status verified";
+	
 	
 	
 	

@@ -15,7 +15,7 @@ public interface WishListRepo  extends JpaRepository< WishListProduct, String>{
 
 	void deleteByVarientIdAndUserId(String varientId, String userId);
 
-	WishListProduct findByUserId(String userId);
+	List<WishListProduct> findByUserId(User user);
 
 	Optional<WishListProduct> findByUser(User user);
 

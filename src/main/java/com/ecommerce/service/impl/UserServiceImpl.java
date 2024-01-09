@@ -131,7 +131,7 @@ public class UserServiceImpl implements UserService,UserDetailsService{
 			if(login.isPresent()) {
 				if(login.get().getExperiedAt().compareTo(LocalDateTime.now())>=0){
 			    
-				// Code to deactivte account
+				
 					Optional<User> user = userRepo.findByUserMobile(loginRequest.getMobileNumber());
 					user.get().setStatus(Status.DEACTIVE);
 					userRepo.save(user.get());
@@ -155,7 +155,7 @@ public class UserServiceImpl implements UserService,UserDetailsService{
 
 	@Override
 	public Map<String, Object> updateUser(UserRequest userRequest) {
-		// TODO Auto-generated method stub
+	
 		return null;
 	}
 }
