@@ -31,4 +31,5 @@ public class ProductSaveForLaterResponse {
 		
 		return this;
 	}
+	 
 }

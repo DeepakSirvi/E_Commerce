@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -13,13 +12,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.ecommerce.exception.BadRequestException;
 import com.ecommerce.exception.ResourceNotFoundException;
-import com.ecommerce.model.Account;
 import com.ecommerce.model.ProductSaveForLater;
 import com.ecommerce.model.User;
 import com.ecommerce.model.Varient;
-import com.ecommerce.payload.AccountResponse;
 import com.ecommerce.payload.ApiResponse;
 import com.ecommerce.payload.ProductSaveForLaterRequest;
 import com.ecommerce.payload.ProductSaveForLaterResponse;
@@ -53,9 +49,9 @@ public class ProductSaveForLaterImpl implements ProductSaveForLaterService {
 	}
 
 	@Override
-	public Map<String, Object> addProductSaveforLater(String vid) {
+	public Map<String, String> addProductSaveforLater(String vid) {
 //		// TODO Auto-generated method stub
-		Map<String, Object> responce = new HashMap<>();
+		Map<String, String> responce = new HashMap<>();
 		Optional<Varient> findById = this.repo.findById(vid);
 		ProductSaveForLater productSaveForLater = new ProductSaveForLater();
 		if (findById.isPresent()) {
@@ -66,7 +62,7 @@ public class ProductSaveForLaterImpl implements ProductSaveForLaterService {
 			productSaveForLater.setVarient(varient);
 			productSaveForLater.setUser(user);
 			laterRepo.save(productSaveForLater);
-			responce.put(AppConstant.RESPONSE_MESSAGE, AppConstant.PRODUCT_SAVE_FOR_LATER);
+			responce.put(AppConstant.RESPONSE_MESSAGE, AppConstant.PRODUCT_ADDED_SUCCESS);
 		} else {
 			throw new ResourceNotFoundException(AppConstant.VARIENT, AppConstant.ID, vid);
 		}

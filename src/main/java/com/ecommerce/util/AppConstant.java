@@ -147,8 +147,18 @@ public class AppConstant {
 	public static final String ACTIVE_VARIENTS_IN_WISHLIST_NOT_FOUND = "Active varient in wishlist not found";
 	public static final Object ACTIVE_VARIENT_IN_WISHLIST_FOUND = "active varient in wishlist found";
 	public static final String WISHLIST_NOT_FOUND = "wishlist not fond";
+	public static final String PRODUCTSAVEFORLATER_NOT_FOUND = "SaveForLater Not Found";
+	public static final String DELETE_SUCCESS = "Delete Succesfully";
+	public static final String MESSAGE = "Message";
+	//public static final Object PRODUCT_SAVE_FOR_LATER = "";
 	
 	
 
 
-}
+
+	public static final  String  PRODUCT_ADDED_SUCCESS= "Added Successfully";
+	public static final String PRODUCTREVIEW_NOT_FOUND = "Product REview NOt Found";
+	public static final Object UPDATE_PRODUCT_REVIEW = "ProductReview Update Successfully";
+	public static final Object PLESE_ORDER_PRODUCT = "Order this Product";
+
+			}

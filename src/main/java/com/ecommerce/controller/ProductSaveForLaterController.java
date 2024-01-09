@@ -37,6 +37,7 @@ public ResponseEntity<Map<String, Object>> getAllAccountsByUserId(@PathVariable(
 }
 @DeleteMapping("/delete/{id}")
 public ResponseEntity<?>DeleteProductSaveForLater(@PathVariable String id){
+
 	return forLaterService.deleteSaveForLater(id);
 }
 }
