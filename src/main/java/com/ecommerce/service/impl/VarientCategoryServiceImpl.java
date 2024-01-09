@@ -216,8 +216,8 @@ public class VarientCategoryServiceImpl implements VarientCategoryService {
 		varientCategoryReponse.setName(varientCategory.getName());
 		varientCategoryReponse.setUser(new UserResponse(varientCategory.getUser().getId()));
 
-		Set<VarientCategoryAttributeResponse> collect = varientCategory.getCategoryAttributes().stream()
-				.map(attribute -> attributeToAttributResponse(attribute)).collect(Collectors.toSet());
+		List<VarientCategoryAttributeResponse> collect = varientCategory.getCategoryAttributes().stream()
+				.map(attribute -> attributeToAttributResponse(attribute)).collect(Collectors.toList());
 		varientCategoryReponse.setCategoryAttributes(collect);
 		return varientCategoryReponse;
 	}
@@ -257,8 +257,8 @@ public class VarientCategoryServiceImpl implements VarientCategoryService {
 		{
 		findAll= varienCategoryRepo.findAll(pageable);
 		}
-		Set<VarientCategoryReponse> varient = findAll.stream().map(varientRes -> varientCategoryToResponse(varientRes))
-				.collect(Collectors.toSet());
+		List<VarientCategoryReponse> varient = findAll.stream().map(varientRes -> varientCategoryToResponse(varientRes))
+				.collect(Collectors.toList());
 
 		PageResponse<VarientCategoryReponse> pageResponse = new PageResponse<>();
 		pageResponse.setContent(varient);

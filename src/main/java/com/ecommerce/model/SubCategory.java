@@ -1,5 +1,6 @@
 package com.ecommerce.model;
 
+import java.util.List;
 import java.util.Set;
 
 import jakarta.persistence.Entity;
@@ -36,6 +37,6 @@ public class SubCategory extends Audit {
 
 	
 	@OneToMany(mappedBy = "subCategory")
-	private Set<Product> product;
+	private List<Product> product;
 	
 }

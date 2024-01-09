@@ -1,7 +1,7 @@
 package com.ecommerce.model;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.ecommerce.payload.VarientResponse;
 
@@ -52,18 +52,18 @@ public class Varient extends Audit {
 	
 	@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
 	@JoinColumn(name = "varient_Id")
-	private Set<VarientCategoryJoin> categoryJoins;
+	private List<VarientCategoryJoin> categoryJoins;
 	
 	@OneToMany(mappedBy = "varientImage",cascade = CascadeType.ALL)
-	private Set<ProductImage> productImage = new HashSet<>();
+	private List<ProductImage> productImage = new ArrayList<>();
 	
 	@OneToMany(mappedBy = "varient") 
-	private Set<Cart> cart;
+	private List<Cart> cart;
 	
 	@OneToMany(mappedBy = "varient")
-	private Set<WishListProduct> wishList;
+	private List<WishListProduct> wishList;
 	
 	@OneToMany(mappedBy = "varient")
-	private Set<ProductSaveForLater> saveLater;
+	private List<ProductSaveForLater> saveLater;
 	
 }

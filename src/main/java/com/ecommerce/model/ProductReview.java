@@ -1,6 +1,8 @@
 package com.ecommerce.model;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.hibernate.annotations.GeneratorType;
@@ -40,7 +42,7 @@ public class ProductReview extends Audit {
 
 	@OneToMany(mappedBy = "imageReview", cascade = CascadeType.ALL)
 	@JsonIgnoreProperties(value = { "imageReview" })
-	private Set<ReviewImage> image = new HashSet<>();;
+	private List<ReviewImage> image = new ArrayList<>();;
 
 	@ManyToOne
 	private User user;

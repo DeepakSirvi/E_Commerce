@@ -28,7 +28,7 @@ public class Cart extends Audit{
 	
 	private Integer quantity;
 	
-	@OneToOne
+	@ManyToOne
 	private User user;
 
 

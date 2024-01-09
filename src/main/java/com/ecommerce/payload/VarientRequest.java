@@ -1,6 +1,8 @@
 package com.ecommerce.payload;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.ecommerce.model.Status;
@@ -31,9 +33,9 @@ public class VarientRequest {
 	
 	private Status status;
 	
-	private Set<VarientCategoryJoinRequest> categoryJoins=new HashSet<>();
+	private List<VarientCategoryJoinRequest> categoryJoins=new ArrayList<>();
 	
-	private Set<ProductImageRequest> productImage=new HashSet<>();
+	private List<ProductImageRequest> productImage=new ArrayList<>();
 	
 	
 }

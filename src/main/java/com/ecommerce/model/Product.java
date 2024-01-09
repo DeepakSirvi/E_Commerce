@@ -1,5 +1,6 @@
 package com.ecommerce.model;
 
+import java.util.List;
 import java.util.Set;
 
 import jakarta.persistence.CascadeType;
@@ -63,19 +64,19 @@ public class Product extends Audit {
 	private ProductDescription description;
 
 	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-	private Set<Varient> varient;
+	private List<Varient> varient;
 
 	@OneToMany(mappedBy = "product")
-	private Set<ProductReview> productReview;
+	private List<ProductReview> productReview;
 
 	@OneToMany(mappedBy = "product")
-	private Set<Complaint> complaint;
+	private List<Complaint> complaint;
 
 	@OneToMany(mappedBy = "product")
-	private Set<ProductFAQ> faq;
+	private List<ProductFAQ> faq;
 
 	@OneToMany(mappedBy = "product")
-	private Set<OrderItem> orderItem;
+	private List<OrderItem> orderItem;
 
 	public Product(String id) {
 		this.id = id;
