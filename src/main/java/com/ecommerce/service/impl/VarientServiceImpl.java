@@ -134,7 +134,7 @@ public class VarientServiceImpl implements VarientService {
 
 	@Override
 	public Map<String, Object> updateVarient(VarientRequest varientRequest) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 

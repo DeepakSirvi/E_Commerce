@@ -142,7 +142,7 @@ public class UserServiceImpl implements UserService,UserDetailsService{
 			if(login.isPresent()) {
 				if(login.get().getExperiedAt().compareTo(LocalDateTime.now())>=0){
 			    
-				// Code to deactivte account
+				
 					Optional<User> user = userRepo.findByUserMobile(loginRequest.getMobileNumber());
 					user.get().setStatus(Status.DEACTIVE);
 					userRepo.save(user.get());
@@ -186,5 +186,6 @@ public class UserServiceImpl implements UserService,UserDetailsService{
 		}
 		response.put(AppConstant.MESSAGE, AppConstant.UPDATE_FAILED);
 		return response;
+
 	}
 }

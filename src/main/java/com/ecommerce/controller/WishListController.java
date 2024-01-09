@@ -36,18 +36,18 @@ public class WishListController {
     }
 	
 	@DeleteMapping("/remove")
-    public ResponseEntity<Map<String, Object>> removeFromWishList( @RequestParam String varientId,@RequestParam String userId)
+    public ResponseEntity<Map<String, Object>> removeFromWishList( @RequestParam String wishlistId)
              {
-		Map<String, Object> response = wishlistService.removeFromWishList(varientId, userId);
+		Map<String, Object> response = wishlistService.removeFromWishList(wishlistId);
         return ResponseEntity.ok(response);
         
       }
 	
-	@GetMapping("/activeVarient/{userId}")
+	/*@GetMapping("/activeVarient/{userId}")
     public ResponseEntity<Map<String, Object>> getActiveVarientInWishlistByUserId(@PathVariable String userId) {
         Map<String, Object> response = wishlistService.getActiveVarientInWishlistByUserId(userId);
         return  new ResponseEntity<>(response, HttpStatus.OK) ;
-    }
+    }*/
 	}
 	  
 	
