@@ -1,5 +1,6 @@
 package com.ecommerce.payload;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -36,7 +37,7 @@ public class UserResponse {
 	private Status status;
 	
 	@JsonIgnoreProperties(value = {"user"})
-	private Set<UserRoleResponse> userRole;
+	private List<UserRoleResponse> userRole;
 	
 	private String token;
 	

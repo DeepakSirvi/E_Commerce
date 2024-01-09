@@ -1,6 +1,7 @@
 package com.ecommerce.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -83,7 +84,7 @@ public class UserServiceImpl implements UserService,UserDetailsService{
 		 User user = mapper.map(userRequest, User.class);
 		 userRole.setUser(user);
 		 
-		 Set<UserRole> userRoles = new HashSet<>();
+		 List<UserRole> userRoles = new ArrayList<>();
 		 userRoles.add(userRole);
 		 
 		 user.setUserRole(userRoles);
@@ -100,7 +101,7 @@ public class UserServiceImpl implements UserService,UserDetailsService{
 
 	@Override
 	public UserDetails loadUserByUsername(String username) {
-		System.out.println("Load By User Method");
+		System.out.println("Load By User Method" + username);
 		Optional<User> findByUserName = userRepo.findByUserMobile(username);
 		 if(findByUserName.isPresent())
 		    {
@@ -124,10 +125,10 @@ public class UserServiceImpl implements UserService,UserDetailsService{
        User user = userRepo.findByIdAndStatus(userId,Status.ACTIVE).orElseThrow(()->new ResourceNotFoundException(AppConstant.USER,AppConstant.ID,userId));
        UserResponse userResponse =new UserResponse();
        userResponse.userToUserResponse(user);
-       Set<UserRoleResponse> collect =  user.getUserRole().stream().map(userRole -> {
+       List<UserRoleResponse> collect =  user.getUserRole().stream().map(userRole -> {
 			return new UserRoleResponse().userRoleToUserRoleResponse(userRole);
 		})
-				.collect(Collectors.toSet());
+				.collect(Collectors.toList());
        userResponse.setUserRole(collect);
        return userResponse;  
 	}

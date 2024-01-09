@@ -216,13 +216,14 @@ public class CategoryServiceImpl implements CategoryService {
 		if(!search.equals("")) {
 			System.out.println(search);
 		 findAll = categoryRepo.getAllCategorySearch(search,pageable);
+		 System.out.println(findAll);
 		}
 		else
 		{
 		findAll= categoryRepo.findAll(pageable);
 		}
-		Set<CategoryResponse> category = findAll.stream().map(categoryRe -> categoryToCategoryResponse(categoryRe))
-				.collect(Collectors.toSet());
+		List<CategoryResponse> category = findAll.stream().map(categoryRe -> categoryToCategoryResponse(categoryRe))
+				.collect(Collectors.toList());
 		PageResponse<CategoryResponse> pageResponse = new PageResponse<>();
 		pageResponse.setContent(category);
 		pageResponse.setSize(size);

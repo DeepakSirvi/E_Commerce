@@ -10,6 +10,7 @@ import static com.ecommerce.util.AppConstant.RESPONSE_MESSAGE;
 import static com.ecommerce.util.AppConstant.UNAUTHORIZED;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -150,8 +151,8 @@ public class NotificationServiceImpl implements NotificationService {
 		Pageable pageable = PageRequest.of(page,size,sort1);	
 	    Page<Notifications> notificationSet =notificationRepo.findAll(example,pageable);		
 	    
-	    Set<NotificationResponse> notificationResponses = notificationSet.getContent().stream().map(notifications -> notificationToNotificationResponse(notifications)
-	    		).collect(Collectors.toSet());
+	    List<NotificationResponse> notificationResponses = notificationSet.getContent().stream().map(notifications -> notificationToNotificationResponse(notifications)
+	    		).collect(Collectors.toList());
 		PageResponse<NotificationResponse> pageResponse = new PageResponse<>();
 		pageResponse.setContent(notificationResponses);
 		pageResponse.setSize(size);

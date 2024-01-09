@@ -16,7 +16,6 @@ import lombok.Setter;
 public class WishListRequest {
 	
 	private String id;
-	
 	private Varient varient;
 
 }

@@ -6,6 +6,7 @@ import static com.ecommerce.util.AppConstant.UNAUTHORIZED;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -90,9 +91,9 @@ public class ProductServiceImpl implements ProductService {
 		Pageable pageable = PageRequest.of(page, size, sort1);
 		Page<Product> productSet = null;
 		productSet = productRepo.findFeaturedProductsBySubCategoryId(subId, Boolean.TRUE, Status.VERIFIED, pageable);		
-		Set<ProductResponse> productResponses = productSet.getContent().stream().map(product -> {
+		List<ProductResponse> productResponses = productSet.getContent().stream().map(product -> {
 			return new ProductResponse().productToProductResponseList(product);
-		}).collect(Collectors.toSet());
+		}).collect(Collectors.toList());
 		PageResponse<ProductResponse> pageResponse = new PageResponse<>();
 		pageResponse.setContent(productResponses);
 		pageResponse.setSize(size);
@@ -133,15 +134,14 @@ public class ProductServiceImpl implements ProductService {
 			Pageable pageable = PageRequest.of(pageIndex, pageSize);
 			Page<Product> productSet = null;
 			if (!search.equals("")) {
-				System.err.println("Depak");
 				productSet = productRepo.findByProductDetail(search, pageable);
 			} else {
 				productSet = productRepo.findAll(pageable);
 			}
-			Set<ProductResponse> productResponses = productSet.getContent().stream().map(products -> {
+			List<ProductResponse> productResponses = productSet.getContent().stream().map(products -> {
 				ProductResponse productResponse = new ProductResponse();
 				return productResponse.productToProductResponseList(products);
-			}).collect(Collectors.toSet());
+			}).collect(Collectors.toList());
 
 			PageResponse<ProductResponse> pageResponse = new PageResponse<>();
 			pageResponse.setContent(productResponses);
@@ -199,17 +199,15 @@ public class ProductServiceImpl implements ProductService {
 		Pageable pageable = PageRequest.of(pageIndex, pageSize, sort1);
 		Page<Product> productSet = null;
 		if (Objects.nonNull(search) && !search.equals("")) {
-			System.out.println(search+"non");
 			productSet = productRepo.findProductsByNameAndCriteria(search, Boolean.TRUE,
 					Status.VERIFIED,pageable);
 		} else {
 			productSet = productRepo.findByListingStatusAndVerified(pageable, Boolean.TRUE, Status.VERIFIED);
 		}
-		Set<ProductResponse> productResponses = productSet.getContent().stream().map(products -> {
+		List<ProductResponse> productResponses = productSet.getContent().stream().map(products -> {
 			ProductResponse productResponse = new ProductResponse();
 			return productResponse.productToProductResponseList(products);
-		}).collect(Collectors.toSet());
-		System.err.println(productResponses);
+		}).collect(Collectors.toList());
 		PageResponse<ProductResponse> pageResponse = new PageResponse<>();
 		pageResponse.setContent(productResponses);
 		pageResponse.setSize(pageSize);
@@ -316,10 +314,10 @@ public class ProductServiceImpl implements ProductService {
 		Pageable pageable = PageRequest.of(pageIndex, pageSize, sort1);
 		Page<Product> productSet = null;
 		productSet = productRepo.findFeaturedProductsByCategoryId(id, Boolean.TRUE, Status.VERIFIED, pageable);
-		Set<ProductResponse> productResponses = productSet.getContent().stream().map(products -> {
+		List<ProductResponse> productResponses = productSet.getContent().stream().map(products -> {
 			ProductResponse productResponse = new ProductResponse();
 			return productResponse.productToProductResponseList(products);
-		}).collect(Collectors.toSet());
+		}).collect(Collectors.toList());
 		PageResponse<ProductResponse> pageResponse = new PageResponse<>();
 		pageResponse.setContent(productResponses);
 		pageResponse.setSize(pageSize);
