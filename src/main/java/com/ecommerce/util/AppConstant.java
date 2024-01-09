@@ -4,6 +4,8 @@ import lombok.NonNull;
 
 public class AppConstant {
 	
+	public static final String MESSAGE = "message";
+	
 //	Default value
 	public static final String DEFAULT_PAGE_NUMBER = "0";
 	public static final String DEFAULT_PAGE_SIZE = "10"; 
@@ -30,7 +32,8 @@ public class AppConstant {
 	public static final String USER_BLOCK = "User is Blocked by admin";
 	public static final String ACCOUNT_DEACTIVATE = "User account deactivate successfully";
 	public static final String USER_NOT_FOUND = "User not found";
-	
+	public static final String UPDATE_SUCCESSFULLY = "User Update Successfully";
+	public static final String UPDATE_FAILED = "User Update Failed";
 //	Role
 	public static final String ROLE_ALREADY_SAVE = "This role is already save";
 	
@@ -147,6 +150,7 @@ public class AppConstant {
 	public static final String ACTIVE_VARIENTS_IN_WISHLIST_NOT_FOUND = "Active varient in wishlist not found";
 	public static final Object ACTIVE_VARIENT_IN_WISHLIST_FOUND = "active varient in wishlist found";
 	public static final String WISHLIST_NOT_FOUND = "wishlist not fond";
+
 	public static final String PRODUCTSAVEFORLATER_NOT_FOUND = "SaveForLater Not Found";
 	public static final String DELETE_SUCCESS = "Delete Succesfully";
 	public static final String MESSAGE = "Message";

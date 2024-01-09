@@ -48,5 +48,4 @@ public class ProductReview extends Audit {
 	@ManyToOne
 	//@JsonIgnore
 	private Product product;
-
 }

@@ -4,7 +4,9 @@ import static com.ecommerce.util.AppConstant.CATEGORY;
 import static com.ecommerce.util.AppConstant.ID;
 import static com.ecommerce.util.AppConstant.UNAUTHORIZED;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -93,6 +95,14 @@ public class CategoryServiceImpl implements CategoryService {
 		categoryResponse.setId(id);
 		categoryResponse.setCategoryName(category.getCategoryName());
 		categoryResponse.setUser(new UserResponse(category.getUser().getId()));
+		Set<SubCategoryResponse>subCategoryResponses = new LinkedHashSet<>();
+		category.getSubCategory().stream().forEach(obj->{
+			SubCategoryResponse res =new SubCategoryResponse();
+			res.setId(obj.getId());
+			res.setSubCategory(obj.getSubCategory());
+			subCategoryResponses.add(res);
+		});
+		categoryResponse.setSubCategory(subCategoryResponses);
 		return categoryResponse;
 	}
 
@@ -154,18 +164,27 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
-	public ApiResponse updateCategory(CategoryRequest categoryRequest) {
+	public ApiResponse updateCategory(Category categoryRequest) {
 		Category category = categoryRepo.findById(categoryRequest.getId())
 				.orElseThrow(() -> new BadRequestException(AppConstant.CATEGORY_NOT_FOUND));
 
 		if (categoryRepo.existsByCategoryNameAndIdNot(categoryRequest.getCategoryName(), categoryRequest.getId())) {
 			throw new BadRequestException(AppConstant.CATEGORY_TAKEN);
 		}
-
+//		Set<SubCategory>res = new LinkedHashSet<>();
+//		categoryRequest.getSubCategory().forEach(obj->{
+//			if(obj.getId()==null || obj.getId()=="") {
+//				res.add(subCategoryRepo.save(obj));
+//			}else {
+//				res.add(obj);
+//			}
+//		});
 		category.setCategoryName(categoryRequest.getCategoryName());
+		category.setSubCategory(categoryRequest.getSubCategory());
 		categoryRepo.save(category);
 		return new ApiResponse(Boolean.TRUE, AppConstant.CATEGORY_UPDATED, HttpStatus.OK);
 	}
+	
 
 	@Override
 	public ApiResponse updateSubCategory(SubCategoryRequest subCategoryRequest) {

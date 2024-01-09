@@ -62,15 +62,26 @@ public class ProductController {
 		return new ResponseEntity<Map<String, Object>>(productService.updateStatusProduct(statusRequest),HttpStatus.CREATED);
 	}        
 	
-	@GetMapping("/ByCategory/{categoryId}/{subCategoryId}")
-	public ResponseEntity<PageResponse<ProductResponse>> getAllProductByCategory(
-			@PathVariable(value = "categoryId") String id,@PathVariable(value = "subCategoryId") String subId,
+	@GetMapping("/permitAll/bySubCategory/{subCategoryId}")
+	public ResponseEntity<Map<String, Object>> getAllProductBySubCategory(
+			@PathVariable(value = "subCategoryId") String subId,
 			@RequestParam(value = "pageIndex", required = false, defaultValue =  AppConstant.DEFAULT_PAGE_NUMBER) Integer pageIndex,
 			@RequestParam(value = "pageSize", required = false, defaultValue = AppConstant.DEFAULT_PAGE_SIZE) Integer pageSize,
 			@RequestParam(value = "sortDir", required = false, defaultValue = AppConstant.DEFAULT_SORT_DIR) String sortDir)
 	{
 		
-		PageResponse<ProductResponse> pageResponse=productService.getProductBySubCategory(id,subId,pageIndex,pageSize,sortDir);
+		Map<String, Object> pageResponse=productService.getProductBySubCategory(subId,pageIndex,pageSize,sortDir);
+		return new ResponseEntity<Map<String, Object>>(pageResponse,HttpStatus.OK);
+	}
+	@GetMapping("/permitAll/byCategory/{categoryId}")
+	public ResponseEntity<Map<String, Object>> getAllProductByCategory(
+			@PathVariable(value = "categoryId") String categoryId,
+			@RequestParam(value = "pageIndex", required = false, defaultValue =  AppConstant.DEFAULT_PAGE_NUMBER) Integer pageIndex,
+			@RequestParam(value = "pageSize", required = false, defaultValue = AppConstant.DEFAULT_PAGE_SIZE) Integer pageSize,
+			@RequestParam(value = "sortDir", required = false, defaultValue = AppConstant.DEFAULT_SORT_DIR) String sortDir)
+	{
+		System.out.println(categoryId);
+		Map<String, Object> pageResponse=productService.getProductByCategory(categoryId,pageIndex,pageSize,sortDir);
 		return new ResponseEntity<>(pageResponse,HttpStatus.OK);
 	}
 	
@@ -81,8 +92,6 @@ public class ProductController {
 			@RequestParam(value = "pageSize", required = false, defaultValue = AppConstant.DEFAULT_PAGE_SIZE) Integer pageSize,
 			@RequestParam(value = "sortDir", required = false, defaultValue = AppConstant.DEFAULT_SORT_DIR) String sortDir)
 	{ 
-		
-		
 		return new ResponseEntity<Map<String,Object>>(productService.getAllProduct(search,pageIndex,pageSize,sortDir),HttpStatus.OK);
 	}
 	
@@ -95,7 +104,7 @@ public class ProductController {
 	{ 
 		
 		
-		return new ResponseEntity<Map<String,Object>>(productService.getProductListBasedOnStatus(search,pageIndex,pageSize,sortDir,true,Status.VERIFIED),HttpStatus.OK);
+		return new ResponseEntity<Map<String,Object>>(productService.getProductListBasedOnStatus(search,pageIndex,pageSize,sortDir),HttpStatus.OK);
 	}
 	
 	

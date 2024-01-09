@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ecommerce.payload.ApiResponse;
 import com.ecommerce.payload.LoginRequest;
 import com.ecommerce.payload.OtpResponse;
+import com.ecommerce.payload.UpdateUserRequest;
 import com.ecommerce.payload.UserRequest;
 import com.ecommerce.payload.UserResponse;
 import com.ecommerce.service.LoginService;
@@ -57,8 +58,9 @@ public class UserController {
 	
 	
 	@PutMapping("")
-	public ResponseEntity<Map< String,Object>>  updateUser(@RequestBody UserRequest userRequest)
+	public ResponseEntity<Map< String,Object>>  updateUser(@RequestBody UpdateUserRequest userRequest)
 	{
+
 		return new ResponseEntity<Map< String,Object>>(userService.updateUser(userRequest),HttpStatus.OK);
 	}
 }
