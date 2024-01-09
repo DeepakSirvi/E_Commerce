@@ -9,7 +9,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -29,7 +28,6 @@ import com.ecommerce.exception.ResourceNotFoundException;
 import com.ecommerce.exception.UnauthorizedException;
 import com.ecommerce.model.Category;
 import com.ecommerce.model.Product;
-import com.ecommerce.model.ProductImage;
 import com.ecommerce.model.Role;
 import com.ecommerce.model.RoleName;
 import com.ecommerce.model.Status;
@@ -40,11 +38,8 @@ import com.ecommerce.payload.PageResponse;
 import com.ecommerce.payload.ProductRequest;
 import com.ecommerce.payload.ProductResponse;
 import com.ecommerce.payload.UpdateStatusBooleanRequest;
-import com.ecommerce.payload.UpdateStatusRequest;
-import com.ecommerce.payload.UserResponse;
 import com.ecommerce.payload.VarientCategoryAttributeResponse;
 import com.ecommerce.payload.VarientCategoryJoinResonse;
-import com.ecommerce.payload.VarientCategoryReponse;
 import com.ecommerce.payload.VarientResponse;
 import com.ecommerce.repository.CategoryRepo;
 import com.ecommerce.repository.ProductRepo;
@@ -248,6 +243,9 @@ public class ProductServiceImpl implements ProductService {
 		Product product1 = productRepo.save(product);
 		ApiResponse apiResponse = new ApiResponse(Boolean.TRUE, AppConstant.PRODUCT_ADDED, HttpStatus.CREATED);
 		response.put(AppConstant.RESPONSE_MESSAGE, apiResponse);
+		ProductResponse productResponse = new ProductResponse();
+//		response.put("product", productResponse.productToProductResponse(product1));
+
 		return response;
 	}
 
