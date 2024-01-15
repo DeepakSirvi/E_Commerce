@@ -1,5 +1,6 @@
 package com.ecommerce.payload;
 
+import java.util.List;
 import java.util.Set;
 
 import com.ecommerce.model.VarientCategory;
@@ -20,7 +21,7 @@ public class VarientCategoryReponse {
 	
 	private String id;
 	private String name;
-	private Set<VarientCategoryAttributeResponse> categoryAttributes;
+	private List<VarientCategoryAttributeResponse> categoryAttributes;
 	private UserResponse user;
 	public VarientCategoryReponse vatCatToResponse(VarientCategory varientCategory) {
 		this.setId(varientCategory.getId());

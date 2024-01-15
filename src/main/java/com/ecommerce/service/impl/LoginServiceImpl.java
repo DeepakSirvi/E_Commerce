@@ -1,6 +1,7 @@
 package com.ecommerce.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -84,10 +85,10 @@ public class LoginServiceImpl implements LoginService {
 					{
 						UserResponse currentUser = new UserResponse();
 						currentUser.userToUserResponse(user.get());
-						Set<UserRoleResponse> collect =  user.get().getUserRole().stream().map(userRole -> {
+						List<UserRoleResponse> collect =  user.get().getUserRole().stream().map(userRole -> {
 							return new UserRoleResponse().userRoleToUserRoleResponse(userRole);
 						})
-								.collect(Collectors.toSet());
+								.collect(Collectors.toList());
 						currentUser.setUserRole(collect);
 						
 						currentUser.setToken(jwtUtils.generateToken(login.get().getPhoneNumber(), currentUser.getId()));

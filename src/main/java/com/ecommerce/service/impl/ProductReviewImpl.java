@@ -51,7 +51,7 @@ public class ProductReviewImpl implements ProductReviewService {
 		Map<String, Object> map = new HashMap<>();
 
 		 User user = userrepo.findById(appUtils.getUserId()).get();
-		Set<Orders> order2 = user.getOrder();
+		List<Orders> order2 = user.getOrder();
 
 		boolean isPresent = order2.stream()
 			    .flatMap(obj -> obj.getOrderItem().stream())
@@ -71,7 +71,7 @@ public class ProductReviewImpl implements ProductReviewService {
 		productReview.setNumberOfStar(numberOfStar);
 		productReview.setTitle(title);
 		if (!image.isEmpty()) {
-			Set<ReviewImage> image2 = productReview.getImage();
+			List<ReviewImage> image2 = productReview.getImage();
 			for (MultipartFile file : image) {
 				String uploadImage = appUtils.uploadImage(file, AppConstant.PRODUCT_IMAGE_PATH, null);
 
@@ -124,7 +124,7 @@ public class ProductReviewImpl implements ProductReviewService {
 			productReview.setProduct(productReview.getProduct());
 			productReview.setUser(productReview.getUser());
 			if (!image.isEmpty()) {
-				Set<ReviewImage> image2 = productReview.getImage();
+				List<ReviewImage> image2 = productReview.getImage();
 				for (MultipartFile file : image) {
 					String uploadImage = appUtils.uploadImage(file, AppConstant.PRODUCT_IMAGE_PATH, null);
 					ReviewImage r = new ReviewImage();
