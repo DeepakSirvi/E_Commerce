@@ -167,4 +167,16 @@ public class AppConstant {
 	public static final Object UPDATE_PRODUCT_REVIEW = "ProductReview Update Successfully";
 	public static final Object PLESE_ORDER_PRODUCT = "Order this Product";
 
+	public static final String CART = "Cart";
+
+	public static final String CART_ITEM_REMOVE = "Product is succesfully remove from cart";
+
+	public static final String ADD_TO_CART = "Product added to cart";
+
+	public static final String Count = "count";
+
+	public static final String ALREADY_ADDED = "Product is already present in wishlist";
+
+	public static final String VARIENT_INACTIVE = "Varient is Inactive";
+
 			}

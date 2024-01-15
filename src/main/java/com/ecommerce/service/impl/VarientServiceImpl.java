@@ -153,12 +153,9 @@ public class VarientServiceImpl implements VarientService {
 	     varientIds = joinRepo.findVarientIdsByVarAttributeIdsAndProductId(attributeJoinIds,productId,varAttributeCount);
 		if(varientIds.isEmpty())
 		{
-			System.out.println("Empty");
-			
 			varientIds = joinRepo.findVarientIdsByVarAttributeIdAndProductId(attributeId,productId);	
 		}
 		response=getVarient(varientIds.get(0));
-		System.out.println(varientIds);
 		return response;
 
 	}}

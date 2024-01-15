@@ -63,7 +63,7 @@ public class VarientResponse {
 			return imageRespone.imageToImageResponse(productImage);
 		}).collect(Collectors.toList()));
 		
-		this.setProduct(new ProductResponse().productToProductResponseList(varient.getProduct()));
+		this.setProduct(new ProductResponse().productToProductResponse(varient.getProduct()));
 		return this;
 	}
 

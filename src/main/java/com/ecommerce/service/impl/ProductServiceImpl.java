@@ -9,7 +9,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -27,7 +26,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ecommerce.exception.BadRequestException;
 import com.ecommerce.exception.ResourceNotFoundException;
 import com.ecommerce.exception.UnauthorizedException;
-import com.ecommerce.model.Category;
 import com.ecommerce.model.Product;
 import com.ecommerce.model.Role;
 import com.ecommerce.model.RoleName;
@@ -76,37 +74,7 @@ public class ProductServiceImpl implements ProductService {
 	@Autowired
 	private ModelMapper modelMapper;
 
-	@Override
-	public Map<String, Object> getProductBySubCategory(String subId, Integer page, Integer size, String sortDir) {
-		Map<String, Object> response = new HashMap<>();
-		AppUtils.validatePageAndSize(page, size);
-		SubCategory category = subCategoryRepo.findById(subId)
-				.orElseThrow(() -> new BadRequestException(AppConstant.SUB_CATEGORY_NOT_FOUND));
-		Sort sort1 = null;
-		if (sortDir.equals("DESC")) {
-			sort1 = Sort.by(Sort.Order.desc("updatedAt"));
-		} else {
-			sort1 = Sort.by(Sort.Order.asc("updatedAt"));
-		}
-		Pageable pageable = PageRequest.of(page, size, sort1);
-		Page<Product> productSet = null;
-		productSet = productRepo.findFeaturedProductsBySubCategoryId(subId, Boolean.TRUE, Status.VERIFIED, pageable);		
-		List<ProductResponse> productResponses = productSet.getContent().stream().map(product -> {
-			return new ProductResponse().productToProductResponseList(product);
-		}).collect(Collectors.toList());
-		PageResponse<ProductResponse> pageResponse = new PageResponse<>();
-		pageResponse.setContent(productResponses);
-		pageResponse.setSize(size);
-		pageResponse.setPage(page);
-		pageResponse.setTotalElements(productSet.getNumberOfElements());
-		pageResponse.setTotalPages(productSet.getTotalPages());
-		pageResponse.setLast(productSet.isLast());
-		pageResponse.setFirst(productSet.isFirst());
-		response.put("AllProduct", pageResponse);
-		return response;
-	}
 	
-
 	@Override
 	public PageResponse<ProductResponse> getProductByVendorId(String vendorId, Integer page, Integer size) {
 		User user = userRepo.findById(vendorId).orElseThrow(() -> new BadRequestException(AppConstant.USER_NOT_FOUND));
@@ -119,6 +87,8 @@ public class ProductServiceImpl implements ProductService {
 		}
 		return null;
 	}
+	
+//	-------------------------------------------------------------------
 
 	@Override
 	public Map<String, Object> getAllProduct(String search, Integer pageIndex, Integer pageSize, String sortDir) {
@@ -131,7 +101,7 @@ public class ProductServiceImpl implements ProductService {
 			} else {
 				sort1 = Sort.by(Sort.Order.asc("updatedAt"));
 			}
-			Pageable pageable = PageRequest.of(pageIndex, pageSize);
+			Pageable pageable = PageRequest.of(pageIndex, pageSize,sort1);
 			Page<Product> productSet = null;
 			if (!search.equals("")) {
 				productSet = productRepo.findByProductDetail(search, pageable);
@@ -157,8 +127,6 @@ public class ProductServiceImpl implements ProductService {
 		throw new UnauthorizedException(UNAUTHORIZED);
 	}
 
-//	-------------------------------------------------------------------
-
 //	For updateing the lisiting status of product
 	@Override
 	public Map<String, Object> updateStatusProduct(UpdateStatusBooleanRequest statusRequest) {
@@ -172,13 +140,16 @@ public class ProductServiceImpl implements ProductService {
 				if (!product.getVerified().equals(Status.VERIFIED)) {
 					throw new BadRequestException(AppConstant.PRODUCT_NOT_VERIFIED);
 				}
-				if (Objects.nonNull(product.getVarient()) || product.getVarient().isEmpty()) {
-					throw new BadRequestException(AppConstant.NO_ACTIVE_VARIENT);
+				if ((Objects.nonNull(product.getVarient()) || !product.getVarient().isEmpty())) {
+					Boolean flag= product.getVarient().stream().anyMatch(varient -> varient.getStatus().equals(Status.ACTIVE));
+					if(!flag) {
+						throw new BadRequestException(AppConstant.NO_ACTIVE_VARIENT);
+					}
 				}
 			}
 			product.setListingStatus(statusRequest.isStatus());
 			productRepo.save(product);
-			response.put(AppConstant.RESPONSE_MESSAGE, AppConstant.LISTING_STATUS_UPDATE + statusRequest.isStatus());
+			response.put(AppConstant.RESPONSE_MESSAGE, AppConstant.LISTING_STATUS_UPDATE +" " + statusRequest.isStatus());
 			return response;
 		}
 		throw new UnauthorizedException(UNAUTHORIZED);
@@ -186,7 +157,7 @@ public class ProductServiceImpl implements ProductService {
 
 //	get all listing based on verification and listing status product to display customer also based on searching
 	@Override
-	public Map<String, Object> getProductListBasedOnStatus(String search, Integer pageIndex, Integer pageSize,
+	public Map<String, Object> getActiveProductList(String search, Integer pageIndex, Integer pageSize,
 			String sortDir) {
 		Map<String, Object> response = new HashMap<>();
 		AppUtils.validatePageAndSize(pageIndex, pageSize);
@@ -208,6 +179,7 @@ public class ProductServiceImpl implements ProductService {
 			ProductResponse productResponse = new ProductResponse();
 			return productResponse.productToProductResponseList(products);
 		}).collect(Collectors.toList());
+		
 		PageResponse<ProductResponse> pageResponse = new PageResponse<>();
 		pageResponse.setContent(productResponses);
 		pageResponse.setSize(pageSize);
@@ -329,6 +301,76 @@ public class ProductServiceImpl implements ProductService {
 		response.put("AllProduct", pageResponse);
 		return response;
 
+	}
+	
+	@Override
+	public Map<String, Object> getProductBySubCategory(String subId, Integer page, Integer size, String sortDir) {
+		Map<String, Object> response = new HashMap<>();
+		AppUtils.validatePageAndSize(page, size);
+		SubCategory category = subCategoryRepo.findById(subId)
+				.orElseThrow(() -> new BadRequestException(AppConstant.SUB_CATEGORY_NOT_FOUND));
+		Sort sort1 = null;
+		if (sortDir.equals("DESC")) {
+			sort1 = Sort.by(Sort.Order.desc("updatedAt"));
+		} else {
+			sort1 = Sort.by(Sort.Order.asc("updatedAt"));
+		}
+		Pageable pageable = PageRequest.of(page, size, sort1);
+		Page<Product> productSet = null;
+		productSet = productRepo.findFeaturedProductsBySubCategoryId(subId, Boolean.TRUE, Status.VERIFIED, pageable);		
+		List<ProductResponse> productResponses = productSet.getContent().stream().map(product -> {
+			return new ProductResponse().productToProductResponseList(product);
+		}).collect(Collectors.toList());
+		PageResponse<ProductResponse> pageResponse = new PageResponse<>();
+		pageResponse.setContent(productResponses);
+		pageResponse.setSize(size);
+		pageResponse.setPage(page);
+		pageResponse.setTotalElements(productSet.getNumberOfElements());
+		pageResponse.setTotalPages(productSet.getTotalPages());
+		pageResponse.setLast(productSet.isLast());
+		pageResponse.setFirst(productSet.isFirst());
+		response.put("AllProduct", pageResponse);
+		return response;
+	}
+
+	@Override
+	public Map<String, Object> getAllProductFilter(String catId, String date, Status status,Boolean listingStatus, int pageIndex, int pageSize,
+			String sortDir) {
+		System.err.println(date);
+		System.err.println(catId);
+		System.err.println(status);
+		System.err.println(listingStatus);
+		Map<String, Object> response = new HashMap<>();
+		AppUtils.validatePageAndSize(pageIndex, pageSize);
+		Sort sort1 = null;
+		if (sortDir.equals("DESC")) {
+			sort1 = Sort.by(Sort.Order.desc("updatedAt"));
+		} else {
+			sort1 = Sort.by(Sort.Order.asc("updatedAt"));
+		}
+		Pageable pageable = PageRequest.of(pageIndex, pageSize, sort1);
+		Page<Product> productSet = null;
+		if(listingStatus!=null)
+		productSet = productRepo.findProductByFilter(catId, date, status,listingStatus, pageable);	
+		else
+		{
+			productSet = productRepo.findProductByFilterWithOutListing(catId, date, status, pageable);		
+
+		}
+			List<ProductResponse> productResponses = productSet.getContent().stream().map(product -> {
+			return new ProductResponse().productToProductResponseList(product);
+		}).collect(Collectors.toList());
+		PageResponse<ProductResponse> pageResponse = new PageResponse<>();
+		pageResponse.setContent(productResponses);
+		pageResponse.setSize(productSet.getSize());
+		pageResponse.setPage(productSet.getNumberOfElements());
+		pageResponse.setTotalElements(productSet.getNumberOfElements());
+		pageResponse.setTotalPages(productSet.getTotalPages());
+		pageResponse.setLast(productSet.isLast());
+		pageResponse.setFirst(productSet.isFirst());
+		response.put("AllProduct", pageResponse);
+		System.err.println(productResponses);
+		return response;
 	}
 
 }

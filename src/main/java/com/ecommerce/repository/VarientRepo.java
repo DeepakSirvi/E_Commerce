@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.ecommerce.model.Status;
+import com.ecommerce.model.User;
 import com.ecommerce.model.Varient;
 
 public interface VarientRepo extends JpaRepository<Varient, String> {
