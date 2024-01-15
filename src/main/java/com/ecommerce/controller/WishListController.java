@@ -30,8 +30,8 @@ public class WishListController {
 	private  WishListService  wishlistService;
 	
 	@PostMapping("/add")
-    public ResponseEntity<Map<String, Object>> addToWishList( @RequestParam String varientId,@RequestParam String userId) {    
-        Map<String, Object> response = wishlistService.addToWishList(varientId, userId);
+    public ResponseEntity<Map<String, Object>> addToWishList( @RequestParam String varientId) {    
+        Map<String, Object> response = wishlistService.addToWishList(varientId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 	

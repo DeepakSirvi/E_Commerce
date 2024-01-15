@@ -74,14 +74,26 @@ public class ProductController {
 		return new ResponseEntity<Map<String, Object>>(pageResponse,HttpStatus.OK);
 	}
 	@GetMapping("/permitAll/byCategory/{categoryId}")
-	public ResponseEntity<Map<String, Object>> getAllProductByCategory(
+	public ResponseEntity<Map<String, Object>> getAllActiveProductByCategory(
 			@PathVariable(value = "categoryId") String categoryId,
 			@RequestParam(value = "pageIndex", required = false, defaultValue =  AppConstant.DEFAULT_PAGE_NUMBER) Integer pageIndex,
 			@RequestParam(value = "pageSize", required = false, defaultValue = AppConstant.DEFAULT_PAGE_SIZE) Integer pageSize,
 			@RequestParam(value = "sortDir", required = false, defaultValue = AppConstant.DEFAULT_SORT_DIR) String sortDir)
 	{
-		System.out.println(categoryId);
 		Map<String, Object> pageResponse=productService.getProductByCategory(categoryId,pageIndex,pageSize,sortDir);
+		return new ResponseEntity<>(pageResponse,HttpStatus.OK);
+	}
+	@GetMapping("/admin/filter")
+	public ResponseEntity<Map<String, Object>> getAllProductByCategory(
+			 @RequestParam(name = "catId", required = false) String catId,
+	            @RequestParam(name = "date", required = false) String date,
+	            @RequestParam(name = "status", required = false) Status status,
+	            @RequestParam(name = "listingStatus", required = false) Boolean listingStatus,
+	            @RequestParam(name = "pageIndex", defaultValue = "0") int pageIndex,
+	            @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
+	            @RequestParam(name = "sortDir", defaultValue = "asc") String sortDir) {
+
+		Map<String, Object> pageResponse=productService.getAllProductFilter(catId,date,status,listingStatus,pageIndex,pageSize,sortDir);
 		return new ResponseEntity<>(pageResponse,HttpStatus.OK);
 	}
 	
@@ -102,9 +114,7 @@ public class ProductController {
 			@RequestParam(value = "pageSize", required = false, defaultValue = AppConstant.DEFAULT_PAGE_SIZE) Integer pageSize,
 			@RequestParam(value = "sortDir", required = false, defaultValue = AppConstant.DEFAULT_SORT_DIR) String sortDir)
 	{ 
-		
-		
-		return new ResponseEntity<Map<String,Object>>(productService.getProductListBasedOnStatus(search,pageIndex,pageSize,sortDir),HttpStatus.OK);
+		return new ResponseEntity<Map<String,Object>>(productService.getActiveProductList(search,pageIndex,pageSize,sortDir),HttpStatus.OK);
 	}
 	
 	

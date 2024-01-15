@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import com.ecommerce.exception.BadRequestException;
 import com.ecommerce.exception.ResourceNotFoundException;
+import com.ecommerce.exception.UnauthorizedException;
 import com.ecommerce.model.Cart;
 import com.ecommerce.model.Status;
 import com.ecommerce.model.User;
@@ -61,7 +62,8 @@ public class CartServiceImpl implements CartService {
 			cart2.setVarient(new Varient(id));
 			cart2 = cartRepo.save(cart2);
 		}
-		Map<String, Object> response = getCartByUserId(appUtils.getUserId());
+		Map<String, Object> response = new HashMap<>();
+		response.put(AppConstant.MESSAGE,AppConstant.ADD_TO_CART);
 		return response;
 	}
 
@@ -75,6 +77,35 @@ public class CartServiceImpl implements CartService {
 			return new CartResponse().cartToCartResponse(carts);
 		}).collect(Collectors.toList());
 		response.put("cart", cartResponses);
+		return response;
+	}
+
+	@Override
+	public Map<String, Object> deleteCartById(String cartId) {
+		Map<String, Object> response = new HashMap<>();
+		Optional<Cart> cart = cartRepo.findById(cartId);
+		if(cart.isPresent()) {
+			if(cart.get().getUser().getId().equals(appUtils.getUserId())) {
+			cartRepo.deleteById(cartId);
+			response.put(AppConstant.MESSAGE, AppConstant.CART_ITEM_REMOVE);
+			return response;
+			}
+			else
+			{
+				throw new UnauthorizedException(AppConstant.UNAUTHORIZED);
+			}
+		}
+		else
+		{
+			throw new ResourceNotFoundException(AppConstant.CART,AppConstant.ID,cartId);
+		}	
+	}
+
+	@Override
+	public Map<String, Object> getCount() {
+		Map<String, Object> response = new HashMap<>();
+		List<Object> count=cartRepo.fetchCountofWishAndCartItem(appUtils.getUserId());
+		response.put(AppConstant.Count, count);
 		return response;
 	}
 }

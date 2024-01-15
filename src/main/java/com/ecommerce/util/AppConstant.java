@@ -174,5 +174,17 @@ public class AppConstant {
 	public static final Object VERFIED_BRAND_LIST = "list of verfied brand ";
 	public static final Object BRAND_VERIFIED = "brand verfiend";
 	public static final Object BRAND_NOT_VERIFIED = "brand  not verfiend";
+	public static final String CART = "Cart";
 
-}		
+	public static final String CART_ITEM_REMOVE = "Product is succesfully remove from cart";
+
+	public static final String ADD_TO_CART = "Product added to cart";
+
+	public static final String Count = "count";
+
+	public static final String ALREADY_ADDED = "Product is already present in wishlist";
+
+	public static final String VARIENT_INACTIVE = "Varient is Inactive";
+
+			}
+

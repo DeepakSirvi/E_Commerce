@@ -1,6 +1,8 @@
 package com.ecommerce.model;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import jakarta.persistence.CascadeType;
@@ -32,7 +34,7 @@ public class Category extends Audit{
 	
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "category_Id")
-	private Set<SubCategory> subCategory=new HashSet<>();
+	private List<SubCategory> subCategory=new ArrayList<>();
 	
 	@ManyToOne
 	private User user;
