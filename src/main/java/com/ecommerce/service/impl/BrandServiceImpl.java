@@ -3,26 +3,29 @@ package com.ecommerce.service.impl;
 
 
 import java.util.HashMap;
-
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ecommerce.exception.ResourceNotFoundException;
+
 import com.ecommerce.model.Brand;
 import com.ecommerce.model.Status;
 import com.ecommerce.model.User;
 import com.ecommerce.payload.BrandRequest;
 import com.ecommerce.payload.BrandResponse;
 import com.ecommerce.repository.BrandRepo;
-
+import com.ecommerce.repository.UserRepo;
 import com.ecommerce.service.BrandService;
 import com.ecommerce.util.AppConstant;
 import com.ecommerce.util.AppUtils;
@@ -39,6 +42,9 @@ public class BrandServiceImpl  implements BrandService{
 	private ModelMapper mapper;
 	@Autowired
 	private AppUtils  appUtils;
+	
+	@Autowired
+	private UserRepo  userRepo;
 	
 	
 	
@@ -58,7 +64,7 @@ public class BrandServiceImpl  implements BrandService{
 	          
 	        		  
 	          brandRepo.save(brand);
-	          response.put("message", AppConstant.BRAND_ADD_SUCCES);
+	          response.put("response", AppConstant.BRAND_ADD_SUCCES);
 	          return response;        
 	}
 	private Brand brandRequestToBrand(BrandRequest brandRequest) {
@@ -76,38 +82,39 @@ public class BrandServiceImpl  implements BrandService{
 		        Brand brand = optionalBrand.get();
 		        
 		        brand.setStatus(Status.VERIFIED);
+		       
 		        
 		        brandRepo.save(brand);
 		        
-		        response.put("brandId", brandId);
+		        response.put("response", AppConstant.UPDATE_STATUS);
 		        
 		        response.put(AppConstant.STATUS, brand.getStatus().toString());
 		        
 		 } else {
 	           
-	            response.put("error", "Brand not found for id: " + brandId);
+	           // response.put("error", "Brand not found for id: " + brandId);
+	            throw new ResourceNotFoundException(BRAND , ID , brandId);
 	        }
 		
 		 return response; 	
 	}
 	
-	@Override
-	public Map<String, Object> getBrandById(String brandId) {
-		
+   @Override
+ 	public Map<String, Object> getBrandById(String brandId) {
+	
 		Map<String, Object> response = new HashMap<>();
+				Optional<Brand> brandOptional = brandRepo.findById(brandId);
 		
-		Optional<Brand> brandOptional = brandRepo.findById(brandId);
-		
-		if (brandOptional.isPresent()) {
+	if (brandOptional.isPresent()) {
 	        Brand brand = brandOptional.get();
 	        
-	        BrandResponse  brandResponse= brandToBrandResponse(brand);
-	        response.put("brand", brandResponse);
+        BrandResponse  brandResponse= brandToBrandResponse(brand);
+        response.put("brand", brandResponse);
 	        
 		} else {
-	        response.put("message", "Brand not found for userId: " + brandId);
+	      
 	         throw new ResourceNotFoundException(BRAND ,ID, brandId);  
-	         
+         
 	    }
 	    return response;
 	}
@@ -118,10 +125,90 @@ public class BrandServiceImpl  implements BrandService{
 		brandResponse.setBrandDescription(brand2.getBrandDescription());
 		return brandResponse;
 	}
-	
+	@Override
+	public Map<String, Object> getAllBrandById(String userId) {
+		
+		 Map<String , Object > response = new HashMap<>();
+		 
+		 List<Brand> brands = brandRepo.findAllByUserId(userId);
+		 
+		  List<BrandResponse> brandResponse= brands.stream()
+				  .map(this::brandToBrandResponse)
+				  .collect(Collectors.toList());
+		  
+		   response.put("brand", brandResponse);
+		return response;
 		
 	}
+	@Override
+	public Map<String, Object> getAllBrand(Integer page, Integer size, String sortDir) {
+		
+		
+		
+		Map<String, Object> response = new HashMap<>();
+		AppUtils.validatePageAndSize(page, size);
+		
+		Sort sort1 = null;
+		if (sortDir.equals("DESC")) {
+			sort1 = Sort.by(Sort.Order.desc("updatedAt"));
+		} else {
+			sort1 = Sort.by(Sort.Order.asc("updatedAt"));
+		}
+		Pageable pageable = PageRequest.of(page, size, sort1);
+		Page <Brand> brandSet =null;
+		brandSet = brandRepo.findAll(pageable);
+		if (!brandSet.isEmpty()) {
+            List<BrandResponse> brandResponses = brandSet.stream()
+                    .map(this::brandToBrandResponse)
+                    .collect(Collectors.toList());
+		 response.put("AllBrand", brandResponses);
+    } else {
+         throw new ResourceNotFoundException(); 
+	}
+    return response;
+  }
 	
+	@Override
+	public Map<String, Object> getVerfiedBrandById(String brandId) {
+		
+		Map<String, Object> response = new HashMap<>();
+		
+//		if (brandId == null || brandId.isEmpty()) {
+//            response.put("response", AppConstant.INVALID_BRAND);
+//            return response;
+//		}
+		Optional<Brand> optionalBrand = brandRepo.findById(brandId);
+		
+		if (!optionalBrand.isPresent()) {
+			throw new  ResourceNotFoundException("Brand Not Found");
+         
+            
+		}
+		 if(optionalBrand.get().getStatus().toString().equals("VERIFIED")) {
+			 response.put("response",AppConstant.BRAND_VERIFIED );
+			 response.put("data",optionalBrand.get() );
+		 }else {
+			 response.put("message" , AppConstant.BRAND_NOT_VERIFIED);
+		 }  
+		 
+		return response ;
+	}
+
+}	
+	
+
+	
+	
+
+
+  
+	
+		 
+	
+	
+
+	
+
 			 
 			 
 			 

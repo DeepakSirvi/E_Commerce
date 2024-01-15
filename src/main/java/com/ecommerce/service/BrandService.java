@@ -15,7 +15,17 @@ import com.ecommerce.payload.BrandRequest;
 	 
 	 public Map<String, Object> updateStatusById(String  brandId);
 	 
-	 public Map<String, Object> getBrandById(String brandId);
+    public Map<String, Object> getBrandById(String brandId );
+	 
+	 public Map<String , Object> getAllBrandById(String userId);
+	 
+	 
+	  public Map<String , Object > getAllBrand(Integer page, Integer size, String sortDir);
+
+	  public Map<String , Object > getVerfiedBrandById(String  brandId);
+	
+	  
+	   
 	 
 	 
 
