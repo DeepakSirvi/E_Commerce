@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
+
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -27,7 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ecommerce.exception.BadRequestException;
 import com.ecommerce.exception.ResourceNotFoundException;
 import com.ecommerce.exception.UnauthorizedException;
-import com.ecommerce.model.Category;
+
 import com.ecommerce.model.Product;
 import com.ecommerce.model.Role;
 import com.ecommerce.model.RoleName;
@@ -157,9 +157,8 @@ public class ProductServiceImpl implements ProductService {
 		throw new UnauthorizedException(UNAUTHORIZED);
 	}
 
-//	-------------------------------------------------------------------
 
-//	For updateing the lisiting status of product
+
 	@Override
 	public Map<String, Object> updateStatusProduct(UpdateStatusBooleanRequest statusRequest) {
 		Map<String, Object> response = new HashMap<>();
@@ -184,7 +183,7 @@ public class ProductServiceImpl implements ProductService {
 		throw new UnauthorizedException(UNAUTHORIZED);
 	}
 
-//	get all listing based on verification and listing status product to display customer also based on searching
+
 	@Override
 	public Map<String, Object> getProductListBasedOnStatus(String search, Integer pageIndex, Integer pageSize,
 			String sortDir) {
@@ -220,7 +219,7 @@ public class ProductServiceImpl implements ProductService {
 		return response;
 	}
 
-//	Add product by vendor or admin with non listing and Unverified Status
+
 	@Override
 	public Map<String, Object> addProduct(ProductRequest productRequest, MultipartFile multipartFiles) {
 
@@ -241,15 +240,11 @@ public class ProductServiceImpl implements ProductService {
 		Product product1 = productRepo.save(product);
 		ApiResponse apiResponse = new ApiResponse(Boolean.TRUE, AppConstant.PRODUCT_ADDED, HttpStatus.CREATED);
 		response.put(AppConstant.RESPONSE_MESSAGE, apiResponse);
-		ProductResponse productResponse = new ProductResponse();
-//		response.put("product", productResponse.productToProductResponse(product1));
-
+		ProductResponse productResponse = new ProductResponse();	
 		return response;
 	}
 
-	// Get product with its Id whose status is true or and edit by as User or User
-	// is admin
-	// In response we get Product detail and VarientCategory and attribute set
+	
 	@Override
 	public Map<String, Object> getProduct(String productId) {
 		Product product = productRepo.findById(productId)

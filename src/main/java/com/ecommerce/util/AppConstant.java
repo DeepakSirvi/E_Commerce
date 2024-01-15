@@ -127,6 +127,7 @@ public class AppConstant {
 	public static final String PRODUCT = "Product";
 	public static final String VARIENTCATEGORYATTRIBUTE = "Varient category attribute";
 	public static final String CATEGORY = "Product category";
+
 	public static final Object REMOVE_FROM_WISHLIST = "remove from wishlist";
 	public static final String WISHLIST = "WishList";
 	public static final String BRAND_NAME_TAKEN = "Brand Name is taken ";
@@ -156,7 +157,9 @@ public class AppConstant {
 
 	public static final String PRODUCTSAVEFORLATER_NOT_FOUND = "SaveForLater Not Found";
 	public static final String DELETE_SUCCESS = "Delete Succesfully";
+
 	//public static final Object PRODUCT_SAVE_FOR_LATER = "";
+
 	
 	
 
@@ -166,5 +169,10 @@ public class AppConstant {
 	public static final String PRODUCTREVIEW_NOT_FOUND = "Product REview NOt Found";
 	public static final Object UPDATE_PRODUCT_REVIEW = "ProductReview Update Successfully";
 	public static final Object PLESE_ORDER_PRODUCT = "Order this Product";
+	public static final Object UPDATE_STATUS = "update status";
+	public static final Object BRAND_LIST = "list of brand";
+	public static final Object VERFIED_BRAND_LIST = "list of verfied brand ";
+	public static final Object BRAND_VERIFIED = "brand verfiend";
+	public static final Object BRAND_NOT_VERIFIED = "brand  not verfiend";
 
-			}
+}		
