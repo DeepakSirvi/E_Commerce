@@ -42,9 +42,9 @@ public interface ProductRepo extends JpaRepository<Product, String> {
 
 	@Query("SELECT p FROM Product p " +
 		       "WHERE p.verified = :status " +
-		       "Or (p.listingStatus = :listingStatus) " +
-		       "Or p.subCategory.category.id = :catId " +
-		       "Or (p.createdAt LIKE CONCAT('%', :date, '%') OR p.updatedAt LIKE CONCAT('%', :date, '%'))")
+		       "And (p.listingStatus = :listingStatus) " +
+		       "And p.subCategory.category.id = :catId " +
+		       "And (p.createdAt LIKE CONCAT('%', :date, '%') OR p.updatedAt LIKE CONCAT('%', :date, '%'))")
 		public Page<Product> findProductByFilter(@Param("catId") String catId,
 		                                         @Param("date") String date,
 		                                         @Param("status") Status status,
@@ -52,8 +52,8 @@ public interface ProductRepo extends JpaRepository<Product, String> {
 		                                         Pageable pageable);
 
 	@Query("SELECT p FROM Product p " +
-		       "WHERE p.subCategory.category.id = :catId " + "Or p.verified = :status "+
-		       "Or (p.createdAt LIKE CONCAT('%', :date, '%') OR p.updatedAt LIKE CONCAT('%', :date, '%'))")
+		       "WHERE p.subCategory.category.id = :catId " + "And p.verified = :status "+
+		       "And (p.createdAt LIKE CONCAT('%', :date, '%') OR p.updatedAt LIKE CONCAT('%', :date, '%'))")
 		public Page<Product> findProductByFilterWithOutListing(@Param("catId") String catId,
 		                                                    @Param("date") String date,
 		                                                    @Param("status") Status status,

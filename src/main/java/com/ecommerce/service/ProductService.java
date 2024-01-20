@@ -9,6 +9,7 @@ import com.ecommerce.payload.PageResponse;
 import com.ecommerce.payload.ProductRequest;
 import com.ecommerce.payload.ProductResponse;
 import com.ecommerce.payload.UpdateStatusBooleanRequest;
+import com.ecommerce.payload.UpdateStatusRequest;
 
 public interface ProductService {
 
@@ -32,6 +33,8 @@ public interface ProductService {
 
 	public Map<String, Object> getAllProductFilter(String catId, String date, Status status, Boolean listingStatus,
 			int pageIndex, int pageSize, String sortDir);
+
+	public Map<String, Object> updateProductStatus(UpdateStatusRequest statusRequest);
 
 	
 	

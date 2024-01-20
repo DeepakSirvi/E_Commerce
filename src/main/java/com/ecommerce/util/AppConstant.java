@@ -1,7 +1,5 @@
 package com.ecommerce.util;
 
-import lombok.NonNull;
-
 public class AppConstant {
 	
 	public static final String MESSAGE = "message";
@@ -185,6 +183,10 @@ public class AppConstant {
 	public static final String ALREADY_ADDED = "Product is already present in wishlist";
 
 	public static final String VARIENT_INACTIVE = "Varient is Inactive";
+
+	public static final String INVALID_TRANSITION = "Invalid status transition";
+
+	public static final String IS_PRESENT = "isPresent";
 
 			}
 

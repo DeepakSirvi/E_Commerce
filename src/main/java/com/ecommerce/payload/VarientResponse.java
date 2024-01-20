@@ -11,6 +11,7 @@ import com.ecommerce.model.Varient;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+import jakarta.validation.metadata.ValidateUnwrappedValue;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,7 +22,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(Include.NON_NULL)
-public class VarientResponse {
+public class VarientResponse extends AuditResponse {
 
 	private String id;
 	private String varientName;
@@ -38,7 +39,8 @@ public class VarientResponse {
 		this.setPrice(varient.getPrice());
 		this.setStock(varient.getStock());
 		this.setVarientName(varient.getVarientName());
-		
+		this.setCreatedAt(varient.getCreatedAt());
+		this.setStatus(varient.getStatus());
 		
 		this.setProductImage(varient.getProductImage().stream().map(productImage -> {
 			ProductImageRespone imageRespone = new ProductImageRespone();
@@ -58,6 +60,9 @@ public class VarientResponse {
 		this.setPrice(varient.getPrice());
 		this.setStock(varient.getStock());
 		this.setVarientName(varient.getVarientName());
+		this.setCreatedAt(varient.getCreatedAt());
+		this.setStatus(varient.getStatus());
+
 		this.setProductImage(varient.getProductImage().stream().map(productImage -> {
 			ProductImageRespone imageRespone = new ProductImageRespone();
 			return imageRespone.imageToImageResponse(productImage);
