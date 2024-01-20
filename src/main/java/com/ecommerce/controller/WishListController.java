@@ -30,28 +30,41 @@ public class WishListController {
 	private  WishListService  wishlistService;
 	
 	@PostMapping("/add")
-    public ResponseEntity<Map<String, Object>> addToWishList( @RequestParam String varientId) {    
+    public ResponseEntity<Map<String, Object>> addToWishList(@RequestParam String varientId) { 
         Map<String, Object> response = wishlistService.addToWishList(varientId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 	
 	@DeleteMapping("/remove")
-    public ResponseEntity<Map<String, Object>> removeFromWishList( @RequestParam String wishlistId)
+    public ResponseEntity<Map<String, Object>> removeFromWishList(@RequestParam String wishlistId)
              {
 		Map<String, Object> response = wishlistService.removeFromWishList(wishlistId);
         return ResponseEntity.ok(response);
         
       }
 	
-	/*@GetMapping("/activeVarient/{userId}")
-    public ResponseEntity<Map<String, Object>> getActiveVarientInWishlistByUserId(@PathVariable String userId) {
-        Map<String, Object> response = wishlistService.getActiveVarientInWishlistByUserId(userId);
-        return  new ResponseEntity<>(response, HttpStatus.OK) ;
-    }*/
-	}
+	
+	@DeleteMapping("/dislike")
+    public ResponseEntity<Map<String, Object>> dislikeFromWishList(@RequestParam String varientId)
+             {
+		Map<String, Object> response = wishlistService.dislikeFromWishList(varientId);
+        return ResponseEntity.ok(response);
+        
+      }
+	
+//	@GetMapping("/activeVarient/{userId}")
+//    public ResponseEntity<Map<String, Object>> getActiveVarientInWishlistByUserId(@PathVariable String userId) {
+//        Map<String, Object> response = wishlistService.getActiveVarientInWishlistByUserId(userId);
+//        return  new ResponseEntity<>(response, HttpStatus.OK) ;
+//    }
+	
+	@GetMapping
+	public ResponseEntity<Map<String, Object>> isVarientExist(@RequestParam String varientId) { 
+        Map<String, Object> response = wishlistService.isVarientExist(varientId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 	  
 	
-	
-	
+}	
 	
 

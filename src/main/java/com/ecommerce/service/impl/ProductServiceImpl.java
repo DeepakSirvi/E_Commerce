@@ -4,18 +4,21 @@ import static com.ecommerce.util.AppConstant.ID;
 import static com.ecommerce.util.AppConstant.PRODUCT;
 import static com.ecommerce.util.AppConstant.UNAUTHORIZED;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -27,18 +30,17 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ecommerce.exception.BadRequestException;
 import com.ecommerce.exception.ResourceNotFoundException;
 import com.ecommerce.exception.UnauthorizedException;
-
 import com.ecommerce.model.Product;
 import com.ecommerce.model.Role;
 import com.ecommerce.model.RoleName;
 import com.ecommerce.model.Status;
-import com.ecommerce.model.SubCategory;
 import com.ecommerce.model.User;
 import com.ecommerce.payload.ApiResponse;
 import com.ecommerce.payload.PageResponse;
 import com.ecommerce.payload.ProductRequest;
 import com.ecommerce.payload.ProductResponse;
 import com.ecommerce.payload.UpdateStatusBooleanRequest;
+import com.ecommerce.payload.UpdateStatusRequest;
 import com.ecommerce.payload.VarientCategoryAttributeResponse;
 import com.ecommerce.payload.VarientCategoryJoinResonse;
 import com.ecommerce.payload.VarientResponse;
@@ -76,7 +78,6 @@ public class ProductServiceImpl implements ProductService {
 	@Autowired
 	private ModelMapper modelMapper;
 
-	
 	@Override
 	public PageResponse<ProductResponse> getProductByVendorId(String vendorId, Integer page, Integer size) {
 		User user = userRepo.findById(vendorId).orElseThrow(() -> new BadRequestException(AppConstant.USER_NOT_FOUND));
@@ -89,7 +90,7 @@ public class ProductServiceImpl implements ProductService {
 		}
 		return null;
 	}
-	
+
 //	-------------------------------------------------------------------
 
 	@Override
@@ -103,7 +104,7 @@ public class ProductServiceImpl implements ProductService {
 			} else {
 				sort1 = Sort.by(Sort.Order.asc("updatedAt"));
 			}
-			Pageable pageable = PageRequest.of(pageIndex, pageSize,sort1);
+			Pageable pageable = PageRequest.of(pageIndex, pageSize, sort1);
 			Page<Product> productSet = null;
 			if (!search.equals("")) {
 				productSet = productRepo.findByProductDetail(search, pageable);
@@ -129,7 +130,6 @@ public class ProductServiceImpl implements ProductService {
 		throw new UnauthorizedException(UNAUTHORIZED);
 	}
 
-
 //	For updateing the lisiting status of product
 
 	@Override
@@ -145,20 +145,30 @@ public class ProductServiceImpl implements ProductService {
 					throw new BadRequestException(AppConstant.PRODUCT_NOT_VERIFIED);
 				}
 				if ((Objects.nonNull(product.getVarient()) || !product.getVarient().isEmpty())) {
-					Boolean flag= product.getVarient().stream().anyMatch(varient -> varient.getStatus().equals(Status.ACTIVE));
-					if(!flag) {
+					Boolean flag = product.getVarient().stream()
+							.anyMatch(varient -> varient.getStatus().equals(Status.ACTIVE));
+					if (!flag) {
 						throw new BadRequestException(AppConstant.NO_ACTIVE_VARIENT);
 					}
 				}
+				product.setListingStatus(statusRequest.isStatus());
+				productRepo.save(product);
+
+			} else {
+				product.setListingStatus(statusRequest.isStatus());
+				product.setVarient(product.getVarient().stream().map(varient -> {
+					 varient.setStatus(Status.DEACTIVE);
+					 return varient;
+				}).collect(Collectors.toList()));
+
+				productRepo.save(product);
 			}
-			product.setListingStatus(statusRequest.isStatus());
-			productRepo.save(product);
-			response.put(AppConstant.RESPONSE_MESSAGE, AppConstant.LISTING_STATUS_UPDATE +" " + statusRequest.isStatus());
+			response.put(AppConstant.RESPONSE_MESSAGE,
+					AppConstant.LISTING_STATUS_UPDATE + " " + statusRequest.isStatus());
 			return response;
 		}
 		throw new UnauthorizedException(UNAUTHORIZED);
 	}
-
 
 	@Override
 	public Map<String, Object> getActiveProductList(String search, Integer pageIndex, Integer pageSize,
@@ -174,8 +184,7 @@ public class ProductServiceImpl implements ProductService {
 		Pageable pageable = PageRequest.of(pageIndex, pageSize, sort1);
 		Page<Product> productSet = null;
 		if (Objects.nonNull(search) && !search.equals("")) {
-			productSet = productRepo.findProductsByNameAndCriteria(search, Boolean.TRUE,
-					Status.VERIFIED,pageable);
+			productSet = productRepo.findProductsByNameAndCriteria(search, Boolean.TRUE, Status.VERIFIED, pageable);
 		} else {
 			productSet = productRepo.findByListingStatusAndVerified(pageable, Boolean.TRUE, Status.VERIFIED);
 		}
@@ -183,7 +192,7 @@ public class ProductServiceImpl implements ProductService {
 			ProductResponse productResponse = new ProductResponse();
 			return productResponse.productToProductResponseList(products);
 		}).collect(Collectors.toList());
-		
+
 		PageResponse<ProductResponse> pageResponse = new PageResponse<>();
 		pageResponse.setContent(productResponses);
 		pageResponse.setSize(pageSize);
@@ -195,7 +204,6 @@ public class ProductServiceImpl implements ProductService {
 		response.put("AllProduct", pageResponse);
 		return response;
 	}
-
 
 	@Override
 	public Map<String, Object> addProduct(ProductRequest productRequest, MultipartFile multipartFiles) {
@@ -214,14 +222,13 @@ public class ProductServiceImpl implements ProductService {
 		product.setVerified(Status.UNVERIFIED);
 		product.setListingStatus(Boolean.FALSE);
 		product.setVendor(new User(appUtils.getUserId()));
-		Product product1 = productRepo.save(product);
+		 productRepo.save(product);
 		ApiResponse apiResponse = new ApiResponse(Boolean.TRUE, AppConstant.PRODUCT_ADDED, HttpStatus.CREATED);
 		response.put(AppConstant.RESPONSE_MESSAGE, apiResponse);
-		ProductResponse productResponse = new ProductResponse();	
+		
 		return response;
 	}
 
-	
 	@Override
 	public Map<String, Object> getProduct(String productId) {
 		Product product = productRepo.findById(productId)
@@ -302,12 +309,12 @@ public class ProductServiceImpl implements ProductService {
 		return response;
 
 	}
-	
+
 	@Override
 	public Map<String, Object> getProductBySubCategory(String subId, Integer page, Integer size, String sortDir) {
 		Map<String, Object> response = new HashMap<>();
 		AppUtils.validatePageAndSize(page, size);
-		SubCategory category = subCategoryRepo.findById(subId)
+		 subCategoryRepo.findById(subId)
 				.orElseThrow(() -> new BadRequestException(AppConstant.SUB_CATEGORY_NOT_FOUND));
 		Sort sort1 = null;
 		if (sortDir.equals("DESC")) {
@@ -317,7 +324,7 @@ public class ProductServiceImpl implements ProductService {
 		}
 		Pageable pageable = PageRequest.of(page, size, sort1);
 		Page<Product> productSet = null;
-		productSet = productRepo.findFeaturedProductsBySubCategoryId(subId, Boolean.TRUE, Status.VERIFIED, pageable);		
+		productSet = productRepo.findFeaturedProductsBySubCategoryId(subId, Boolean.TRUE, Status.VERIFIED, pageable);
 		List<ProductResponse> productResponses = productSet.getContent().stream().map(product -> {
 			return new ProductResponse().productToProductResponseList(product);
 		}).collect(Collectors.toList());
@@ -334,14 +341,30 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public Map<String, Object> getAllProductFilter(String catId, String date, Status status,Boolean listingStatus, int pageIndex, int pageSize,
-			String sortDir) {
+	public Map<String, Object> getAllProductFilter(String catId, String date, Status status, Boolean listingStatus,
+			int pageIndex, int pageSize, String sortDir) {
 		System.err.println(date);
 		System.err.println(catId);
 		System.err.println(status);
 		System.err.println(listingStatus);
 		Map<String, Object> response = new HashMap<>();
 		AppUtils.validatePageAndSize(pageIndex, pageSize);
+		ExampleMatcher exampleMatcher = ExampleMatcher.matching()
+				 .withIgnoreNullValues()
+				 .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
+				 .withIgnoreCase()
+				 .withMatcher("id", match->match.transform(value->value.map(id->((Long)id==0)?null:id)));
+		Product request = new Product();
+		request.setListingStatus(listingStatus);
+		request.setVerified(status);
+		if (!date.isEmpty()) {
+		    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+//		    request.setCreatedAt(LocalDate.parse(date , formatter));
+//		    request.setUpdatedAt(LocalDate.parse(date , formatter));
+		}
+		request.getSubCategory().getCategory().setId(catId);		
+		Example<Product> example = Example.of(request,exampleMatcher);
+		
 		Sort sort1 = null;
 		if (sortDir.equals("DESC")) {
 			sort1 = Sort.by(Sort.Order.desc("updatedAt"));
@@ -349,17 +372,17 @@ public class ProductServiceImpl implements ProductService {
 			sort1 = Sort.by(Sort.Order.asc("updatedAt"));
 		}
 		Pageable pageable = PageRequest.of(pageIndex, pageSize, sort1);
-		Page<Product> productSet = null;
-		if(listingStatus!=null)
-		productSet = productRepo.findProductByFilter(catId, date, status,listingStatus, pageable);	
-		else
-		{
-			productSet = productRepo.findProductByFilterWithOutListing(catId, date, status, pageable);		
-
-		}
-			List<ProductResponse> productResponses = productSet.getContent().stream().map(product -> {
+		Page<Product> productSet = productRepo.findAll(example,pageable);
+//		if (listingStatus != null)
+//			productSet = productRepo.findProductByFilter(catId, date, status, listingStatus, pageable);
+//		else {
+//			productSet = productRepo.findProductByFilterWithOutListing(catId, date, status, pageable);
+//
+//		}
+		List<ProductResponse> productResponses = productSet.getContent().stream().map(product -> {
 			return new ProductResponse().productToProductResponseList(product);
 		}).collect(Collectors.toList());
+		
 		PageResponse<ProductResponse> pageResponse = new PageResponse<>();
 		pageResponse.setContent(productResponses);
 		pageResponse.setSize(productSet.getSize());
@@ -370,6 +393,38 @@ public class ProductServiceImpl implements ProductService {
 		pageResponse.setFirst(productSet.isFirst());
 		response.put("AllProduct", pageResponse);
 		System.err.println(productResponses);
+		return response;
+	}
+
+	@Override
+	public Map<String, Object> updateProductStatus(UpdateStatusRequest statusRequest) {
+		Map<String, Object> response = new HashMap<>();
+		Product product = productRepo.findById(statusRequest.getId())
+				.orElseThrow(() -> new ResourceNotFoundException(PRODUCT, ID, statusRequest.getId()));
+		
+		if(statusRequest.getStatus().equals(product.getVerified()))
+		{
+			throw new BadRequestException(AppConstant.INVALID_TRANSITION);
+		}
+		else if(statusRequest.getStatus().equals(Status.VERIFIED))
+		{
+			product.setVerified(statusRequest.getStatus());
+			product.setListingStatus(Boolean.FALSE);
+			productRepo.save(product);
+		}
+		else
+		{
+			product.setVerified(statusRequest.getStatus());
+			product.setListingStatus(Boolean.FALSE);
+			product.setVarient(product.getVarient().stream().map(varient -> {
+				 varient.setStatus(Status.DEACTIVE);
+				 return varient;
+			}).collect(Collectors.toList()));
+
+			productRepo.save(product);
+		}
+		response.put(AppConstant.RESPONSE_MESSAGE,
+				AppConstant.STATUS_UPDATE + " " + statusRequest.getStatus());
 		return response;
 	}
 

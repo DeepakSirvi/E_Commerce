@@ -6,8 +6,6 @@ import static com.ecommerce.util.AppConstant.VARIENT;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +16,6 @@ import com.ecommerce.model.Status;
 import com.ecommerce.model.User;
 import com.ecommerce.model.Varient;
 import com.ecommerce.model.WishListProduct;
-import com.ecommerce.payload.VarientResponse;
 import com.ecommerce.repository.UserRepo;
 import com.ecommerce.repository.VarientRepo;
 import com.ecommerce.repository.WishListRepo;
@@ -50,7 +47,6 @@ public class WishListServiceImpl  implements WishListService   {
 		 }
 		 Map<String, Object> response = new HashMap<>(); 
 		 boolean productExists = wishListRepo.existsByVarientIdAndUserId(varientId,appUtils.getUserId());
-		 
 		 if (productExists) {
 		      response.put("response", AppConstant.ALREADY_ADDED);
 				 return response;
@@ -98,6 +94,29 @@ public class WishListServiceImpl  implements WishListService   {
 		 List<WishListProduct> wishListProducts = wishListRepo.findByUserId(user);
 	        return wishListProducts;
 	    }
+
+
+	@Override
+	public Map<String, Object> isVarientExist(String varientId) {
+		 Varient varient = varientRepo.findById(varientId).orElseThrow(() -> new ResourceNotFoundException(VARIENT, ID, varientId));
+		 if(varient.getStatus().equals(Status.DEACTIVE))
+		 {
+			 throw new BadRequestException(AppConstant.VARIENT_INACTIVE);
+		 }
+		 boolean productExists = wishListRepo.existsByVarientIdAndUserId(varientId,appUtils.getUserId());
+		 Map<String, Object> response = new HashMap<>(); 
+		 response.put(AppConstant.IS_PRESENT,productExists);
+		return response;
+	}
+
+
+	@Override
+	public Map<String, Object> dislikeFromWishList(String varientId) {
+		wishListRepo.deleteByVarientIdAndUserId(varientId,appUtils.getUserId());
+		 Map<String, Object> response = new HashMap<>(); 
+		 response.put(AppConstant.RESPONSE_MESSAGE, AppConstant.REMOVE_FROM_WISHLIST);
+		return response;
+	}
 	
 		
 	}

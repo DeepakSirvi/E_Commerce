@@ -60,7 +60,13 @@ public class ProductController {
 	public ResponseEntity<Map<String, Object>> editListingStatusProduct(@RequestBody UpdateStatusBooleanRequest statusRequest){
 		
 		return new ResponseEntity<Map<String, Object>>(productService.updateStatusProduct(statusRequest),HttpStatus.CREATED);
-	}        
+	}    
+	
+	@PatchMapping("/admin/status")
+	public ResponseEntity<Map<String, Object>> updateProductStatus(@RequestBody UpdateStatusRequest statusRequest){
+		
+		return new ResponseEntity<Map<String, Object>>(productService.updateProductStatus(statusRequest),HttpStatus.CREATED);
+	}    
 	
 	@GetMapping("/permitAll/bySubCategory/{subCategoryId}")
 	public ResponseEntity<Map<String, Object>> getAllProductBySubCategory(
