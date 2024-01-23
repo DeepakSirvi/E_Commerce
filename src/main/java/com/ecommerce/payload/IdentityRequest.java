@@ -17,6 +17,7 @@ import lombok.Setter;
 @JsonInclude(Include.NON_NULL)
 public class IdentityRequest {
 
+	private String id;
 	@NotBlank
 	private String idCardName;
 	@NotBlank

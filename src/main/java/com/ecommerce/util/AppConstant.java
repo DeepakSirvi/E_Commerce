@@ -175,4 +175,17 @@ public class AppConstant {
 	public static final Object BRAND_VERIFIED = "brand verfiend";
 	public static final Object BRAND_NOT_VERIFIED = "brand  not verfiend";
 
+	public static final Object BRAND_UnVERIFIED = " brand Unverified the code ";
+
+	public static final String Identity_IMAGE_PATH = "identityImage";
+
+	public static final Object IDENTITY_ADD_SUCCES = " Add identity ";
+
+	public static final String IDENTITY_NOT_ADD_SUCCES = "identity not add ";
+
+	public static final Object WISHLIST_RETRIVED_SUCCESSFULLY = "whishlist_retrieved_successfully";
+
+	public static final Object ALL_VERFIED_BRAND = "verfied brand";
+
+	
 }		

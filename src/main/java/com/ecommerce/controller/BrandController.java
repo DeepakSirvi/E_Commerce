@@ -79,24 +79,22 @@ public class BrandController {
 	    		@RequestParam(value= "sortDir" , required= false , defaultValue= AppConstant.DEFAULT_SORT_DIR) String SortDir ){
 	        return  new  ResponseEntity<Map <String, Object>>(brandService.getAllBrand(page, size, SortDir),HttpStatus.OK);
 	    }
-	/* @GetMapping("/verified/{brandId}")
-	 public ResponseEntity<Map<String, Object>> getAllVerifiedBrandsById(
-			 @PathVariable(value = "brandId")String brandId ,
-			 @RequestParam(value= "pageIndex" , required=false , defaultValue= AppConstant.DEFAULT_PAGE_NUMBER) Integer pageIndex,
-			 @RequestParam(value= "pagesize" , required= false ,defaultValue= AppConstant.DEFAULT_PAGE_SIZE)  Integer pageSize ,
-			 
-			 @RequestParam(value= "sortDir" , required = false , defaultValue= AppConstant.DEFAULT_SORT_DIR)  String SortDir) {
-		 
-		  return  new  ResponseEntity<Map <String, Object>>(brandService.getAllVerfiedBrandById(brandId, pageIndex, pageSize, SortDir),HttpStatus.OK);
-	 }*/
-	 
-	  
+	
 	 @GetMapping("/Verified/{brandId}")
 	 public ResponseEntity<Map<String, Object >> getVerfiedBrandById(@PathVariable String brandId ) {
 		 Map<String, Object> response = brandService.getVerfiedBrandById(brandId);
 	        return ResponseEntity.ok(response);
 	 }
 	 
+	 @GetMapping("/AllVerifiedBrand")
+	 public ResponseEntity<Map<String, Object >>getAllVerfiedBrand ( 
+			 @RequestParam(value="pageIndex"  , required= false , defaultValue= AppConstant.DEFAULT_PAGE_NUMBER) Integer page,
+	    		@RequestParam(value= "pagesize" , required= false , defaultValue= AppConstant.DEFAULT_PAGE_SIZE)   Integer size,
+	    		@RequestParam(value= "sortDir" , required= false , defaultValue= AppConstant.DEFAULT_SORT_DIR) String SortDir ){
+			 
+		  Map<String, Object> response = brandService.getAllVerfiedBrand(page , size, SortDir  );
+	        return ResponseEntity.ok(response);
+	 }
 	 
 	 }
 	   

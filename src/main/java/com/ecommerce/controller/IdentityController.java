@@ -1,5 +1,6 @@
 package com.ecommerce.controller;
 
+import java.security.Principal;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,53 +9,54 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ecommerce.payload.IdentityRequest;
 import com.ecommerce.service.IdentityService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.websocket.server.PathParam;
 
 @RestController
-@RequestMapping("ecommerce/identity")
+@RequestMapping("/ecommerce/identity")
 @CrossOrigin
 public class IdentityController {
 
 	@Autowired
 	private IdentityService identityService;
 	
-	@PostMapping("/")
-	public ResponseEntity<Map<String, Object>> addUserIdentity(@RequestBody IdentityRequest IdentityRequest){
+	 
+	 @PostMapping("/addIdentity")
+	 public ResponseEntity<Map<String, Object>> addIdentityDetails( @RequestPart String  identityRequest, @RequestPart(value="file",required= false) MultipartFile multipartFile) {
 		
-		return new ResponseEntity<Map<String,Object>>(identityService.createIdentity(IdentityRequest),HttpStatus.CREATED);
-	}
+		 ObjectMapper mapper = new ObjectMapper();
+		 IdentityRequest request=null;
+		 try {
+		 request=mapper.readValue(identityRequest, IdentityRequest.class);
+		 }catch(Exception e) 
+		 {
+			 e.printStackTrace();
+		 }
+		 Map<String, Object> response = identityService.addIdentityDetails(request, multipartFile);
+	       
+	        return new ResponseEntity<>(response, HttpStatus.OK);
+	    }
+	 
+	 @PostMapping("/updateStatus/{identityId}")
+	    public ResponseEntity<Map<String, Object>> updateStatusById(@PathVariable String identityId) {
+	        Map<String, Object> response =identityService .updateStatusById(identityId);
+	        return  ResponseEntity.ok(response);
+	    }
+	 
 	
-	@PutMapping("/")
-	public ResponseEntity<Map<String, Object>> updateUserIdentity(@RequestBody IdentityRequest IdentityRequest){
-		
-		return new ResponseEntity<Map<String,Object>>(identityService.updateIdentity(IdentityRequest),HttpStatus.CREATED);
-	}
+	  
 	
-	@GetMapping("/{identityId}")
-	public ResponseEntity<Map<String, Object>> getUserIdentity(@PathParam(value = "identityId") String id){
-		
-		return new ResponseEntity<Map<String,Object>>(identityService.getIdentity(id),HttpStatus.CREATED);
-	}
-	
-	@GetMapping("/allIdentity/{userId}")
-	public ResponseEntity<Map<String, Object>> getAllUserIdentity(@PathParam(value = "userId") String id){
-		
-		return new ResponseEntity<Map<String,Object>>(identityService.getAllIdentityByUserId(id),HttpStatus.CREATED);
-	}
-	
-	@PatchMapping("/{identityId}")
-	public ResponseEntity<Map<String, Object>> updateIdentityStatus(@PathParam(value = "identityId") String id){
-		
-		return new ResponseEntity<Map<String,Object>>(identityService.updateIdentityStatus(id),HttpStatus.CREATED);
-	}
-
-}
+   }

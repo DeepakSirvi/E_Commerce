@@ -12,7 +12,7 @@ public interface WishListService {
 	
 	 public Map<String, Object> removeFromWishList(String wishlistId);  
 	 
-	 public List<WishListProduct> getWishlistByUserId(String userId); 
+	 public Map<String, Object> getWishlistByUserId(String userId); 
 	 
 	
 	 

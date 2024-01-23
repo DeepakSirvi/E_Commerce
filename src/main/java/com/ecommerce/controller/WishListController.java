@@ -1,6 +1,7 @@
 package com.ecommerce.controller;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,34 +25,31 @@ import com.ecommerce.service.WishListService;
 @RequestMapping("ecommerce/wishList")
 @CrossOrigin
 public class WishListController {
-	
-	@Autowired
-	
-	private  WishListService  wishlistService;
-	
-	@PostMapping("/add")
-    public ResponseEntity<Map<String, Object>> addToWishList( @RequestParam String varientId,@RequestParam String userId) {    
-        Map<String, Object> response = wishlistService.addToWishList(varientId, userId);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-	
-	@DeleteMapping("/remove")
-    public ResponseEntity<Map<String, Object>> removeFromWishList( @RequestParam String wishlistId)
-             {
-		Map<String, Object> response = wishlistService.removeFromWishList(wishlistId);
-        return ResponseEntity.ok(response);
-        
-      }
-	
-	/*@GetMapping("/activeVarient/{userId}")
-    public ResponseEntity<Map<String, Object>> getActiveVarientInWishlistByUserId(@PathVariable String userId) {
-        Map<String, Object> response = wishlistService.getActiveVarientInWishlistByUserId(userId);
-        return  new ResponseEntity<>(response, HttpStatus.OK) ;
-    }*/
-	}
-	  
-	
-	
-	
-	
 
+	@Autowired
+
+	private WishListService wishlistService;
+
+	@PostMapping("/add")
+	public ResponseEntity<Map<String, Object>> addToWishList(@RequestParam String varientId,
+			@RequestParam String userId) {
+		Map<String, Object> response = wishlistService.addToWishList(varientId, userId);
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
+	@DeleteMapping("/remove")
+	public ResponseEntity<Map<String, Object>> removeFromWishList(@RequestParam String wishlistId) {
+		Map<String, Object> response = wishlistService.removeFromWishList(wishlistId);
+		return ResponseEntity.ok(response);
+
+	}
+
+	@GetMapping("wishlistProduct/{userId}")
+	public ResponseEntity<Map<String, Object>> getWishlistByUserId(@RequestParam String userId) {
+		Map<String, Object> wishlistByUserId = wishlistService.getWishlistByUserId(userId);
+
+		return ResponseEntity.ok(wishlistByUserId);
+
+	}
+
+}
