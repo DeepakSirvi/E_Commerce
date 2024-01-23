@@ -86,7 +86,11 @@ public class ProductResponse extends AuditResponse {
 		return this;
 	}
 	
-
+/***
+ * 
+ * @param product
+ * @return
+ */
 	  public ProductResponse productToProductResponseList(Product product) {
 		this.setId(product.getId());
 		this.setProductName(product.getProductName());
@@ -100,6 +104,8 @@ public class ProductResponse extends AuditResponse {
 		{
 			this.setProductImage(product.getProductImage());
 		}
+		UserResponse response = new UserResponse();
+		this.setVendor(response.userToUserResponse(product.getVendor()));
 		this.setBasicPrice(product.getBasicPrice());
 		return this;
 	}

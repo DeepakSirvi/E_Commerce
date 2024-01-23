@@ -58,7 +58,7 @@ public class BrandController {
 	 
 	
 	 
-	 @GetMapping("/brands/{userId}")
+	 @GetMapping("/brands/{brandId}")
 	 public ResponseEntity<Map<String, Object>> getBrandById(@PathVariable String brandId) {
 		 Map<String, Object> response = brandService.getBrandById(brandId);
 	        return ResponseEntity.ok(response);
