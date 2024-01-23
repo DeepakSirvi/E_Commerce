@@ -30,19 +30,10 @@ public class WishListController {
 
 	private WishListService wishlistService;
 
-	@PostMapping("/add")
-	public ResponseEntity<Map<String, Object>> addToWishList(@RequestParam String varientId,
-			@RequestParam String userId) {
-		Map<String, Object> response = wishlistService.addToWishList(varientId, userId);
-		return new ResponseEntity<>(response, HttpStatus.OK);
-	}
 
-	@DeleteMapping("/remove")
-	public ResponseEntity<Map<String, Object>> removeFromWishList(@RequestParam String wishlistId) {
-		Map<String, Object> response = wishlistService.removeFromWishList(wishlistId);
-		return ResponseEntity.ok(response);
 
-	}
+
+
 
 	@GetMapping("wishlistProduct/{userId}")
 	public ResponseEntity<Map<String, Object>> getWishlistByUserId(@RequestParam String userId) {
@@ -51,5 +42,38 @@ public class WishListController {
 		return ResponseEntity.ok(wishlistByUserId);
 
 	}
+	@PostMapping("/add")
+    public ResponseEntity<Map<String, Object>> addToWishList(@RequestParam String varientId) { 
+        Map<String, Object> response = wishlistService.addToWishList(varientId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+	
+	@DeleteMapping("/remove")
+    public ResponseEntity<Map<String, Object>> removeFromWishList(@RequestParam String wishlistId)
+             {
+		Map<String, Object> response = wishlistService.removeFromWishList(wishlistId);
+        return ResponseEntity.ok(response);
+        
+      }
+	
+	
+	@DeleteMapping("/dislike")
+    public ResponseEntity<Map<String, Object>> dislikeFromWishList(@RequestParam String varientId)
+             {
+		Map<String, Object> response = wishlistService.dislikeFromWishList(varientId);
+        return ResponseEntity.ok(response);
+        
+      }
+	
+
+	
+	@GetMapping
+	public ResponseEntity<Map<String, Object>> isVarientExist(@RequestParam String varientId) { 
+        Map<String, Object> response = wishlistService.isVarientExist(varientId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+}	
+	
+
 
 }

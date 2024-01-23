@@ -2,11 +2,9 @@ package com.ecommerce.service;
 
 import java.util.Map;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ecommerce.model.Status;
-import com.ecommerce.payload.ApiResponse;
 import com.ecommerce.payload.PageResponse;
 import com.ecommerce.payload.ProductRequest;
 import com.ecommerce.payload.ProductResponse;
@@ -26,12 +24,17 @@ public interface ProductService {
 	public Map<String, Object> getAllProduct(String search, Integer pageIndex, Integer pageSize,
 			String sortDir);
 
-	public Map<String, Object> getProductListBasedOnStatus(String search, Integer pageIndex, Integer pageSize, String sortDir);
+	public Map<String, Object> getActiveProductList(String search, Integer pageIndex, Integer pageSize, String sortDir);
 
 	public Map<String, Object> updateStatusProduct(UpdateStatusBooleanRequest statusRequest);
 
 	public Map<String, Object> getProductByCategory(String id, Integer pageIndex, Integer pageSize,
 			String sortDir);
+
+	public Map<String, Object> getAllProductFilter(String catId, String date, Status status, Boolean listingStatus,
+			int pageIndex, int pageSize, String sortDir);
+
+	public Map<String, Object> updateProductStatus(UpdateStatusRequest statusRequest);
 
 	
 	

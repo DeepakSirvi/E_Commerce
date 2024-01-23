@@ -11,4 +11,6 @@ public interface SubCategoryRepo extends JpaRepository<SubCategory, String> {
 
 	public SubCategory findByIdAndCategory(String id, Category category);
 
+	public SubCategory findBySubCategory(String subCategory);
+
 }

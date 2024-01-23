@@ -1,14 +1,12 @@
 package com.ecommerce.model;
 
 import java.util.List;
-import java.util.Set;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -53,7 +51,7 @@ public class Product extends Audit {
 	private User vendor;
 
 	@ManyToOne
-	private SubCategory subCategory;
+	private SubCategory subCategory = new SubCategory();
 
 	private String productImage;
 

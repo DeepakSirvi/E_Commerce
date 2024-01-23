@@ -8,11 +8,17 @@ import com.ecommerce.model.WishListProduct;
 
 public interface WishListService {
 	
-	 public  Map<String, Object> addToWishList(String variantId, String userId); 
+	 public  Map<String, Object> addToWishList(String variantId); 
 	
 	 public Map<String, Object> removeFromWishList(String wishlistId);  
 	 
-	 public Map<String, Object> getWishlistByUserId(String userId); 
+
+	 public List<WishListProduct> getWishlistByUserId(String userId);
+
+	public Map<String, Object> isVarientExist(String varientId);
+
+	public Map<String, Object> dislikeFromWishList(String varientId); 
+
 	 
 	
 	 
