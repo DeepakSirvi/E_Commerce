@@ -1,5 +1,5 @@
 package com.ecommerce.service;
 
-public interface ProductDescriptionService {
+public interface ProductDescriptionService  {
 
 }

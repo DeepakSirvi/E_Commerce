@@ -2,6 +2,7 @@ package com.ecommerce.service.impl;
 
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ecommerce.exception.ResourceNotFoundException;
-
 import com.ecommerce.model.Brand;
 import com.ecommerce.model.Status;
 import com.ecommerce.model.User;
@@ -92,7 +92,7 @@ public class BrandServiceImpl  implements BrandService{
 		        
 		 } else {
 	           
-	           // response.put("error", "Brand not found for id: " + brandId);
+	           
 	            throw new ResourceNotFoundException(BRAND , ID , brandId);
 	        }
 		
@@ -173,10 +173,7 @@ public class BrandServiceImpl  implements BrandService{
 		
 		Map<String, Object> response = new HashMap<>();
 		
-//		if (brandId == null || brandId.isEmpty()) {
-//            response.put("response", AppConstant.INVALID_BRAND);
-//            return response;
-//		}
+
 		Optional<Brand> optionalBrand = brandRepo.findById(brandId);
 		
 		if (!optionalBrand.isPresent()) {
@@ -193,6 +190,38 @@ public class BrandServiceImpl  implements BrandService{
 		 
 		return response ;
 	}
+	@SuppressWarnings("unchecked")
+	@Override
+	public Map<String, Object> getAllVerfiedBrand(Integer pageIndex, Integer pagesize, String sortDir) {
+		Map<String, Object> response = new HashMap<>();
+		AppUtils.validatePageAndSize(pageIndex, pagesize);
+		Sort sort1 = null;
+		if (sortDir.equals("DESC")) {
+			sort1 = Sort.by(Sort.Order.desc("updatedAt"));
+		} else {
+			sort1 = Sort.by(Sort.Order.asc("updatedAt"));
+		}
+		Pageable pageable = PageRequest.of(pageIndex, pagesize,sort1);
+		 Page<Brand> findAllVerfiedBrand = brandRepo.findAllVerfiedBrand(pageable);
+		 response.put("response",findAllVerfiedBrand.getContent().stream().map(obj->brandFilter(obj)).collect(Collectors.toList()));
+		 
+		 response.put(AppConstant.MESSAGE,AppConstant.ALL_VERFIED_BRAND);
+		
+		
+		return response;
+	}
+	
+ public BrandResponse brandFilter(Brand obj){
+	 BrandResponse  brandResponse = new  BrandResponse();
+	    brandResponse.setId(obj.getId());
+	    brandResponse.setBrandDescription(obj.getBrandDescription());
+	    brandResponse.setBrandImage(obj.getBrandImage());
+	    brandResponse.setBrandName(obj.getBrandName());
+	    return brandResponse;
+//	    
+	    
+ }
+	
 
 }	
 	

@@ -24,14 +24,18 @@ import com.ecommerce.util.AppConstant;
 import com.ecommerce.util.AppUtils;
 
 @Service
-public class WishListServiceImpl  implements WishListService   {
-	
+
+public class WishListServiceImpl implements WishListService {
+
+	private static final String ID = null;
+
+
 	@Autowired
-	private WishListRepo wishListRepo ;
-	 
+	private WishListRepo wishListRepo;
+
 	@Autowired
-	private AppUtils  appUtils;
-	
+	private AppUtils appUtils;
+
 	@Autowired
 	private UserRepo userRepo;
 	
@@ -39,6 +43,8 @@ public class WishListServiceImpl  implements WishListService   {
 	private VarientRepo varientRepo;
 
 	@Override
+
+
 	public Map<String, Object> addToWishList(String varientId) {
 		 Varient varient = varientRepo.findById(varientId).orElseThrow(() -> new ResourceNotFoundException(VARIENT, ID, varientId));
 		 if(varient.getStatus().equals(Status.DEACTIVE))
@@ -62,11 +68,12 @@ public class WishListServiceImpl  implements WishListService   {
 		 response.put("response", AppConstant.ADDWISHLIST);
 		 return response;
 	}
+
 	}
 
-	
 	@Override
 	public Map<String, Object> removeFromWishList(String wishlistId) {
+
 		
 		Map<String ,Object> response = new HashMap<>();
 		
@@ -83,7 +90,6 @@ public class WishListServiceImpl  implements WishListService   {
 
     return response;
 }
-
 
 	@Override
 	public List<WishListProduct> getWishlistByUserId(String userId) {
@@ -120,25 +126,31 @@ public class WishListServiceImpl  implements WishListService   {
 	
 		
 	}
+
+			response.put("response", AppConstant.REMOVE_FROM_WISHLIST);
+
+		} else {
+
+			throw new ResourceNotFoundException(AppConstant.WISHLIST, ID, wishlistId);
+		}
+
+		return response;
+	}
+
+	@Override
+	public Map<String, Object> getWishlistByUserId(String userId) {
+
+		User user = userRepo.findById(userId)
+				.orElseThrow(() -> new ResourceNotFoundException(AppConstant.USER, ID, userId));
+
+		List<WishListProduct> wishListProducts = wishListRepo.findByUserId(user);
+		Map<String, Object> response = new HashMap<>();
+		response.put("message", wishListProducts);
+		
+		response.put("respo",AppConstant.WISHLIST_RETRIVED_SUCCESSFULLY);
 		
 
-               
-	
-	
+		return response;
+	}
 
-
-	
-
-	         
-	
-		
-	      
-		
-		
-	
-
-	
-	
-
-	
-
+}

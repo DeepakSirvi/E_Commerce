@@ -75,8 +75,8 @@ public class User {
 	@OneToMany(mappedBy="userAddress")
 	private List<Address> userAddress = new ArrayList<>();
 	
-	@OneToOne(mappedBy = "user")
-	private Identity userIdentity;
+	@OneToMany(mappedBy = "user")
+	private List <Identity> user= new ArrayList<>();
 	
 	@OneToMany(mappedBy = "user")
 	private List<Account> accountId = new ArrayList<>();

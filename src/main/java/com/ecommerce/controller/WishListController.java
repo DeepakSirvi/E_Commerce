@@ -1,6 +1,7 @@
 package com.ecommerce.controller;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,11 +25,23 @@ import com.ecommerce.service.WishListService;
 @RequestMapping("ecommerce/wishList")
 @CrossOrigin
 public class WishListController {
-	
+
 	@Autowired
-	
-	private  WishListService  wishlistService;
-	
+
+	private WishListService wishlistService;
+
+
+
+
+
+
+	@GetMapping("wishlistProduct/{userId}")
+	public ResponseEntity<Map<String, Object>> getWishlistByUserId(@RequestParam String userId) {
+		Map<String, Object> wishlistByUserId = wishlistService.getWishlistByUserId(userId);
+
+		return ResponseEntity.ok(wishlistByUserId);
+
+	}
 	@PostMapping("/add")
     public ResponseEntity<Map<String, Object>> addToWishList(@RequestParam String varientId) { 
         Map<String, Object> response = wishlistService.addToWishList(varientId);
@@ -52,19 +65,15 @@ public class WishListController {
         
       }
 	
-//	@GetMapping("/activeVarient/{userId}")
-//    public ResponseEntity<Map<String, Object>> getActiveVarientInWishlistByUserId(@PathVariable String userId) {
-//        Map<String, Object> response = wishlistService.getActiveVarientInWishlistByUserId(userId);
-//        return  new ResponseEntity<>(response, HttpStatus.OK) ;
-//    }
+
 	
 	@GetMapping
 	public ResponseEntity<Map<String, Object>> isVarientExist(@RequestParam String varientId) { 
         Map<String, Object> response = wishlistService.isVarientExist(varientId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-	  
-	
 }	
 	
 
+
+}
