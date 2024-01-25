@@ -75,10 +75,10 @@ public class ProductSaveForLaterImpl implements ProductSaveForLaterService {
 	}
 
 	@Override
-	public Map<String, Object> getAllSaveForLaterByUserId(String uid) {
+	public Map<String, Object> getAllSaveForLaterByUserId() {
 		// TODO Auto-generated method stub
 		Map<String , Object> responce =new HashMap<>();
-		 List<ProductSaveForLater> forLaters= laterRepo.findByUserId(uid);
+		 List<ProductSaveForLater> forLaters= laterRepo.findByUserId(appUtils.getUserId());
 		 //System.out.println(forLaters);
 		 List<ProductSaveForLaterResponse> forLaterResponses= forLaters.stream().map(savedLaterProduct -> {
 			 ProductSaveForLaterResponse laterResponse=new ProductSaveForLaterResponse();

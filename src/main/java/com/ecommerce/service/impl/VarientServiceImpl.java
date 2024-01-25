@@ -25,6 +25,7 @@ import com.ecommerce.exception.ResourceNotFoundException;
 import com.ecommerce.exception.UnauthorizedException;
 import com.ecommerce.model.Product;
 import com.ecommerce.model.ProductImage;
+import com.ecommerce.model.ProductSaveForLater;
 import com.ecommerce.model.Role;
 import com.ecommerce.model.RoleName;
 import com.ecommerce.model.Status;
@@ -34,9 +35,15 @@ import com.ecommerce.payload.ApiResponse;
 import com.ecommerce.payload.UpdateStatusRequest;
 import com.ecommerce.payload.VarientRequest;
 import com.ecommerce.payload.VarientResponse;
+import com.ecommerce.repository.CartRepo;
+import com.ecommerce.repository.ProductRepo;
+import com.ecommerce.repository.ProductSaveLaterRepo;
 import com.ecommerce.repository.UserRoleRepo;
 import com.ecommerce.repository.VarientCategoryJoinRepo;
 import com.ecommerce.repository.VarientRepo;
+import com.ecommerce.repository.WishListRepo;
+import com.ecommerce.service.ProductSaveForLaterService;
+import com.ecommerce.service.ProductService;
 import com.ecommerce.service.VarientService;
 import com.ecommerce.util.AppConstant;
 import com.ecommerce.util.AppUtils;
@@ -59,6 +66,20 @@ public class VarientServiceImpl implements VarientService {
 
 	@Autowired
 	private VarientCategoryJoinRepo joinRepo;
+	
+	@Autowired
+	private ProductSaveLaterRepo saveLaterRepo;
+	
+	@Autowired
+	private CartRepo cartRepo;
+	
+	@Autowired
+	private WishListRepo wishListRepo;
+	
+	@Autowired
+	private ProductRepo productRepo;
+	
+	
 
 //	To add varient
 	@Override
@@ -96,6 +117,15 @@ public class VarientServiceImpl implements VarientService {
 
 		if (userRepo.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleNameIdConstant.ADMIN))
 				|| varient.getCreatedBy().equals(appUtils.getUserId())) {
+			if(statusRequest.getStatus().equals(Status.DEACTIVE))
+			{
+				saveLaterRepo.deleteByVarient(varient);
+				cartRepo.deleteByVarient(varient);
+				wishListRepo.deleteByVarient(varient);	 
+				varient.getProduct().setListingStatus(Boolean.FALSE);
+				productRepo.save(varient.getProduct());
+			}
+			
 			if (varient.getProduct().getVerified().equals(Status.VERIFIED)) {
 				varient.setStatus(statusRequest.getStatus());
 				varientRepo.save(varient);

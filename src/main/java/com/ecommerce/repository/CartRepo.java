@@ -13,6 +13,8 @@ import com.ecommerce.model.Product;
 import com.ecommerce.model.User;
 import com.ecommerce.model.Varient;
 
+import jakarta.transaction.Transactional;
+
 public interface CartRepo extends JpaRepository<Cart, String> {
 
 	public Optional<Cart> findByUserAndVarient(User user, Varient varient);
@@ -23,5 +25,8 @@ public interface CartRepo extends JpaRepository<Cart, String> {
 			+ "SELECT 'wishlist' as wishlist, COUNT(*) as count FROM wish_list_product  WHERE user_id = :userId "
 			, nativeQuery = true)
 	public List<Object> fetchCountofWishAndCartItem(@Param("userId") String userId);
+
+	@Transactional
+	public Integer deleteByVarient(Varient varient);
 
 }
