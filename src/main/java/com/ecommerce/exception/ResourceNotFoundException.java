@@ -19,7 +19,6 @@ public class ResourceNotFoundException extends RuntimeException {
 	
 	private ExceptionResponse exceptionResponse;
 	
-	
 	public ResourceNotFoundException(String message)
 	{
 		exceptionResponse=new ExceptionResponse();

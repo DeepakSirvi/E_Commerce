@@ -41,7 +41,7 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(ResourceNotFoundException.class)
 	public ResponseEntity<ExceptionResponse> resolveException(ResourceNotFoundException exception) {
 		ExceptionResponse exceptionResponse = exception.getExceptionResponse();
-		return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
 	}
 	
 	@ExceptionHandler(UnauthorizedException.class)

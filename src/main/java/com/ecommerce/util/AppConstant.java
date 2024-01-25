@@ -180,16 +180,13 @@ public class AppConstant {
 
 	public static final String Count = "count";
 
-	public static final String ALREADY_ADDED = "Product is already present in wishlist";
+	public static final String ALREADY_ADDED = "Product is already added";
 
 	public static final String VARIENT_INACTIVE = "Varient is Inactive";
 
 	public static final String INVALID_TRANSITION = "Invalid status transition";
 
 	public static final String IS_PRESENT = "isPresent";
-
-
-
 
 	public static final Object BRAND_UnVERIFIED = " brand Unverified the code ";
 
