@@ -156,6 +156,8 @@ public class AppConstant {
 	public static final String PRODUCTSAVEFORLATER_NOT_FOUND = "SaveForLater Not Found";
 	public static final String DELETE_SUCCESS = "Delete Succesfully";
 
+	public static final String MESSAGE1 = "Message";
+
 	//public static final Object PRODUCT_SAVE_FOR_LATER = "";
 
 	
