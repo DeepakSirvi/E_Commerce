@@ -19,6 +19,8 @@ public interface ProductSaveLaterRepo extends JpaRepository<ProductSaveForLater 
 
 		boolean deleteById(ProductSaveForLater product);
 
+		boolean existsByUserIdAndVarientId(String userId, String vid);
+
 	
 
 		

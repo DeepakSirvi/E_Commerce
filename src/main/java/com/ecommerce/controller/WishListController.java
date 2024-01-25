@@ -1,6 +1,7 @@
 package com.ecommerce.controller;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,34 +25,43 @@ import com.ecommerce.service.WishListService;
 @RequestMapping("ecommerce/wishList")
 @CrossOrigin
 public class WishListController {
-	
+
 	@Autowired
-	
-	private  WishListService  wishlistService;
-	
+
+	private WishListService wishlistService;
+
+	@GetMapping("/all")
+	public ResponseEntity<Map<String, Object>> getWishlistByUserId() {
+		Map<String, Object> wishlistByUserId = wishlistService.getWishlistByUserId();
+		return ResponseEntity.ok(wishlistByUserId);
+
+	}
 	@PostMapping("/add")
-    public ResponseEntity<Map<String, Object>> addToWishList( @RequestParam String varientId,@RequestParam String userId) {    
-        Map<String, Object> response = wishlistService.addToWishList(varientId, userId);
+    public ResponseEntity<Map<String, Object>> addToWishList(@RequestParam String varientId) { 
+        Map<String, Object> response = wishlistService.addToWishList(varientId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 	
 	@DeleteMapping("/remove")
-    public ResponseEntity<Map<String, Object>> removeFromWishList( @RequestParam String varientId,@RequestParam String userId)
+    public ResponseEntity<Map<String, Object>> removeFromWishList(@RequestParam String wishlistId)
              {
-		Map<String, Object> response = wishlistService.removeFromWishList(varientId, userId);
+		Map<String, Object> response = wishlistService.removeFromWishList(wishlistId);
         return ResponseEntity.ok(response);
         
       }
 	
-	@GetMapping("/activeVarient/{userId}")
-    public ResponseEntity<Map<String, Object>> getActiveVarientInWishlistByUserId(@PathVariable String userId) {
-        Map<String, Object> response = wishlistService.getActiveVarientInWishlistByUserId(userId);
-        return  new ResponseEntity<>(response, HttpStatus.OK) ;
+	@DeleteMapping("/dislike")
+    public ResponseEntity<Map<String, Object>> dislikeFromWishList(@RequestParam String varientId)
+             {
+		Map<String, Object> response = wishlistService.dislikeFromWishList(varientId);
+        return ResponseEntity.ok(response);
+        
+      }
+	
+	@GetMapping
+	public ResponseEntity<Map<String, Object>> isVarientExist(@RequestParam String varientId) { 
+        Map<String, Object> response = wishlistService.isVarientExist(varientId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
-	}
-	  
+}	
 	
-	
-	
-	
-

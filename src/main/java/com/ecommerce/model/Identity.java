@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,8 +19,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Identity extends Audit{
-	
+public class Identity extends Audit {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private String id;
@@ -28,14 +29,12 @@ public class Identity extends Audit{
 	private String idCardNumber;
 	private String description;
 	private String image;
-	
+
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
 	private Status status;
-	
+
 	@ManyToOne
 	private User user;
-	
-	
 
 }

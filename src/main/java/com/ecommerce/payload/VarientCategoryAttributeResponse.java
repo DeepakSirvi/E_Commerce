@@ -1,6 +1,8 @@
 package com.ecommerce.payload;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -25,7 +27,7 @@ public class VarientCategoryAttributeResponse {
 	private String id;
 	private String attributeName;
 	private VarientCategoryReponse varientCategory;
-	private Set<VarientCategoryJoinResonse> categoryJoins = new HashSet<>();
+	private List<VarientCategoryJoinResonse> categoryJoins = new ArrayList<>();
 	
 
     @Override

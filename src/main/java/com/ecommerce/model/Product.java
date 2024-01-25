@@ -1,13 +1,12 @@
 package com.ecommerce.model;
 
-import java.util.Set;
+import java.util.List;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -52,7 +51,7 @@ public class Product extends Audit {
 	private User vendor;
 
 	@ManyToOne
-	private SubCategory subCategory;
+	private SubCategory subCategory = new SubCategory();
 
 	private String productImage;
 
@@ -63,19 +62,19 @@ public class Product extends Audit {
 	private ProductDescription description;
 
 	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-	private Set<Varient> varient;
+	private List<Varient> varient;
 
 	@OneToMany(mappedBy = "product")
-	private Set<ProductReview> productReview;
+	private List<ProductReview> productReview;
 
 	@OneToMany(mappedBy = "product")
-	private Set<Complaint> complaint;
+	private List<Complaint> complaint;
 
 	@OneToMany(mappedBy = "product")
-	private Set<ProductFAQ> faq;
+	private List<ProductFAQ> faq;
 
 	@OneToMany(mappedBy = "product")
-	private Set<OrderItem> orderItem;
+	private List<OrderItem> orderItem;
 
 	public Product(String id) {
 		this.id = id;

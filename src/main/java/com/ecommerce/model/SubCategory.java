@@ -1,6 +1,6 @@
 package com.ecommerce.model;
 
-import java.util.Set;
+import java.util.List;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -32,10 +32,10 @@ public class SubCategory extends Audit {
 	private String subCategory;
 	
 	@ManyToOne
-	private Category category;
+	private Category category = new Category();
 
 	
 	@OneToMany(mappedBy = "subCategory")
-	private Set<Product> product;
+	private List<Product> product;
 	
 }

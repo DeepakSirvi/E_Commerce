@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -58,52 +59,22 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Autowired
 	private ModelMapper modelMapper;
-	
+
 	@Autowired
 	private UserRoleRepo userRoleRepo;
 
-	@Override
-	public ApiResponse addCategory(CategoryRequest categoryRequest) {
-		if (categoryRepo.existsByCategoryName(categoryRequest.getCategoryName())) {
-			throw new BadRequestException(AppConstant.CATEGORY_TAKEN);
-		}
-		Category category = modelMapper.map(categoryRequest, Category.class);
-		category.setUser(new User(appUtils.getUserId()));
-		categoryRepo.save(category);
-		ApiResponse apiResponse = new ApiResponse(Boolean.TRUE, AppConstant.CATEGORY_ADDED, HttpStatus.CREATED);
-		return apiResponse;
-	}
+	
 
 	@Override
 	public ApiResponse addSubCategory(SubCategoryRequest subCategoryRequest) {
-
+               System.out.println("Deepak" + subCategoryRequest.getSubCategory() +" "+ subCategoryRequest.getCategory().getId());
 		if (subCategoryRepo.existsBySubCategoryAndCategory(subCategoryRequest.getSubCategory(),
 				new Category(subCategoryRequest.getCategory().getId()))) {
 			throw new BadRequestException(AppConstant.SUBCATEGORY_TAKEN);
 		}
 		SubCategory subCategory = modelMapper.map(subCategoryRequest, SubCategory.class);
 		subCategoryRepo.save(subCategory);
-
 		return new ApiResponse(Boolean.TRUE, AppConstant.SUBCATEGORY_ADDED, HttpStatus.CREATED);
-	}
-
-	@Override
-	public CategoryResponse getCategoryById(String id) {
-		Category category = categoryRepo.findById(id)
-				.orElseThrow(() -> new BadRequestException(AppConstant.CATEGORY_NOT_FOUND));
-		CategoryResponse categoryResponse = new CategoryResponse();
-		categoryResponse.setId(id);
-		categoryResponse.setCategoryName(category.getCategoryName());
-		categoryResponse.setUser(new UserResponse(category.getUser().getId()));
-		Set<SubCategoryResponse>subCategoryResponses = new LinkedHashSet<>();
-		category.getSubCategory().stream().forEach(obj->{
-			SubCategoryResponse res =new SubCategoryResponse();
-			res.setId(obj.getId());
-			res.setSubCategory(obj.getSubCategory());
-			subCategoryResponses.add(res);
-		});
-		categoryResponse.setSubCategory(subCategoryResponses);
-		return categoryResponse;
 	}
 
 	private CategoryResponse categoryToCategoryResponse(Category category) {
@@ -111,19 +82,16 @@ public class CategoryServiceImpl implements CategoryService {
 		CategoryResponse categoryResponse = new CategoryResponse();
 		categoryResponse.setId(category.getId());
 		categoryResponse.setCategoryName(category.getCategoryName());
-		Set<SubCategory> subCategories = category.getSubCategory();
-		Set<SubCategoryResponse> collect = subCategories.stream()
-				.map(subCat -> {
-				return new SubCategoryResponse().subCategoryToSubCategoryResponse(subCat);
-					}).collect(Collectors.toSet());
+		List<SubCategory> subCategories = category.getSubCategory();
+		List<SubCategoryResponse> collect = subCategories.stream().map(subCat -> {
+			return new SubCategoryResponse().subCategoryToSubCategoryResponse(subCat);
+		}).collect(Collectors.toList());
 		categoryResponse.setSubCategory(collect);
 
 		UserResponse user = new UserResponse(category.getUser().getId());
 		categoryResponse.setUser(user);
 		return categoryResponse;
 	}
-
-
 
 	@Override
 	public SubCategoryResponse getSubCategoryById(String id) {
@@ -133,58 +101,6 @@ public class CategoryServiceImpl implements CategoryService {
 		response.subCategoryToSubCategoryResponse(subCategory);
 		return response;
 	}
-
-	@Override
-	public ApiResponse deleteCategoryById(String id) {
-		Category category = categoryRepo.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException(CATEGORY,ID,id));
-		if (category.getSubCategory().size() != 0)
-			throw new BadRequestException(AppConstant.DELETE_SUBCATEGORY);
-		
-		if(category.getCreatedBy().equals(appUtils.getUserId())
-				|| userRoleRepo.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleNameIdConstant.ADMIN))) {
-		categoryRepo.deleteById(id);
-		return new ApiResponse(Boolean.TRUE, AppConstant.CATEGORY_DELETED, HttpStatus.OK);
-		}
-		throw new UnauthorizedException(UNAUTHORIZED);
-	}
-
-	@Override
-	public ApiResponse deleteSubCategoryById(String id) {
-		SubCategory subCategory = subCategoryRepo.findById(id)
-				.orElseThrow(() -> new BadRequestException(AppConstant.SUB_CATEGORY_NOT_FOUND));
-		if (subCategory.getProduct().size() != 0)
-			throw new BadRequestException(AppConstant.DELETE_PRODUCT);
-		if(subCategory.getCreatedBy().equals(appUtils.getUserId())
-				|| userRoleRepo.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleNameIdConstant.ADMIN))) {
-		subCategoryRepo.deleteById(id);
-		return new ApiResponse(Boolean.TRUE, AppConstant.SUBCATEGORY_DELETED, HttpStatus.OK);
-		}
-		throw new UnauthorizedException(UNAUTHORIZED);
-	}
-
-	@Override
-	public ApiResponse updateCategory(Category categoryRequest) {
-		Category category = categoryRepo.findById(categoryRequest.getId())
-				.orElseThrow(() -> new BadRequestException(AppConstant.CATEGORY_NOT_FOUND));
-
-		if (categoryRepo.existsByCategoryNameAndIdNot(categoryRequest.getCategoryName(), categoryRequest.getId())) {
-			throw new BadRequestException(AppConstant.CATEGORY_TAKEN);
-		}
-//		Set<SubCategory>res = new LinkedHashSet<>();
-//		categoryRequest.getSubCategory().forEach(obj->{
-//			if(obj.getId()==null || obj.getId()=="") {
-//				res.add(subCategoryRepo.save(obj));
-//			}else {
-//				res.add(obj);
-//			}
-//		});
-		category.setCategoryName(categoryRequest.getCategoryName());
-		category.setSubCategory(categoryRequest.getSubCategory());
-		categoryRepo.save(category);
-		return new ApiResponse(Boolean.TRUE, AppConstant.CATEGORY_UPDATED, HttpStatus.OK);
-	}
-	
 
 	@Override
 	public ApiResponse updateSubCategory(SubCategoryRequest subCategoryRequest) {
@@ -199,30 +115,84 @@ public class CategoryServiceImpl implements CategoryService {
 		return new ApiResponse(Boolean.TRUE, AppConstant.SUBCATEGORY_UPDATED, HttpStatus.OK);
 	}
 
+	
+//	----------------------------------------------------------------
+	
 	@Override
-	public Map<String, Object> getCategory(String search,Integer page, Integer size, String sortDirection) {
+	public ApiResponse addCategory(CategoryRequest categoryRequest) {
+		if (categoryRepo.existsByCategoryName(categoryRequest.getCategoryName())) {
+			throw new BadRequestException(AppConstant.CATEGORY_TAKEN);
+		}
+		Category category = modelMapper.map(categoryRequest, Category.class);
+		category.setUser(new User(appUtils.getUserId()));
+		categoryRepo.save(category);
+		ApiResponse apiResponse = new ApiResponse(Boolean.TRUE, AppConstant.CATEGORY_ADDED, HttpStatus.CREATED);
+		return apiResponse;
+	}
+
+	@Override
+	public ApiResponse deleteCategoryById(String id) {
+		Category category = categoryRepo.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException(CATEGORY, ID, id));
+		if (category.getSubCategory().size() != 0)
+			throw new BadRequestException(AppConstant.DELETE_SUBCATEGORY);
+
+		if (category.getCreatedBy().equals(appUtils.getUserId()) || userRoleRepo
+				.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleNameIdConstant.ADMIN))) {
+			categoryRepo.deleteById(id);
+			return new ApiResponse(Boolean.TRUE, AppConstant.CATEGORY_DELETED, HttpStatus.OK);
+		}
+		throw new UnauthorizedException(UNAUTHORIZED);
+	}
+	
+	@Override
+	public ApiResponse deleteSubCategoryById(String id) {
+		SubCategory subCategory = subCategoryRepo.findById(id)
+				.orElseThrow(() -> new BadRequestException(AppConstant.SUB_CATEGORY_NOT_FOUND));
+		if (subCategory.getProduct().size() != 0)
+			throw new BadRequestException(AppConstant.DELETE_PRODUCT);
+		if (subCategory.getCreatedBy().equals(appUtils.getUserId()) || userRoleRepo
+				.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleNameIdConstant.ADMIN))) {
+			subCategoryRepo.deleteById(id);
+			return new ApiResponse(Boolean.TRUE, AppConstant.SUBCATEGORY_DELETED, HttpStatus.OK);
+		}
+		throw new UnauthorizedException(UNAUTHORIZED);
+	}
+	
+	@Override
+	public Map<String, Object> getAllCategory() {
+		Map<String, Object> response = new HashMap<>();
+		Sort sort = Sort.by(Sort.Order.asc("categoryName"));
+		List<Category> findAll = categoryRepo.findAll(sort);
+		List<CategoryResponse> category = findAll.stream().map(categoryRe -> categoryToCategoryResponse(categoryRe))
+				.collect(Collectors.toList());
+		response.put("AllCategory", category);
+		return response;
+	}
+
+	@Override
+	public Map<String, Object> getCategory(String search, Integer page, Integer size, String sortDirection) {
 		Map<String, Object> response = new HashMap<>();
 		AppUtils.validatePageAndSize(page, size);
-		
+
 		Sort sort1 = null;
 		if (sortDirection.equals("DESC")) {
 			sort1 = Sort.by(Sort.Order.desc("updatedAt"));
 		} else {
 			sort1 = Sort.by(Sort.Order.asc("updatedAt"));
 		}
-		Pageable pageable = PageRequest.of(page, size,sort1);
-		Page<Category> findAll=null;
-		 search = search.trim();
-		if(!search.equals("")) {
+		Pageable pageable = PageRequest.of(page, size, sort1);
+		Page<Category> findAll = null;
+		search = search.trim();
+		if (!search.equals("")) {
 			System.out.println(search);
-		 findAll = categoryRepo.getAllCategorySearch(search,pageable);
+			findAll = categoryRepo.getAllCategorySearch(search, pageable);
+			System.out.println(findAll);
+		} else {
+			findAll = categoryRepo.findAll(pageable);
 		}
-		else
-		{
-		findAll= categoryRepo.findAll(pageable);
-		}
-		Set<CategoryResponse> category = findAll.stream().map(categoryRe -> categoryToCategoryResponse(categoryRe))
-				.collect(Collectors.toSet());
+		List<CategoryResponse> category = findAll.stream().map(categoryRe -> categoryToCategoryResponse(categoryRe))
+				.collect(Collectors.toList());
 		PageResponse<CategoryResponse> pageResponse = new PageResponse<>();
 		pageResponse.setContent(category);
 		pageResponse.setSize(size);
@@ -236,14 +206,52 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
-	public Map<String, Object> getAllCategory() {
-		Map<String, Object> response = new HashMap<>();
-		Sort sort = Sort.by(Sort.Order.asc("categoryName"));
-		List<Category> findAll = categoryRepo.findAll(sort);	
-		Set<CategoryResponse> category = findAll.stream().map(categoryRe -> categoryToCategoryResponse(categoryRe))
-				.collect(Collectors.toSet());
-		response.put("AllCategory", category);
-		return response;
+	public ApiResponse updateCategory(Category categoryRequest) {
+		Category category = categoryRepo.findById(categoryRequest.getId())
+				.orElseThrow(() -> new BadRequestException(AppConstant.CATEGORY_NOT_FOUND));
+
+		if (categoryRepo.existsByCategoryNameAndIdNot(categoryRequest.getCategoryName(), categoryRequest.getId())) {
+			throw new BadRequestException(AppConstant.CATEGORY_TAKEN);
+		}
+		
+		List<SubCategory> subCata =categoryRequest.getSubCategory().stream().map(subCat -> {
+			if(Objects.isNull(subCat.getId()) || subCat.getId().equals("")){
+			 SubCategoryRequest subCategoryRequest = new SubCategoryRequest();
+			 subCategoryRequest.setSubCategory(subCat.getSubCategory());
+			 CategoryRequest categoryReq = new CategoryRequest();
+			 categoryReq.setId(categoryRequest.getId());
+			 subCategoryRequest.setCategory(categoryReq);
+			 addSubCategory(subCategoryRequest);
+			 return subCategoryRepo.findBySubCategory(subCat.getSubCategory());
+		}else
+		{
+			return subCat;
+		}
+		})
+		.collect(Collectors.toList());	
+		category = categoryRepo.findById(categoryRequest.getId()).get();
+		category.setCategoryName(categoryRequest.getCategoryName());
+		category.setSubCategory(subCata);
+		categoryRepo.save(category);
+		return new ApiResponse(Boolean.TRUE, AppConstant.CATEGORY_UPDATED, HttpStatus.OK);
 	}
 
+	@Override
+	public CategoryResponse getCategoryById(String id) {
+		Category category = categoryRepo.findById(id)
+				.orElseThrow(() -> new BadRequestException(AppConstant.CATEGORY_NOT_FOUND));
+		CategoryResponse categoryResponse = new CategoryResponse();
+		categoryResponse.setId(id);
+		categoryResponse.setCategoryName(category.getCategoryName());
+		categoryResponse.setUser(new UserResponse(category.getUser().getId()));
+		List<SubCategoryResponse> subCategoryResponses = new ArrayList<>();
+		category.getSubCategory().stream().forEach(obj -> {
+			SubCategoryResponse res = new SubCategoryResponse();
+			res.setId(obj.getId());
+			res.setSubCategory(obj.getSubCategory());
+			subCategoryResponses.add(res);
+		});
+		categoryResponse.setSubCategory(subCategoryResponses);
+		return categoryResponse;
+	}
 }
