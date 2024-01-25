@@ -31,9 +31,10 @@ public class ProductSaveForLaterController {
 public ResponseEntity<?> addProductSaveForLater(@PathVariable String vid){
 	return new ResponseEntity<>(this.forLaterService.addProductSaveforLater(vid),HttpStatus.CREATED);
 }
-@GetMapping("/allSaveForLaterUserId/{uid}")
-public ResponseEntity<Map<String, Object>> getAllAccountsByUserId(@PathVariable(name = "uid") String uid) {
-	return new ResponseEntity<Map<String, Object>>(forLaterService.getAllSaveForLaterByUserId(uid),HttpStatus.OK);
+@GetMapping("/allSaveForLaterUserId")
+public ResponseEntity<Map<String, Object>> getAllAccountsByUserId() {
+
+	return new ResponseEntity<Map<String, Object>>(forLaterService.getAllSaveForLaterByUserId(),HttpStatus.OK);
 }
 @DeleteMapping("/delete/{id}")
 public ResponseEntity<?>DeleteProductSaveForLater(@PathVariable String id){
