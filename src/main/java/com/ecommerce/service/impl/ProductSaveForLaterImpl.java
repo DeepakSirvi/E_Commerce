@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.ecommerce.exception.BadRequestException;
 import com.ecommerce.exception.ResourceNotFoundException;
 import com.ecommerce.model.ProductSaveForLater;
 import com.ecommerce.model.User;
@@ -53,6 +54,10 @@ public class ProductSaveForLaterImpl implements ProductSaveForLaterService {
 //		// TODO Auto-generated method stub
 		Map<String, String> responce = new HashMap<>();
 		Optional<Varient> findById = this.repo.findById(vid);
+	    if(laterRepo.existsByUserIdAndVarientId(appUtils.getUserId(),vid)) {
+	    	throw new BadRequestException(AppConstant.ALREADY_ADDED);
+	    }
+	    
 		ProductSaveForLater productSaveForLater = new ProductSaveForLater();
 		if (findById.isPresent()) {
 			Varient varient = new Varient();
