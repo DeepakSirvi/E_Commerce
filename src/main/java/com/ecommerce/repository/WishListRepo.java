@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import com.ecommerce.model.User;
 import com.ecommerce.model.Varient;
@@ -23,6 +24,8 @@ public interface WishListRepo  extends JpaRepository< WishListProduct, String>{
 	List<WishListProduct> findByUserId(String userId);
 
 	Optional<WishListProduct> findByUser(User user);
+    @Query("SELECT  w FROM WishListProduct  w WHERE w.varient.id =:varientId")
+	WishListProduct findByVarientId(String varientId);
 
 	@Transactional
 	public void deleteByVarient(Varient varient);

@@ -91,7 +91,7 @@ public class ProductServiceImpl implements ProductService {
 		return null;
 	}
 
-//	-------------------------------------------------------------------
+
 
 	@Override
 	public Map<String, Object> getAllProduct(String search, Integer pageIndex, Integer pageSize, String sortDir) {
@@ -130,7 +130,7 @@ public class ProductServiceImpl implements ProductService {
 		throw new UnauthorizedException(UNAUTHORIZED);
 	}
 
-//	For updateing the lisiting status of product
+
 
 	@Override
 	public Map<String, Object> updateStatusProduct(UpdateStatusBooleanRequest statusRequest) {

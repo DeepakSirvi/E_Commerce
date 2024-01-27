@@ -62,7 +62,7 @@ public class Varient extends Audit {
 	@OneToMany(mappedBy = "varient") 
 	private List<Cart> cart;
 	
-	@OneToMany(mappedBy = "varient")
+	@OneToMany(mappedBy = "varient",cascade = CascadeType.ALL)
 	private List<WishListProduct> wishList;
 	
 	@OneToMany(mappedBy = "varient")

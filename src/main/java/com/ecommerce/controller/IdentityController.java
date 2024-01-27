@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ecommerce.payload.IdentityRequest;
 import com.ecommerce.service.IdentityService;
+import com.ecommerce.util.AppConstant;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.websocket.server.PathParam;
@@ -56,7 +57,33 @@ public class IdentityController {
 	        return  ResponseEntity.ok(response);
 	    }
 	 
-	
+	  @GetMapping("/ALLIdentity/{userId}")
+	  public ResponseEntity<Map<String, Object>> getAllIdentitiesById(@PathVariable String userId){
+		  Map<String , Object > response = identityService .getAllIdentityById(userId);
+		   return ResponseEntity.ok(response);
+	  }
 	  
+	  @GetMapping("/identitys/{identityId}")
+		 public ResponseEntity<Map<String, Object>> getIdentityById(@PathVariable String identityId) {
+			 Map<String, Object> response = identityService.getIdentityById(identityId);
+		        return ResponseEntity.ok(response);
+		    }
+		 
+	  @GetMapping("/AllActiveIdentity")
+		 public ResponseEntity<Map<String, Object >> getAllActiveIdentity ( 
+				   @RequestParam(value="pageIndex"  , required= false , defaultValue= AppConstant.DEFAULT_PAGE_NUMBER) Integer page,
+		    		@RequestParam(value= "pagesize" , required= false , defaultValue= AppConstant.DEFAULT_PAGE_SIZE)   Integer size,
+		    		@RequestParam(value= "sortDir" , required= false , defaultValue= AppConstant.DEFAULT_SORT_DIR) String SortDir ){
+				 
+			  Map<String, Object> response = identityService.getAllActiveIdentity(page , size, SortDir  );
+		        return ResponseEntity.ok(response);
+		 }
 	
+	  @GetMapping("/AllIdentity")
+	    public ResponseEntity<Map<String, Object>>getAllIdentity(
+	    		@RequestParam(value="pageIndex"  , required= false , defaultValue= AppConstant.DEFAULT_PAGE_NUMBER) Integer page,
+	    		@RequestParam(value= "pagesize" , required= false , defaultValue= AppConstant.DEFAULT_PAGE_SIZE)   Integer size,
+	    		@RequestParam(value= "sortDir" , required= false , defaultValue= AppConstant.DEFAULT_SORT_DIR) String SortDir ){
+	        return  new  ResponseEntity<Map <String, Object>>(identityService.getAllIdentity(page, size, SortDir),HttpStatus.OK);
+	    }
    }

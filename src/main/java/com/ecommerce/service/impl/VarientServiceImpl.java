@@ -101,10 +101,10 @@ public class VarientServiceImpl implements VarientService {
 			}
 		}
 		Map<String, Object> response = new HashMap<>();
-		Varient save = varientRepo.save(varient);
+	Varient save = varientRepo.save(varient);
 		response.put(AppConstant.RESPONSE_MESSAGE,
 				new ApiResponse(Boolean.TRUE, AppConstant.VARIENT_ADDED, HttpStatus.CREATED));
-		response.put("varient", new VarientResponse().varientToVarientResponse(save));
+	  response.put("varient", new VarientResponse().varientToVarientResponse(save));
 		return response;
 	}
 

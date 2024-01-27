@@ -202,6 +202,8 @@ public class AppConstant {
 
 	public static final Object ALL_VERFIED_BRAND = "verfied brand";
 
+	public static final Object ALL_ACTIVE_IDENTITY = "identity active successfully" ;
+
 	
 }		
 
