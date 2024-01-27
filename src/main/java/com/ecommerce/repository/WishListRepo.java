@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import com.ecommerce.model.User;
 import com.ecommerce.model.Varient;
@@ -22,6 +23,8 @@ public interface WishListRepo  extends JpaRepository< WishListProduct, String>{
 	List<WishListProduct> findByUserId(User user);
 
 	Optional<WishListProduct> findByUser(User user);
+    @Query("SELECT  w FROM WishListProduct  w WHERE w.varient.id =:varientId")
+	WishListProduct findByVarientId(String varientId);
 
 
 	

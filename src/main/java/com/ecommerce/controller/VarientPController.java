@@ -46,7 +46,7 @@ public class VarientPController {
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			request=mapper.readValue(varientRequest, VarientRequest.class);
-			System.err.println("error");
+			System.err.println(request);
 		}
 		catch (JsonMappingException e) {
 			// TODO Auto-generated catch block
@@ -59,7 +59,7 @@ public class VarientPController {
 		catch(Exception e) {
 			System.out.println("asda");
 		}
-				System.out.println(request.getVarientName());
+				//System.out.println(request.getVarientName());
 		return new ResponseEntity<Map<String,Object>>(varientService.createVarient(request,multipartFiles),HttpStatus.CREATED);
 
 	}

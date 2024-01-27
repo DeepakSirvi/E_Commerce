@@ -23,7 +23,7 @@ import com.ecommerce.payload.BrandRequest;
 
 	   public Map<String , Object > getVerfiedBrandById(String  brandId);
 	   
-	 public Map<String, Object> getAllVerfiedBrand(Integer page, Integer size, String sortDir);
+	  public Map<String, Object> getAllVerfiedBrand(Integer page, Integer size, String sortDir);
 	   
 	  
 	

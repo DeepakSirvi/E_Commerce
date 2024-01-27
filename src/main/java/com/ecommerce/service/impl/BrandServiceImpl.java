@@ -82,8 +82,12 @@ public class BrandServiceImpl  implements BrandService{
 		        Brand brand = optionalBrand.get();
 		        
 		        brand.setStatus(Status.VERIFIED);
-		       
 		        
+		        if (optionalBrand.isPresent()) {
+		        	 Brand brand1 =  optionalBrand.get();
+		        	 
+		        	 brand1.setStatus(Status.UNVERIFIED);
+		        }
 		        brandRepo.save(brand);
 		        
 		        response.put("response", AppConstant.UPDATE_STATUS);
@@ -218,7 +222,7 @@ public class BrandServiceImpl  implements BrandService{
 	    brandResponse.setBrandImage(obj.getBrandImage());
 	    brandResponse.setBrandName(obj.getBrandName());
 	    return brandResponse;
-//	    
+    
 	    
  }
 	

@@ -67,7 +67,7 @@ public class WishListController {
 	
 
 	
-	@GetMapping
+	@GetMapping("/VarientExist")
 	public ResponseEntity<Map<String, Object>> isVarientExist(@RequestParam String varientId) { 
         Map<String, Object> response = wishlistService.isVarientExist(varientId);
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -76,4 +76,4 @@ public class WishListController {
 	
 
 
-}
+

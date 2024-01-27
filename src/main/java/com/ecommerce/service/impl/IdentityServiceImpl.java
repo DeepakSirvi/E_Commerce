@@ -1,12 +1,18 @@
 package com.ecommerce.service.impl;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.internal.bytebuddy.implementation.bytecode.Throw;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,8 +22,11 @@ import com.ecommerce.model.Brand;
 import com.ecommerce.model.Identity;
 import com.ecommerce.model.Status;
 import com.ecommerce.model.User;
+import com.ecommerce.payload.AccountResponse;
 import com.ecommerce.payload.BrandRequest;
+import com.ecommerce.payload.BrandResponse;
 import com.ecommerce.payload.IdentityRequest;
+import com.ecommerce.payload.IdentityResponse;
 import com.ecommerce.repository.BrandRepo;
 import com.ecommerce.repository.IdentityRepo;
 import com.ecommerce.repository.UserRepo;
@@ -88,9 +97,16 @@ public class IdentityServiceImpl implements IdentityService {
 		 Optional<Identity> optionalIdentity =identityRepo .findById(identityId);
 		 
 		 if (optionalIdentity.isPresent()) {
-			 Identity    identity     = optionalIdentity.get();
-			 
+			 Identity  identity = optionalIdentity.get();
 			 identity .setStatus(Status.ACTIVE);
+			
+			  if (optionalIdentity.isPresent()) {
+				   
+				  Identity identity1 =optionalIdentity.get();
+				  identity1.setStatus(Status.DEACTIVE);
+			  }
+			 
+			 
 			 
 			 identityRepo.save(identity);
 			 
@@ -104,7 +120,134 @@ public class IdentityServiceImpl implements IdentityService {
 	        }
 		 return response; 	
 	}
-		        		
-	}
+
+	@Override
+	public Map<String, Object> getAllIdentityById(String userId) {
+		
+		 Map<String, Object> response = new HashMap<>();
+		 
+		 List<Identity> identity =  identityRepo. findAllByUserId(userId );
+		 List<IdentityResponse> identityResponses = identity.stream()
+                 .map(obj->identityResponse(obj))
+                 .collect(Collectors.toList());
+         response.put("identity", identityResponses);
+         return response;
+}
+	 
+		public IdentityResponse  identityResponse (Identity identity) {
+			 
+			 IdentityResponse identityResponse = new   IdentityResponse ();
+			 identityResponse.setId(identity.getId());
+			 identityResponse.setIdCardName(identity.getIdCardName());
+			 identityResponse.setIdCardNumber(identity.getIdCardNumber());
+			 identityResponse.setImage(identity.getImage());
+			 identityResponse.setDescription(identity.getDescription());
+			 return identityResponse;
+		}
+
+		@Override
+		public Map<String, Object> getIdentityById(String identityId) {
+			
+			Map<String, Object> response = new HashMap<>();
+			
+			Optional<Identity> identityOptional =identityRepo .findById(identityId);
+			
+			if (identityOptional.isPresent()) {
+				 
+				Identity   identity = identityOptional.get();
+				
+				IdentityResponse   identityResponse = identityToIdentityResponse(identity);
+				
+				response.put("identity",identityResponse);
+				
+			} else 
+			{
+				 throw new ResourceNotFoundException(IDENTITY ,ID, identityId);
+			}
+			
+			
+			return  response;
+		}
+
+		private IdentityResponse identityToIdentityResponse(Identity identity2) {
+			IdentityResponse identityResponse= new IdentityResponse();
+			identityResponse.setId( identity2.getId());
+			identityResponse.setIdCardName(identity2.getIdCardName());
+			identityResponse.setIdCardNumber(identity2.getIdCardNumber());
+			identityResponse.setDescription(identity2.getDescription());
+			identityResponse.setImage(identity2.getImage());
+		
+			return  identityResponse ;
+		}
+
+		@Override
+		public Map<String, Object> getAllActiveIdentity(Integer page, Integer size, String sortDir) {
+			Map<String, Object> response = new HashMap<>();
+			
+			AppUtils.validatePageAndSize(page, size);
+			Sort sort1 = null;
+			if (sortDir.equals("DESC")) {
+				sort1 = Sort.by(Sort.Order.desc("updatedAt"));
+			} else {
+				sort1 = Sort.by(Sort.Order.asc("updatedAt"));
+			}
+			
+			Pageable pageable = PageRequest.of(page, size,sort1);
+			
+			 Page<Identity> findAllActiveIdentity = identityRepo.findAllActiveIdentity(pageable);
+			 
+			 response.put("response",findAllActiveIdentity.getContent().stream().map(obj->identityFilter(obj)).collect(Collectors.toList()));
+			 
+			 response.put(AppConstant.MESSAGE,AppConstant.ALL_ACTIVE_IDENTITY);
+			return  response ;
+		}
+
+		private Object identityFilter(Identity obj) {
+			
+			IdentityResponse identityResponse= new IdentityResponse();
+			identityResponse.setId( obj.getId());
+			identityResponse.setIdCardName(obj.getIdCardName());
+			identityResponse.setIdCardNumber(obj.getIdCardNumber());
+			identityResponse.setDescription(obj.getDescription());
+			identityResponse.setImage(obj.getImage());
+			return identityResponse ;
+		}
+
+		@Override
+		public Map<String, Object> getAllIdentity(Integer page, Integer size, String sortDir) {
+			
+			Map<String, Object> response = new HashMap<>();
+			AppUtils.validatePageAndSize(page, size);
+			
+			Sort sort1 = null;
+			if (sortDir.equals("DESC")) {
+				sort1 = Sort.by(Sort.Order.desc("updatedAt"));
+			} else {
+				sort1 = Sort.by(Sort.Order.asc("updatedAt"));
+			}
+			
+			Pageable pageable = PageRequest.of(page, size, sort1);
+			
+			Page <Identity> identitySet =null;
+			identitySet = identityRepo.findAll(pageable);
+			if (!identitySet.isEmpty()) {
+	            List<IdentityResponse> identityResponse = identitySet.stream()
+	                    .map(this::identityToIdentityResponse)
+	                    .collect(Collectors.toList());
+			 response.put("AllIdentity", identityResponse);
+	    } else {
+	         throw new ResourceNotFoundException(); 
+		}
+	    return response;
+	  }
+			
+			
+		}
+
+		
+	
+
+
+	   		
 
 
