@@ -30,15 +30,9 @@ public class WishListController {
 
 	private WishListService wishlistService;
 
-
-
-
-
-
-	@GetMapping("wishlistProduct/{userId}")
-	public ResponseEntity<Map<String, Object>> getWishlistByUserId(@RequestParam String userId) {
-		Map<String, Object> wishlistByUserId = wishlistService.getWishlistByUserId(userId);
-
+	@GetMapping("/all")
+	public ResponseEntity<Map<String, Object>> getWishlistByUserId() {
+		Map<String, Object> wishlistByUserId = wishlistService.getWishlistByUserId();
 		return ResponseEntity.ok(wishlistByUserId);
 
 	}
@@ -56,7 +50,6 @@ public class WishListController {
         
       }
 	
-	
 	@DeleteMapping("/dislike")
     public ResponseEntity<Map<String, Object>> dislikeFromWishList(@RequestParam String varientId)
              {
@@ -64,16 +57,9 @@ public class WishListController {
         return ResponseEntity.ok(response);
         
       }
-	
-
-	
 	@GetMapping("/VarientExist")
 	public ResponseEntity<Map<String, Object>> isVarientExist(@RequestParam String varientId) { 
         Map<String, Object> response = wishlistService.isVarientExist(varientId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }	
-	
-
-
-

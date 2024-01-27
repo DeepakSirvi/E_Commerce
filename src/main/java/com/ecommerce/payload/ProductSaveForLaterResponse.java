@@ -19,15 +19,13 @@ import lombok.Setter;
 public class ProductSaveForLaterResponse {
 	private String id;
 	private VarientResponse varient;
-//	private User user;
+	private UserResponse user;
 	
 	
 	 public ProductSaveForLaterResponse savedLaterToResponse(ProductSaveForLater savedLaterProduct) {
 		this.setId(savedLaterProduct.getId());
-		
 		VarientResponse varientResponse = new VarientResponse();
-		
-      this.setVarient(varientResponse.varientToVarientResponse(savedLaterProduct.getVarient()));
+      this.setVarient(varientResponse.varientToVarientResponseForCard(savedLaterProduct.getVarient()));
 		
 		return this;
 	}

@@ -19,98 +19,128 @@ import com.ecommerce.repository.UserRepo;
 import com.ecommerce.service.AddressService;
 import com.ecommerce.util.AppConstant;
 import com.ecommerce.util.AppUtils;
+
 @Service
 public class AddressServiceImpl implements AddressService {
-@Autowired
-private AddressRepo addressRepo;
-@Autowired
-private ModelMapper modelMapper;
-@Autowired
-private AppUtils appUtils;
-@Autowired
-private UserRepo userRepo;
-  
+	@Autowired
+	private AddressRepo addressRepo;
+	@Autowired
+	private ModelMapper modelMapper;
+	@Autowired
+	private AppUtils appUtils;
+	@Autowired
+	private UserRepo userRepo;
 
-public ApiResponse apiresponse;
+	public ApiResponse apiresponse;
 
-public AddressResponse addressToAddressResponse(Address address)
-{ 
-	return this.modelMapper.map(address, AddressResponse.class);
-}
-public Address addressRequestToAddress(AddressRequest addressRequest)
-{
-	return this.modelMapper.map(addressRequest, Address.class);
-}
+	public AddressResponse addressToAddressResponse(Address address) {
 
+		AddressResponse as = new AddressResponse();
+		as.setAddressType(address.getAddressType());
+		//System.err.println(address.getAddressType());
+		as.setCity(address.getCity());
+		as.setLandMark(address.getLandMark());
+		as.setPincode(address.getPincode());
+		as.setAddressType(address.getAddressType());
+		as.setLocality(address.getLocality());
+		as.setMobile(address.getMobile());
+		as.setName(address.getName());
+		as.setId(address.getId());
+		as.setState(address.getState());					
+        as.setAlternateMobile(address.getAlternateMobile());
+		return as;
+	}
 
+	public Address addressRequestToAddress(AddressRequest addressRequest) {
+		// return this.modelMapper.map(addressRequest, Address.class);
+		Address as = new Address();
+		as.setAddressType(addressRequest.getAddressType());
+		//System.err.println(addressRequest.getAddressType());
+		as.setCity(addressRequest.getCity());
+		as.setLandMark(addressRequest.getLandMark());
+		as.setPincode(addressRequest.getPincode());
+		as.setAddressType(addressRequest.getAddressType());
+		as.setLocality(addressRequest.getLocality());
+		as.setMobile(addressRequest.getMobile());
+		as.setName(addressRequest.getName());
+		as.setId(addressRequest.getId());
+		as.setState(addressRequest.getState());
+		as.setAlternateMobile(addressRequest.getAlternateMobile());
+		return as;
+	}
 
-@Override
-public AddressResponse createAdress(AddressRequest addressRequest) {
+	@Override
+	public AddressResponse createAdress(AddressRequest addressRequest) {
 
-	Address address=this.addressRequestToAddress(addressRequest);
-	//System.out.println(addressRequest.getLocality());
-	User user=new User();
-	
-	user.setId(appUtils.getUserId());
-	
-	address.setUserAddress(user);
-	address.setStatus(Boolean.TRUE);
-	
-	return this.addressToAddressResponse(this.addressRepo.save(address));
-}
-@Override
-public AddressResponse updateAddress(AddressRequest addressRequest) {
-	System.out.println("-------------");
-	Optional<Address> address = Optional.of(this.addressRepo.findById(addressRequest.getId()).orElseThrow(()->new BadRequestException(AppConstant.ADDRESS_NOT_FOUND)));
-	
-	Address address2 = address.get();
-	address2.setId(addressRequest.getId());
-	address2.setLandMark(addressRequest.getLandMark());
-	address2.setCity(addressRequest.getCity());
-	address2.setLocality(addressRequest.getLocality()); 
-	address2.setMobile(addressRequest.getMobile());
-	address2.setPincode(addressRequest.getPincode());
-	address2.setAlternateMobile(addressRequest.getAlternateMobile());
-	address2.setName(addressRequest.getName());
-	address2.setState(addressRequest.getState());
-	address2.setStatus(Boolean.TRUE);
-	User user=new User();
-	user.setId(appUtils.getUserId());
-	
-	return this.addressToAddressResponse(this.addressRepo.save(address2));
-	
-	
-}
+		Address address = this.addressRequestToAddress(addressRequest);
+		// System.out.println(addressRequest.getLocality());
+		User user = new User();
 
-@Override
-public AddressResponse getbyId(String id) {
-	Address address=this.addressRepo.findById(id).orElseThrow(()->new BadRequestException(AppConstant.ADDRESS_NOT_FOUND)) ;
-	return this.addressToAddressResponse(address);
-}
+		user.setId(appUtils.getUserId());
 
-@Override
-public boolean deleteAdress(String id) {
-	Address address=this.addressRepo.findByIdAndStatus(id,true).orElseThrow(()->new BadRequestException(AppConstant.ADDRESS_NOT_FOUND));
-	this.addressRepo.save(address);
-	return true;
-}
+		address.setUserAddress(user);
+		address.setStatus(Boolean.TRUE);
 
-@Override
-public List<AddressResponse> getAddressbyUserid(String id) {
-	// TODO Auto-generated method stub
-	List<Address> listOfAddresses = this.addressRepo.findAddresssByuserId(id);
-	List<AddressResponse> list = listOfAddresses.stream().map(ar->addressToAddressResponse(ar)).collect(Collectors.toList());
-			
-	return list;
-}
-@Override
-public List<AddressResponse> findByActiveStatus(String id) {
- Optional<User> user= this.userRepo.findById(id);
- List<Address> listOfActiveAddress= this.addressRepo.getActiveAddressOfUser(user.get().getId());
- List<AddressResponse> collect = listOfActiveAddress.stream().map(as->addressToAddressResponse(as)).collect(Collectors.toList());
- return collect;
-}
+		return this.addressToAddressResponse(this.addressRepo.save(address));
+	}
 
+	@Override
+	public AddressResponse updateAddress(AddressRequest addressRequest) {
+		System.out.println("-------------");
+		Optional<Address> address = Optional.of(this.addressRepo.findById(addressRequest.getId())
+				.orElseThrow(() -> new BadRequestException(AppConstant.ADDRESS_NOT_FOUND)));
 
+		Address address2 = address.get();
+		address2.setId(addressRequest.getId());
+		address2.setLandMark(addressRequest.getLandMark());
+		address2.setCity(addressRequest.getCity());
+		address2.setLocality(addressRequest.getLocality());
+		address2.setMobile(addressRequest.getMobile());
+		address2.setPincode(addressRequest.getPincode());
+		address2.setAlternateMobile(addressRequest.getAlternateMobile());
+		address2.setName(addressRequest.getName());
+		address2.setState(addressRequest.getState());
+		address2.setAddressType(addressRequest.getAddressType());
+		address2.setStatus(Boolean.TRUE);
+		User user = new User();
+		user.setId(appUtils.getUserId());
+
+		return this.addressToAddressResponse(this.addressRepo.save(address2));
+
+	}
+
+	@Override
+	public AddressResponse getbyId(String id) {
+		Address address = this.addressRepo.findById(id)
+				.orElseThrow(() -> new BadRequestException(AppConstant.ADDRESS_NOT_FOUND));
+		return this.addressToAddressResponse(address);
+	}
+
+	@Override
+	public boolean deleteAdress(String id) {
+		Address address = this.addressRepo.findByIdAndStatus(id, true)
+				.orElseThrow(() -> new BadRequestException(AppConstant.ADDRESS_NOT_FOUND));
+		this.addressRepo.save(address);
+		return true;
+	}
+
+	@Override
+	public List<AddressResponse> getAddressbyUserid(String id) {
+		// TODO Auto-generated method stub
+		List<Address> listOfAddresses = this.addressRepo.findAddresssByuserId(id);
+		List<AddressResponse> list = listOfAddresses.stream().map(ar -> addressToAddressResponse(ar))
+				.collect(Collectors.toList());
+		System.err.println(list);
+		return list;
+	}
+
+	@Override
+	public List<AddressResponse> findByActiveStatus(String id) {
+		Optional<User> user = this.userRepo.findById(id);
+		List<Address> listOfActiveAddress = this.addressRepo.getActiveAddressOfUser(user.get().getId());
+		List<AddressResponse> collect = listOfActiveAddress.stream().map(as -> addressToAddressResponse(as))
+				.collect(Collectors.toList());
+		return collect;
+	}
 
 }
