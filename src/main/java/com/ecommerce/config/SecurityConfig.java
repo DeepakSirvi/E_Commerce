@@ -43,8 +43,7 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain configuraPaths(HttpSecurity http) throws Exception {
 		
-		http.csrf()
-		.disable()  
+		http.csrf(csrf -> csrf.disable())
 		.authorizeRequests()
 		.requestMatchers("ecommerce/auth/**","ecommerce/image/**","**/permitAll/**").permitAll()
 		.requestMatchers("ecommerce/category/admin/**","ecommerce/varient/admin/**","ecommerce/product/admin/**")

@@ -7,10 +7,12 @@ import org.springframework.stereotype.Component;
 import com.ecommerce.model.RoleName;
 import com.ecommerce.payload.RoleRequest;
 import com.ecommerce.service.RoleService;
-import com.ecommerce.util.AppConstant;
 import com.ecommerce.util.RoleNameIdConstant;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Component
+@Slf4j
 public class PreRequirment implements CommandLineRunner {
 
 	@Autowired
@@ -45,7 +47,5 @@ public class PreRequirment implements CommandLineRunner {
 		} catch (Exception e) {
 			System.out.println(e);
 		}
-
 	}
-
 }

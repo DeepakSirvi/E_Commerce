@@ -6,11 +6,9 @@ import static com.ecommerce.util.AppConstant.UNAUTHORIZED;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -27,7 +25,6 @@ import com.ecommerce.exception.ResourceNotFoundException;
 import com.ecommerce.exception.UnauthorizedException;
 import com.ecommerce.model.Category;
 import com.ecommerce.model.Role;
-import com.ecommerce.model.RoleName;
 import com.ecommerce.model.SubCategory;
 import com.ecommerce.model.User;
 import com.ecommerce.payload.ApiResponse;
@@ -63,11 +60,9 @@ public class CategoryServiceImpl implements CategoryService {
 	@Autowired
 	private UserRoleRepo userRoleRepo;
 
-	
-
 	@Override
 	public ApiResponse addSubCategory(SubCategoryRequest subCategoryRequest) {
-               System.out.println("Deepak" + subCategoryRequest.getSubCategory() +" "+ subCategoryRequest.getCategory().getId());
+//               System.out.println("Deepak" + subCategoryRequest.getSubCategory() +" "+ subCategoryRequest.getCategory().getId());
 		if (subCategoryRepo.existsBySubCategoryAndCategory(subCategoryRequest.getSubCategory(),
 				new Category(subCategoryRequest.getCategory().getId()))) {
 			throw new BadRequestException(AppConstant.SUBCATEGORY_TAKEN);
@@ -107,7 +102,8 @@ public class CategoryServiceImpl implements CategoryService {
 		SubCategory subCategory = subCategoryRepo.findById(subCategoryRequest.getId())
 				.orElseThrow(() -> new BadRequestException(AppConstant.SUB_CATEGORY_NOT_FOUND));
 		if (subCategoryRepo.existsBySubCategoryAndCategory(subCategoryRequest.getSubCategory(),
-				new Category(subCategoryRequest.getCategory().getId()))) {
+				new Category(subCategoryRequest.getCategory().getId()))
+				&& !subCategory.getSubCategory().equals(subCategoryRequest.getSubCategory())) {
 			throw new BadRequestException(AppConstant.SUBCATEGORY_TAKEN);
 		}
 		subCategory = modelMapper.map(subCategoryRequest, SubCategory.class);
@@ -115,9 +111,6 @@ public class CategoryServiceImpl implements CategoryService {
 		return new ApiResponse(Boolean.TRUE, AppConstant.SUBCATEGORY_UPDATED, HttpStatus.OK);
 	}
 
-	
-
-	
 	@Override
 	public ApiResponse addCategory(CategoryRequest categoryRequest) {
 		if (categoryRepo.existsByCategoryName(categoryRequest.getCategoryName())) {
@@ -144,7 +137,7 @@ public class CategoryServiceImpl implements CategoryService {
 		}
 		throw new UnauthorizedException(UNAUTHORIZED);
 	}
-	
+
 	@Override
 	public ApiResponse deleteSubCategoryById(String id) {
 		SubCategory subCategory = subCategoryRepo.findById(id)
@@ -158,7 +151,7 @@ public class CategoryServiceImpl implements CategoryService {
 		}
 		throw new UnauthorizedException(UNAUTHORIZED);
 	}
-	
+
 	@Override
 	public Map<String, Object> getAllCategory() {
 		Map<String, Object> response = new HashMap<>();
@@ -206,32 +199,30 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
-	public ApiResponse updateCategory(Category categoryRequest) {
+	public ApiResponse updateCategory(CategoryRequest categoryRequest) {
 		Category category = categoryRepo.findById(categoryRequest.getId())
 				.orElseThrow(() -> new BadRequestException(AppConstant.CATEGORY_NOT_FOUND));
 
 		if (categoryRepo.existsByCategoryNameAndIdNot(categoryRequest.getCategoryName(), categoryRequest.getId())) {
 			throw new BadRequestException(AppConstant.CATEGORY_TAKEN);
 		}
-		
-		List<SubCategory> subCata =categoryRequest.getSubCategory().stream().map(subCat -> {
-			if(Objects.isNull(subCat.getId()) || subCat.getId().equals("")){
-			 SubCategoryRequest subCategoryRequest = new SubCategoryRequest();
-			 subCategoryRequest.setSubCategory(subCat.getSubCategory());
-			 CategoryRequest categoryReq = new CategoryRequest();
-			 categoryReq.setId(categoryRequest.getId());
-			 subCategoryRequest.setCategory(categoryReq);
-			 addSubCategory(subCategoryRequest);
-			 return subCategoryRepo.findBySubCategory(subCat.getSubCategory());
-		}else
-		{
-			return subCat;
-		}
-		})
-		.collect(Collectors.toList());	
-		category = categoryRepo.findById(categoryRequest.getId()).get();
+
+		categoryRequest.getSubCategory().stream().map(subCat -> {
+			if (Objects.isNull(subCat.getId()) || subCat.getId().equals("")) {
+				SubCategoryRequest subCategoryRequest = new SubCategoryRequest();
+				subCategoryRequest.setSubCategory(subCat.getSubCategory());
+				CategoryRequest categoryReq = new CategoryRequest();
+				categoryReq.setId(categoryRequest.getId());
+				subCategoryRequest.setCategory(categoryReq);
+				addSubCategory(subCategoryRequest);
+				return subCategoryRepo.findBySubCategory(subCat.getSubCategory());
+			} else {
+				subCat.setCategory(new CategoryRequest(categoryRequest.getId()));
+				updateSubCategory(subCat);
+				return subCat;
+			}
+		}).collect(Collectors.toList());
 		category.setCategoryName(categoryRequest.getCategoryName());
-		category.setSubCategory(subCata);
 		categoryRepo.save(category);
 		return new ApiResponse(Boolean.TRUE, AppConstant.CATEGORY_UPDATED, HttpStatus.OK);
 	}
