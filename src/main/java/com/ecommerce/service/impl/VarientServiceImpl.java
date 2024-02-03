@@ -1,11 +1,9 @@
 package com.ecommerce.service.impl;
 
 import static com.ecommerce.util.AppConstant.ID;
-import static com.ecommerce.util.AppConstant.PRODUCT;
 import static com.ecommerce.util.AppConstant.UNAUTHORIZED;
 import static com.ecommerce.util.AppConstant.VARIENT;
 
-import java.io.Console;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,9 +23,7 @@ import com.ecommerce.exception.ResourceNotFoundException;
 import com.ecommerce.exception.UnauthorizedException;
 import com.ecommerce.model.Product;
 import com.ecommerce.model.ProductImage;
-import com.ecommerce.model.ProductSaveForLater;
 import com.ecommerce.model.Role;
-import com.ecommerce.model.RoleName;
 import com.ecommerce.model.Status;
 import com.ecommerce.model.User;
 import com.ecommerce.model.Varient;
@@ -42,8 +38,6 @@ import com.ecommerce.repository.UserRoleRepo;
 import com.ecommerce.repository.VarientCategoryJoinRepo;
 import com.ecommerce.repository.VarientRepo;
 import com.ecommerce.repository.WishListRepo;
-import com.ecommerce.service.ProductSaveForLaterService;
-import com.ecommerce.service.ProductService;
 import com.ecommerce.service.VarientService;
 import com.ecommerce.util.AppConstant;
 import com.ecommerce.util.AppUtils;
@@ -66,20 +60,18 @@ public class VarientServiceImpl implements VarientService {
 
 	@Autowired
 	private VarientCategoryJoinRepo joinRepo;
-	
+
 	@Autowired
 	private ProductSaveLaterRepo saveLaterRepo;
-	
+
 	@Autowired
 	private CartRepo cartRepo;
-	
+
 	@Autowired
 	private WishListRepo wishListRepo;
-	
+
 	@Autowired
 	private ProductRepo productRepo;
-	
-	
 
 //	To add varient
 	@Override
@@ -101,10 +93,10 @@ public class VarientServiceImpl implements VarientService {
 			}
 		}
 		Map<String, Object> response = new HashMap<>();
-	Varient save = varientRepo.save(varient);
+		Varient save = varientRepo.save(varient);
 		response.put(AppConstant.RESPONSE_MESSAGE,
 				new ApiResponse(Boolean.TRUE, AppConstant.VARIENT_ADDED, HttpStatus.CREATED));
-	  response.put("varient", new VarientResponse().varientToVarientResponse(save));
+		response.put("varient", new VarientResponse().varientToVarientResponse(save));
 		return response;
 	}
 
@@ -117,20 +109,27 @@ public class VarientServiceImpl implements VarientService {
 
 		if (userRepo.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleNameIdConstant.ADMIN))
 				|| varient.getCreatedBy().equals(appUtils.getUserId())) {
-			if(statusRequest.getStatus().equals(Status.DEACTIVE))
-			{
+			if (statusRequest.getStatus().equals(Status.DEACTIVE)) {
 				saveLaterRepo.deleteByVarient(varient);
 				cartRepo.deleteByVarient(varient);
-				wishListRepo.deleteByVarient(varient);	 
-				varient.getProduct().setListingStatus(Boolean.FALSE);
-				productRepo.save(varient.getProduct());
+				wishListRepo.deleteByVarient(varient);
+				Product product = varient.getProduct();
+				if ((Objects.nonNull(product.getVarient()) || !product.getVarient().isEmpty())) {
+					Boolean flag = product.getVarient().stream()
+							.anyMatch(varients -> varients.getStatus().equals(Status.ACTIVE));
+					if (!flag) {
+						varient.getProduct().setListingStatus(Boolean.FALSE);
+						productRepo.save(varient.getProduct());
+					}
+				}
+
 			}
-			
+
 			if (varient.getProduct().getVerified().equals(Status.VERIFIED)) {
 				varient.setStatus(statusRequest.getStatus());
 				varientRepo.save(varient);
-				response.put("response", AppConstant.STATUS_UPDATE +" "+ statusRequest.getStatus());
-				
+				response.put("response", AppConstant.STATUS_UPDATE + " " + statusRequest.getStatus());
+
 			} else {
 				response.put("response", "First Product should get verified from admin side");
 			}
