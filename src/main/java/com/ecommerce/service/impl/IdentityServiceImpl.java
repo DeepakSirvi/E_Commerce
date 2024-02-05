@@ -7,7 +7,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
-import org.modelmapper.internal.bytebuddy.implementation.bytecode.Throw;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,16 +18,16 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ecommerce.exception.BadRequestException;
 import com.ecommerce.exception.ResourceNotFoundException;
-import com.ecommerce.model.Brand;
+
 import com.ecommerce.model.Identity;
 import com.ecommerce.model.Status;
 import com.ecommerce.model.User;
-import com.ecommerce.payload.AccountResponse;
-import com.ecommerce.payload.BrandRequest;
-import com.ecommerce.payload.BrandResponse;
+
+
+
 import com.ecommerce.payload.IdentityRequest;
 import com.ecommerce.payload.IdentityResponse;
-import com.ecommerce.repository.BrandRepo;
+
 import com.ecommerce.repository.IdentityRepo;
 import com.ecommerce.repository.UserRepo;
 import com.ecommerce.service.IdentityService;
@@ -240,8 +240,7 @@ public class IdentityServiceImpl implements IdentityService {
 		}
 	    return response;
 	  }
-			
-			
+		
 		}
 
 		

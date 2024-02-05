@@ -82,7 +82,7 @@ public class CartServiceImpl implements CartService {
 
 	@Override
 	public Map<String, Object> deleteCartById(String cartId) {
-		Map<String, Object> response = new HashMap<>();
+		Map<String , Object> response = new HashMap<>();
 		Optional<Cart> cart = cartRepo.findById(cartId);
 		if(cart.isPresent()) {
 			if(cart.get().getUser().getId().equals(appUtils.getUserId())) {

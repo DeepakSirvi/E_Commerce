@@ -2,7 +2,7 @@ package com.ecommerce.service.impl;
 
 import static com.ecommerce.util.AppConstant.VARIENT;
 
-import java.util.ArrayList;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
