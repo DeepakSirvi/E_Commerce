@@ -63,9 +63,11 @@ public class BrandServiceImpl  implements BrandService{
 	          brand.setUser(new User(appUtils.getUserId()));
 	          
 	        		  
-	          brandRepo.save(brand);
+	        brandRepo.save(brand);
 	          response.put("response", AppConstant.BRAND_ADD_SUCCES);
-	          return response;        
+	          return response;   
+	          
+	          
 	}
 	private Brand brandRequestToBrand(BrandRequest brandRequest) {
 		return this.mapper.map(brandRequest, Brand.class);

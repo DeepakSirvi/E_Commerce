@@ -204,6 +204,10 @@ public class AppConstant {
 
 	public static final Object ALL_ACTIVE_IDENTITY = "identity active successfully" ;
 
+	public static final String COMPLAINT_IMAGE_PATH = "complaintImage" ;
+
+	public static final Object COMPLAINT_ADD_SUCCES = "add complaint" ;
+
 	
 }		
 

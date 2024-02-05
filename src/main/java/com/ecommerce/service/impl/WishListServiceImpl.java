@@ -2,7 +2,7 @@ package com.ecommerce.service.impl;
 
 import static com.ecommerce.util.AppConstant.VARIENT;
 
-import java.util.ArrayList;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -125,12 +125,7 @@ public class WishListServiceImpl implements WishListService {
 	}
 
 
-		wishListRepo.deleteByVarientIdAndUserId(varientId,appUtils.getUserId());
-		 Map<String, Object> response = new HashMap<>(); 
-		 response.put(AppConstant.RESPONSE_MESSAGE, AppConstant.REMOVE_FROM_WISHLIST);
-		return response;
-	}
-	
+		
 
 	@Override
 	public Map<String, Object> getWishlistByUserId() {

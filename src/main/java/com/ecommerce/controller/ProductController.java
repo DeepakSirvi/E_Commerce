@@ -1,6 +1,6 @@
  package com.ecommerce.controller;
 
-import java.util.List;
+
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,23 +11,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.service.annotation.PatchExchange;
-
 import com.ecommerce.model.Status;
-import com.ecommerce.payload.ApiResponse;
 import com.ecommerce.payload.PageResponse;
 import com.ecommerce.payload.ProductRequest;
 import com.ecommerce.payload.ProductResponse;
 import com.ecommerce.payload.UpdateStatusBooleanRequest;
 import com.ecommerce.payload.UpdateStatusRequest;
-import com.ecommerce.payload.VarientRequest;
 import com.ecommerce.service.ProductService;
 import com.ecommerce.util.AppConstant;
 import com.fasterxml.jackson.core.JsonProcessingException;
