@@ -2,7 +2,7 @@ package com.ecommerce.service;
 
 import java.util.Map;
 
-import com.ecommerce.payload.CategoryRequest;
+
 import com.ecommerce.payload.VarientCategoryAttributeRequest;
 import com.ecommerce.payload.VarientCategoryRequest;
 

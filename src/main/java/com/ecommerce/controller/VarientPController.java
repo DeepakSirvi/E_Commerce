@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ecommerce.payload.UpdateStatusRequest;
 import com.ecommerce.payload.VarientRequest;
 import com.ecommerce.service.VarientService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -45,7 +46,7 @@ public class VarientPController {
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			request=mapper.readValue(varientRequest, VarientRequest.class);
-			System.err.println("error");
+			System.err.println(request);
 		}
 		catch (JsonMappingException e) {
 			// TODO Auto-generated catch block
@@ -58,7 +59,7 @@ public class VarientPController {
 		catch(Exception e) {
 			System.out.println("asda");
 		}
-				System.out.println(request.getVarientName());
+				//System.out.println(request.getVarientName());
 		return new ResponseEntity<Map<String,Object>>(varientService.createVarient(request,multipartFiles),HttpStatus.CREATED);
 
 	}
@@ -82,10 +83,10 @@ public class VarientPController {
 		return new ResponseEntity<Map<String, Object>>(varientService.getAllVarientByProductId(id), HttpStatus.CREATED);
 	}
 
-	@PatchMapping("/{varientId}")
-	public ResponseEntity<Map<String, Object>> updateVarientStatus(@PathParam(value = "varientId") String id) {
+	@PatchMapping("/admin/status")
+	public ResponseEntity<Map<String, Object>> updateVarientStatus(@RequestBody UpdateStatusRequest statusRequest) {
 
-		return new ResponseEntity<Map<String, Object>>(varientService.updateVarientStatus(id), HttpStatus.CREATED);
+		return new ResponseEntity<Map<String, Object>>(varientService.updateVarientStatus(statusRequest), HttpStatus.CREATED);
 	}
 
 	@GetMapping("/permitAll/varientByProduct/{productId}")

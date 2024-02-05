@@ -12,8 +12,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import com.ecommerce.payload.ApiResponse;
-
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -41,7 +39,7 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(ResourceNotFoundException.class)
 	public ResponseEntity<ExceptionResponse> resolveException(ResourceNotFoundException exception) {
 		ExceptionResponse exceptionResponse = exception.getExceptionResponse();
-		return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
 	}
 	
 	@ExceptionHandler(UnauthorizedException.class)

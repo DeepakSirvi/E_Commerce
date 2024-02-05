@@ -1,7 +1,9 @@
 package com.ecommerce.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -60,48 +62,48 @@ public class User {
 	
 	@OneToMany(mappedBy="user",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
 	@JsonIgnoreProperties(value = "user")
-	private Set<UserRole> userRole = new HashSet<>();
+	private List<UserRole> userRole = new ArrayList<>();
 	
 	@OneToMany(mappedBy = "user")
-	private Set<Category> category;
+	private List<Category> category;
 	
 	@OneToMany(mappedBy = "user")
-	private Set<VarientCategory> varientCategory;
+	private List<VarientCategory> varientCategory;
 
 
 	
 	@OneToMany(mappedBy="userAddress")
-	private Set<Address> userAddress = new HashSet<>();
-	
-	@OneToOne(mappedBy = "user")
-	private Identity userIdentity;
+	private List<Address> userAddress = new ArrayList<>();
 	
 	@OneToMany(mappedBy = "user")
-	private Set<Account> accountId = new HashSet<>();
+	private List <Identity> user= new ArrayList<>();
+	
+	@OneToMany(mappedBy = "user")
+	private List<Account> accountId = new ArrayList<>();
 	
 	
 	@OneToMany(mappedBy = "vendor")
-	private Set<Product> product = new HashSet<>();
+	private List<Product> product = new ArrayList<>();
 	
-	@OneToOne(mappedBy = "user")
-	private Cart cart;
+	@OneToMany(mappedBy = "user")
+	private List<Cart> cart;
 	
 	
 	@OneToMany(mappedBy = "user")
-	private Set<ProductReview> productReview;
+	private List<ProductReview> productReview;
 	
 	@OneToMany(mappedBy = "user")
-	private Set<ProductSaveForLater> saveLater;
+	private List<ProductSaveForLater> saveLater;
 	
 	@OneToMany
 	@JoinColumn(name = "user_id")
-	private Set<Notifications> notification;
+	private List<Notifications> notification;
 	
 	@OneToMany(mappedBy = "user")
-	private Set<TermsAndCondition> termsAndConditons;
+	private List<TermsAndCondition> termsAndConditons;
 	
 	@OneToMany(mappedBy = "user")
-	private Set<Orders> order;
+	private List<Orders> order;
 
 	public User(String id){
 		this.id=id;		

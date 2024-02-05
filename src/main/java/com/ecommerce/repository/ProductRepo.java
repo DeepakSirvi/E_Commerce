@@ -40,4 +40,23 @@ public interface ProductRepo extends JpaRepository<Product, String> {
 			@Param("listingStatus") Boolean listingStatus, @Param("verifiedStatus") Status verifiedStatus,
 			Pageable pageable);
 
+	@Query("SELECT p FROM Product p " +
+		       "WHERE p.verified = :status " +
+		       "And (p.listingStatus = :listingStatus) " +
+		       "And p.subCategory.category.id = :catId " +
+		       "And (p.createdAt LIKE CONCAT('%', :date, '%') OR p.updatedAt LIKE CONCAT('%', :date, '%'))")
+		public Page<Product> findProductByFilter(@Param("catId") String catId,
+		                                         @Param("date") String date,
+		                                         @Param("status") Status status,
+		                                         @Param("listingStatus") boolean listingStatus,
+		                                         Pageable pageable);
+
+	@Query("SELECT p FROM Product p " +
+		       "WHERE p.subCategory.category.id = :catId " + "And p.verified = :status "+
+		       "And (p.createdAt LIKE CONCAT('%', :date, '%') OR p.updatedAt LIKE CONCAT('%', :date, '%'))")
+		public Page<Product> findProductByFilterWithOutListing(@Param("catId") String catId,
+		                                                    @Param("date") String date,
+		                                                    @Param("status") Status status,
+		                                                    Pageable pageable);
+
 }

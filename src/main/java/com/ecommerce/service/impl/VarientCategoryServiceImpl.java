@@ -8,34 +8,29 @@ import static com.ecommerce.util.AppConstant.VARIENTCATEGORYATTRIBUTE;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.ExampleMatcher.StringMatcher;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.ecommerce.exception.BadRequestException;
 import com.ecommerce.exception.ResourceNotFoundException;
 import com.ecommerce.exception.UnauthorizedException;
-import com.ecommerce.model.Category;
 import com.ecommerce.model.Role;
 import com.ecommerce.model.RoleName;
 import com.ecommerce.model.User;
 import com.ecommerce.model.VarientCategory;
 import com.ecommerce.model.VarientCategoryAttribute;
 import com.ecommerce.payload.ApiResponse;
-import com.ecommerce.payload.CategoryRequest;
-import com.ecommerce.payload.CategoryResponse;
 import com.ecommerce.payload.PageResponse;
 import com.ecommerce.payload.UserResponse;
 import com.ecommerce.payload.VarientCategoryAttributeRequest;
@@ -70,7 +65,6 @@ public class VarientCategoryServiceImpl implements VarientCategoryService {
 	@Autowired
 	private UserRoleRepo userRepo;
 
-	
 //	To add varient category like size, Ram, Rom, Color
 	@Override
 	public Map<String, Object> addVarientCategory(VarientCategoryRequest varientCategory) {
@@ -90,7 +84,7 @@ public class VarientCategoryServiceImpl implements VarientCategoryService {
 		return response;
 	}
 
-//	To add varient attribute like black, bue, 8GB, 16 GB
+//	To add variant attribute like black, blue, 8GB, 16 GB
 	@Override
 	public Map<String, Object> addVarientCategoryAttribute(VarientCategoryAttributeRequest varientCategoryAttribute) {
 
@@ -116,8 +110,8 @@ public class VarientCategoryServiceImpl implements VarientCategoryService {
 			throw new BadRequestException(AppConstant.DELETE_ALL_ATTRIBUTE);
 		}
 
-		if (userRepo.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleName.ADMIN))
-			||	userRoleRepo.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleNameIdConstant.ADMIN))) {
+		if (userRepo.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleName.ADMIN)) || userRoleRepo
+				.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleNameIdConstant.ADMIN))) {
 			Map<String, Object> response = new HashMap<>();
 			varienCategoryRepo.deleteById(id);
 			ApiResponse apiResonse = new ApiResponse(Boolean.TRUE, AppConstant.VARIENTCAT_DELETED, HttpStatus.OK);
@@ -131,30 +125,45 @@ public class VarientCategoryServiceImpl implements VarientCategoryService {
 	public Map<String, Object> deleteVarientCategoryAttributeById(String id) {
 
 		VarientCategoryAttribute categoryAttribute = attributeRepo.findById(id)
-				.orElseThrow(() ->new ResourceNotFoundException(VARIENTCATEGORYATTRIBUTE, ID, id));
+				.orElseThrow(() -> new ResourceNotFoundException(VARIENTCATEGORYATTRIBUTE, ID, id));
 		if (categoryAttribute.getCategoryJoins().size() != 0) {
 			throw new BadRequestException(AppConstant.DELETE_ALL_PRODUCT);
 		}
-		if (userRepo.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleName.ADMIN))
-				|| userRoleRepo.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleNameIdConstant.ADMIN))) {
-		Map<String, Object> response = new HashMap<>();
-		attributeRepo.deleteById(id);
-		ApiResponse apiResonse = new ApiResponse(Boolean.TRUE, AppConstant.ATTRIBUTE_DELETED, HttpStatus.OK);
-		response.put(AppConstant.RESPONSE_MESSAGE, apiResonse);
-		return response;
+		if (userRepo.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleName.ADMIN)) || userRoleRepo
+				.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleNameIdConstant.ADMIN))) {
+			Map<String, Object> response = new HashMap<>();
+			attributeRepo.deleteById(id);
+			ApiResponse apiResonse = new ApiResponse(Boolean.TRUE, AppConstant.ATTRIBUTE_DELETED, HttpStatus.OK);
+			response.put(AppConstant.RESPONSE_MESSAGE, apiResonse);
+			return response;
 		}
 		throw new UnauthorizedException(UNAUTHORIZED);
-		
+
 	}
 
 	@Override
 	public Map<String, Object> updateVarientCategory(VarientCategoryRequest varientCategoryRequest) {
 
 		VarientCategory varientCategory = varienCategoryRepo.findById(varientCategoryRequest.getId())
-				.orElseThrow(() -> new ResourceNotFoundException(VARIENTCATEGORY, ID,varientCategoryRequest.getId()));
+				.orElseThrow(() -> new ResourceNotFoundException(VARIENTCATEGORY, ID, varientCategoryRequest.getId()));
 		Optional.of(varienCategoryRepo.existsByNameAndIdNot(varientCategoryRequest.getName(), varientCategory.getId()))
 				.orElseThrow(() -> new BadRequestException(AppConstant.VARIENTCAT_TAKEN));
 
+		varientCategoryRequest.getCategoryAttributes().stream().map(varAtt -> {
+			if (Objects.isNull(varAtt.getId()) || varAtt.getId().equals("")) {
+				VarientCategoryAttributeRequest attributeRequest = new VarientCategoryAttributeRequest();
+				attributeRequest.setAttributeName(varAtt.getAttributeName());
+				VarientCategoryRequest categoryReq = new VarientCategoryRequest();
+				categoryReq.setId(varientCategoryRequest.getId());
+				attributeRequest.setVarientCategory(categoryReq);
+				addVarientCategoryAttribute(attributeRequest);
+				return null;
+			} else {
+				varAtt.setVarientCategory(new VarientCategoryRequest(varientCategoryRequest.getId()));
+				updateVarientCategoryAttribute(varAtt);
+				return null;
+			}
+		}).collect(Collectors.toList());
 		Map<String, Object> response = new HashMap<>();
 		varientCategory.setName(varientCategoryRequest.getName());
 		varienCategoryRepo.save(varientCategory);
@@ -216,8 +225,8 @@ public class VarientCategoryServiceImpl implements VarientCategoryService {
 		varientCategoryReponse.setName(varientCategory.getName());
 		varientCategoryReponse.setUser(new UserResponse(varientCategory.getUser().getId()));
 
-		Set<VarientCategoryAttributeResponse> collect = varientCategory.getCategoryAttributes().stream()
-				.map(attribute -> attributeToAttributResponse(attribute)).collect(Collectors.toSet());
+		List<VarientCategoryAttributeResponse> collect = varientCategory.getCategoryAttributes().stream()
+				.map(attribute -> attributeToAttributResponse(attribute)).collect(Collectors.toList());
 		varientCategoryReponse.setCategoryAttributes(collect);
 		return varientCategoryReponse;
 	}
@@ -233,32 +242,29 @@ public class VarientCategoryServiceImpl implements VarientCategoryService {
 		return response;
 	}
 
-	
 //	Get all varient category and attribute with pagination
 	@Override
-	public Map<String, Object> getAllVarientCategory(String search, Integer pageIndex,
-			Integer pageSize, String sortDir) {
+	public Map<String, Object> getAllVarientCategory(String search, Integer pageIndex, Integer pageSize,
+			String sortDir) {
 		Map<String, Object> response = new HashMap<>();
 		AppUtils.validatePageAndSize(pageIndex, pageSize);
-	
+
 		Sort sort1 = null;
 		if (sortDir.equals("DESC")) {
 			sort1 = Sort.by(Sort.Order.desc("updatedAt"));
 		} else {
 			sort1 = Sort.by(Sort.Order.asc("updatedAt"));
 		}
-		Pageable pageable = PageRequest.of(pageIndex, pageSize,sort1);
-		search=search.trim();
-		Page<VarientCategory> findAll=null;
-		if(!search.equals("")) {
-		 findAll = varienCategoryRepo.getAllVarientList(search,pageable);
+		Pageable pageable = PageRequest.of(pageIndex, pageSize, sort1);
+		search = search.trim();
+		Page<VarientCategory> findAll = null;
+		if (!search.equals("")) {
+			findAll = varienCategoryRepo.getAllVarientList(search, pageable);
+		} else {
+			findAll = varienCategoryRepo.findAll(pageable);
 		}
-		else
-		{
-		findAll= varienCategoryRepo.findAll(pageable);
-		}
-		Set<VarientCategoryReponse> varient = findAll.stream().map(varientRes -> varientCategoryToResponse(varientRes))
-				.collect(Collectors.toSet());
+		List<VarientCategoryReponse> varient = findAll.stream().map(varientRes -> varientCategoryToResponse(varientRes))
+				.collect(Collectors.toList());
 
 		PageResponse<VarientCategoryReponse> pageResponse = new PageResponse<>();
 		pageResponse.setContent(varient);

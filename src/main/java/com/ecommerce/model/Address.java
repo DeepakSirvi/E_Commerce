@@ -1,5 +1,6 @@
 package com.ecommerce.model;
 
+import java.util.List;
 import java.util.Set;
 
 import jakarta.persistence.Column;
@@ -52,9 +53,8 @@ public class Address extends Audit {
 	private User userAddress;
 	
 	@OneToMany(mappedBy = "address")
-	private Set<Orders> order;
+	private List<Orders> order;
 
-	
 }
 
 

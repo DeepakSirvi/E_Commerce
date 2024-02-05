@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ecommerce.payload.UpdateStatusRequest;
 import com.ecommerce.payload.VarientRequest;
 
 public interface VarientService {
@@ -17,7 +18,7 @@ public interface VarientService {
 
 	public Map<String, Object> getAllVarientByProductId(String id);
 
-	public Map<String, Object> updateVarientStatus(String id);
+	public Map<String, Object> updateVarientStatus(UpdateStatusRequest statusRequest);
 
 	public Map<String, Object> getActiveOneVarientByProductId(String id);
 

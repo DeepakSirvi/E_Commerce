@@ -1,7 +1,7 @@
 package com.ecommerce.payload;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -17,9 +17,13 @@ import lombok.Setter;
 @NoArgsConstructor
 @JsonInclude(Include.NON_NULL)
 public class VarientCategoryRequest {
-	
+
+	public VarientCategoryRequest(String id) {
+		this.id = id;
+	}
+
 	private String id;
 	private String name;
-	private Set<VarientCategoryAttributeRequest> categoryAttributes=new HashSet<>();
+	private List<VarientCategoryAttributeRequest> categoryAttributes = new ArrayList<>();
 
 }
