@@ -24,8 +24,7 @@ import com.ecommerce.util.AppUtils;
 public class AddressServiceImpl implements AddressService {
 	@Autowired
 	private AddressRepo addressRepo;
-	@Autowired
-	private ModelMapper modelMapper;
+	
 	@Autowired
 	private AppUtils appUtils;
 	@Autowired
@@ -118,9 +117,18 @@ public class AddressServiceImpl implements AddressService {
 
 	@Override
 	public boolean deleteAdress(String id) {
+//		Optional<Address> findById = this.addressRepo.findById(id);
+//		if(findById.isPresent())
+//		{
+//			Address address = findById.get();
+//			address.setStatus(false);
+//			this.addressRepo.save(address);
+//		}
 		Address address = this.addressRepo.findByIdAndStatus(id, true)
 				.orElseThrow(() -> new BadRequestException(AppConstant.ADDRESS_NOT_FOUND));
-		this.addressRepo.save(address);
+		     address.setStatus(false);
+		    this.addressRepo.save(address);
+		
 		return true;
 	}
 

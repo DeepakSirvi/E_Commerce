@@ -32,10 +32,13 @@ public class ProductSaveForLaterImpl implements ProductSaveForLaterService {
 
 	@Autowired
 	private ProductSaveLaterRepo laterRepo;
+	
 	@Autowired
 	private ModelMapper mapper;
+	
 	@Autowired
 	private AppUtils appUtils;
+	
 	@Autowired
 	private VarientRepo repo;
 

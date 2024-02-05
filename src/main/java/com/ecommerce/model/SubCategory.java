@@ -21,21 +21,19 @@ import lombok.Setter;
 public class SubCategory extends Audit {
 
 	public SubCategory(String id2) {
-		this.id=id2;
+		this.id = id2;
 	}
-
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private String id;
-	
+
 	private String subCategory;
-	
+
 	@ManyToOne
 	private Category category = new Category();
 
-	
 	@OneToMany(mappedBy = "subCategory")
 	private List<Product> product;
-	
+
 }

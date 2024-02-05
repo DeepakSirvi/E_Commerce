@@ -124,9 +124,6 @@ public class WishListServiceImpl implements WishListService {
 
 	}
 
-
-		
-
 	@Override
 	public Map<String, Object> getWishlistByUserId() {
 

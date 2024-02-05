@@ -2,7 +2,6 @@ package com.ecommerce.service;
 
 import java.util.Map;
 
-import com.ecommerce.model.Category;
 import com.ecommerce.payload.ApiResponse;
 import com.ecommerce.payload.CategoryRequest;
 import com.ecommerce.payload.CategoryResponse;
@@ -21,7 +20,7 @@ public interface CategoryService {
 
 	public ApiResponse deleteSubCategoryById(String id);
 
-	public ApiResponse updateCategory(Category categoryRequest);
+	public ApiResponse updateCategory(CategoryRequest categoryRequest);
 
 	public ApiResponse updateSubCategory(SubCategoryRequest subCategoryRequest);
 
@@ -30,6 +29,5 @@ public interface CategoryService {
 	public Map<String, Object> getAllCategory();
 
 	public Map<String, Object> getCategory(String search, Integer pageIndex, Integer pageSize, String sortDir);
-
 
 }
