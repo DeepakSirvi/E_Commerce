@@ -1,6 +1,6 @@
 package com.ecommerce.model;
 
-import java.util.Set;
+import java.util.List;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -24,7 +24,7 @@ public class Orders extends Audit{
 	private User user;
 	
 	@OneToMany(mappedBy = "order")
-	private Set<OrderItem> orderItem;
+	private List<OrderItem> orderItem;
 	
 	@ManyToOne
 	private Address address;

@@ -1,4 +1,4 @@
-package com.ecommerce.config;
+ package com.ecommerce.config;
 
 import java.io.IOException;
 
@@ -34,6 +34,7 @@ public class SecurityFilter extends OncePerRequestFilter {
 		try {
 			RequestContextHolder.setRequest(request);
 			String token = request.getParameter("Authorization");
+			
 			if (token != null) {
 					System.out.println(token);
 				String userName = jwtUtil.getUserName(token);

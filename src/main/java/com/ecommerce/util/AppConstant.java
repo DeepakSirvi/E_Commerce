@@ -126,9 +126,13 @@ public class AppConstant {
 	public static final String VARIENTCATEGORYATTRIBUTE = "Varient category attribute";
 	public static final String CATEGORY = "Product category";
 
-	
-	
-	
+	public static final Object REMOVE_FROM_WISHLIST = "remove from wishlist";
+	public static final String WISHLIST = "WishList";
+	public static final String BRAND_NAME_TAKEN = "Brand Name is taken ";
+	public static final String BRAND_IMAGE_PATH = "brandImage";
+	public static final Object BRAND_ADD_SUCCES = "Add Brand";
+	public static final String STATUS = "status verified";
+
 	
 	
 	
@@ -151,8 +155,11 @@ public class AppConstant {
 
 	public static final String PRODUCTSAVEFORLATER_NOT_FOUND = "SaveForLater Not Found";
 	public static final String DELETE_SUCCESS = "Delete Succesfully";
+
 	public static final String MESSAGE1 = "Message";
+
 	//public static final Object PRODUCT_SAVE_FOR_LATER = "";
+
 	
 	
 
@@ -162,5 +169,45 @@ public class AppConstant {
 	public static final String PRODUCTREVIEW_NOT_FOUND = "Product REview NOt Found";
 	public static final Object UPDATE_PRODUCT_REVIEW = "ProductReview Update Successfully";
 	public static final Object PLESE_ORDER_PRODUCT = "Order this Product";
+	public static final Object UPDATE_STATUS = "update status";
+	public static final Object BRAND_LIST = "list of brand";
+	public static final Object VERFIED_BRAND_LIST = "list of verfied brand ";
+	public static final Object BRAND_VERIFIED = "brand verfiend";
+	public static final Object BRAND_NOT_VERIFIED = "brand  not verfiend";
+	public static final String CART = "Cart";
 
-			}
+	public static final String CART_ITEM_REMOVE = "Product is succesfully remove from cart";
+
+	public static final String ADD_TO_CART = "Product added to cart";
+
+	public static final String Count = "count";
+
+	public static final String ALREADY_ADDED = "Product is already added";
+
+	public static final String VARIENT_INACTIVE = "Varient is Inactive";
+
+	public static final String INVALID_TRANSITION = "Invalid status transition";
+
+	public static final String IS_PRESENT = "isPresent";
+
+	public static final Object BRAND_UnVERIFIED = " brand Unverified the code ";
+
+	public static final String Identity_IMAGE_PATH = "identityImage";
+
+	public static final Object IDENTITY_ADD_SUCCES = " Add identity ";
+
+	public static final String IDENTITY_NOT_ADD_SUCCES = "identity not add ";
+
+	public static final Object WISHLIST_RETRIVED_SUCCESSFULLY = "whishlist_retrieved_successfully";
+
+	public static final Object ALL_VERFIED_BRAND = "verfied brand";
+
+	public static final Object ALL_ACTIVE_IDENTITY = "identity active successfully" ;
+
+	public static final String COMPLAINT_IMAGE_PATH = "complaintImage" ;
+
+	public static final Object COMPLAINT_ADD_SUCCES = "add complaint" ;
+
+	
+}		
+

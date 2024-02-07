@@ -1,5 +1,6 @@
 package com.ecommerce.payload;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -40,7 +41,7 @@ public class ProductResponse extends AuditResponse {
     
 	private UserResponse vendor;
 	private SubCategoryResponse subCategory;
-	private Set<VarientResponse> varient;
+	private List<VarientResponse> varient;
 	private ProductDescriptionResponse description=new ProductDescriptionResponse();
 	
 	private String productImage;
@@ -74,7 +75,7 @@ public class ProductResponse extends AuditResponse {
 				.map(varient-> {
 					VarientResponse varientResponse=new VarientResponse();
 				  return varientResponse.varientToVarientResponse(varient);
-				}).collect(Collectors.toSet()));
+				}).collect(Collectors.toList()));
 		}
 		if(Objects.nonNull(product.getSubCategory()))
 		{
@@ -85,7 +86,11 @@ public class ProductResponse extends AuditResponse {
 		return this;
 	}
 	
-
+/***
+ * 
+ * @param product
+ * @return
+ */
 	  public ProductResponse productToProductResponseList(Product product) {
 		this.setId(product.getId());
 		this.setProductName(product.getProductName());
@@ -99,6 +104,8 @@ public class ProductResponse extends AuditResponse {
 		{
 			this.setProductImage(product.getProductImage());
 		}
+		UserResponse response = new UserResponse();
+		this.setVendor(response.userToUserResponse(product.getVendor()));
 		this.setBasicPrice(product.getBasicPrice());
 		return this;
 	}

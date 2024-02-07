@@ -41,7 +41,10 @@ public class AccountServiceImpl implements AccountService {
     
     
     public Account accountToAccountRequest(AccountRequest accountRequest) {
-    	return this.modelMapper.map(accountRequest, Account.class);
+    	
+    	return this. modelMapper.map(accountRequest, Account.class);
+    
+    	
     }
     
 	
@@ -80,7 +83,7 @@ public class AccountServiceImpl implements AccountService {
 	 private void validateStatusTransition(Status currentStatus, Status newStatus) {
 	        if ((currentStatus == Status.ACTIVE && newStatus == Status.ACTIVE) ||
 	            (currentStatus == Status.INACTIVE && newStatus == Status.INACTIVE)) {
-	            throw new BadRequestException("Invalid status transition");
+	            throw new BadRequestException(AppConstant.INVALID_TRANSITION);
 	        }
 	 }
 

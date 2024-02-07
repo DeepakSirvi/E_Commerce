@@ -11,10 +11,13 @@ import com.ecommerce.payload.ProductReviewRequest;
 
 public interface ProductReviewService {
 	
+	
 	public ResponseEntity<?> addProductReview(Integer numberOfStar, String description, String productid,
 			 List<MultipartFile> image,String title);
+	
 	public ResponseEntity<?> updateProductReview(String id, Integer numberOfStar, String description, String productid,
 			 List<MultipartFile> image,String title);
+	
 	public ResponseEntity<?>  deleteProductReview(String id);
 	
 }

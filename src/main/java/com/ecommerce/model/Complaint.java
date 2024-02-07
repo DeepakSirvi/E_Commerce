@@ -1,7 +1,6 @@
 package com.ecommerce.model;
 
-import java.util.Set;
-
+import java.util.List;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -29,11 +28,18 @@ public class Complaint extends Audit {
 	@ManyToOne
 	private User user;
 	
+	
 	@ManyToOne
 	private Product product;
 	
 	
 	@OneToMany(mappedBy = "complaint")
-	private Set<ComplaintImage> image;
+	private List<ComplaintImage> image;
+
+
+	public void setComplaintImage(String uploadImage) {
+		
+		
+	}
 
 }
