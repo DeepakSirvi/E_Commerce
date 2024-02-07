@@ -17,7 +17,7 @@ public interface AddressRepo extends JpaRepository<Address, String> {
 
 	
 
-	@Query("SELECT a FROM Address a WHERE a.userAddress.id=:uid")
+	@Query("SELECT a FROM Address a WHERE a.userAddress.id=:uid AND a.status = true ")
 	public List<Address> findAddresssByuserId(String uid);
 
     @Query("SELECT a FROM Address a WHERE a.userAddress.id=:id AND a.status=true")
