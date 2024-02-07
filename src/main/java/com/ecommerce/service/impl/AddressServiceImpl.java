@@ -85,7 +85,7 @@ public class AddressServiceImpl implements AddressService {
 
 	@Override
 	public AddressResponse updateAddress(AddressRequest addressRequest) {
-		System.out.println("-------------");
+		//System.out.println("-------------");
 		Optional<Address> address = Optional.of(this.addressRepo.findById(addressRequest.getId())
 				.orElseThrow(() -> new BadRequestException(AppConstant.ADDRESS_NOT_FOUND)));
 
@@ -138,7 +138,7 @@ public class AddressServiceImpl implements AddressService {
 		List<Address> listOfAddresses = this.addressRepo.findAddresssByuserId(id);
 		List<AddressResponse> list = listOfAddresses.stream().map(ar -> addressToAddressResponse(ar))
 				.collect(Collectors.toList());
-		System.err.println(list);
+		//System.err.println(list);
 		return list;
 	}
 
