@@ -138,8 +138,7 @@ public class VarientServiceImpl implements VarientService {
 		throw new UnauthorizedException(UNAUTHORIZED);
 	}
 
-// get varient by id if status is active 
-	@Override
+ 	@Override
 	public Map<String, Object> getVarient(String id) {
 		Varient varient = varientRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException(VARIENT, ID, id));
 		if (varient.getStatus().equals(Status.ACTIVE)) {
@@ -150,7 +149,7 @@ public class VarientServiceImpl implements VarientService {
 		throw new UnauthorizedException(UNAUTHORIZED);
 	}
 
-//	Get one active varient of product to display default to user
+
 	@Override
 	public Map<String, Object> getActiveOneVarientByProductId(String id) {
 		Pageable pageable = PageRequest.of(0, 1);
