@@ -208,6 +208,10 @@ public class AppConstant {
 
 	public static final Object COMPLAINT_ADD_SUCCES = "add complaint" ;
 
+	public static final Object UPDATE_COMPLAINT = "complaint update ";
+
+	public static final String COMPLAINT_NOT_FOUND = "complaint not found";
+
 	
 }		
 

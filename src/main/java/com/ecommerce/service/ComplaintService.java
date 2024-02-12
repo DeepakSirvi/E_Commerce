@@ -10,6 +10,12 @@ public interface ComplaintService {
 	
 	 public Map<String , Object> addComplaintDetails(ComplaintRequest complaintRequest , MultipartFile multipartFile);
 	 
+	 public Map<String ,Object> updateComplaintById(ComplaintRequest complaintRequest);
+	 
+     public Map<String ,Object> getComplaintById(String complaintId );
+	 
+	
+	 
 	
 	
 

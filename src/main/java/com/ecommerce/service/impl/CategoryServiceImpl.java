@@ -121,6 +121,10 @@ public class CategoryServiceImpl implements CategoryService {
 			throw new BadRequestException(AppConstant.CATEGORY_TAKEN);
 		}
 		Category category = modelMapper.map(categoryRequest, Category.class);
+		category.getSubCategory().stream().map(subCat->{
+			subCat.setCategory(category);
+			return null;
+		}).collect(Collectors.toList());
 		category.setUser(new User(appUtils.getUserId()));
 		categoryRepo.save(category);
 		ApiResponse apiResponse = new ApiResponse(Boolean.TRUE, AppConstant.CATEGORY_ADDED, HttpStatus.CREATED);
