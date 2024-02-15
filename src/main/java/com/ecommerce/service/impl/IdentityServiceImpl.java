@@ -59,11 +59,13 @@ public class IdentityServiceImpl implements IdentityService {
 		Map<String ,Object> response = new HashMap<>();
 		
 		Identity identity = this.IdentityRequestToIdentity(identityRequest);
+		
 		identity.setStatus(Status.DEACTIVE);
 		
 		
 		
 		if(identityRepo.findByIdCardNumber(identityRequest.getIdCardNumber()).isPresent()) {
+			
 			throw new BadRequestException(AppConstant.IDENTITY_NOT_ADD_SUCCES);
 		}
 		
@@ -71,12 +73,14 @@ public class IdentityServiceImpl implements IdentityService {
 		 if (multipartFiles != null) {
 			 
 			 String uploadImage= appUtils.uploadImage(multipartFiles ,AppConstant.Identity_IMAGE_PATH, null);
+			 
       	    identity.setImage(uploadImage);  
 		 }
 			  
 		 identity .setUser(new User(appUtils.getUserId()));
 		 
 		 identityRepo.save(identity);
+		 
 		 response.put("response",AppConstant.IDENTITY_ADD_SUCCES);
 		 
 	
@@ -97,12 +101,15 @@ public class IdentityServiceImpl implements IdentityService {
 		 Optional<Identity> optionalIdentity =identityRepo .findById(identityId);
 		 
 		 if (optionalIdentity.isPresent()) {
+			 
 			 Identity  identity = optionalIdentity.get();
+			 
 			 identity .setStatus(Status.ACTIVE);
 			
 			  if (optionalIdentity.isPresent()) {
 				   
 				  Identity identity1 =optionalIdentity.get();
+				  
 				  identity1.setStatus(Status.DEACTIVE);
 			  }
 			 
@@ -127,8 +134,9 @@ public class IdentityServiceImpl implements IdentityService {
 		 Map<String, Object> response = new HashMap<>();
 		 
 		 List<Identity> identity =  identityRepo. findAllByUserId(userId );
-		 List<IdentityResponse> identityResponses = identity.stream()
-                 .map(obj->identityResponse(obj))
+		 
+		 List<IdentityResponse> identityResponses = identity.stream()	 
+                 .map(obj->identityResponse(obj))   
                  .collect(Collectors.toList());
          response.put("identity", identityResponses);
          return response;
@@ -137,11 +145,17 @@ public class IdentityServiceImpl implements IdentityService {
 		public IdentityResponse  identityResponse (Identity identity) {
 			 
 			 IdentityResponse identityResponse = new   IdentityResponse ();
+			 
 			 identityResponse.setId(identity.getId());
+			 
 			 identityResponse.setIdCardName(identity.getIdCardName());
+			 
 			 identityResponse.setIdCardNumber(identity.getIdCardNumber());
+			 
 			 identityResponse.setImage(identity.getImage());
+			 
 			 identityResponse.setDescription(identity.getDescription());
+			 
 			 return identityResponse;
 		}
 
@@ -170,11 +184,17 @@ public class IdentityServiceImpl implements IdentityService {
 		}
 
 		private IdentityResponse identityToIdentityResponse(Identity identity2) {
+			
 			IdentityResponse identityResponse= new IdentityResponse();
+			
 			identityResponse.setId( identity2.getId());
+			
 			identityResponse.setIdCardName(identity2.getIdCardName());
+			
 			identityResponse.setIdCardNumber(identity2.getIdCardNumber());
+			
 			identityResponse.setDescription(identity2.getDescription());
+			
 			identityResponse.setImage(identity2.getImage());
 		
 			return  identityResponse ;
@@ -205,11 +225,17 @@ public class IdentityServiceImpl implements IdentityService {
 		private Object identityFilter(Identity obj) {
 			
 			IdentityResponse identityResponse= new IdentityResponse();
+			
 			identityResponse.setId( obj.getId());
+			
 			identityResponse.setIdCardName(obj.getIdCardName());
+			
 			identityResponse.setIdCardNumber(obj.getIdCardNumber());
+			
 			identityResponse.setDescription(obj.getDescription());
+			
 			identityResponse.setImage(obj.getImage());
+			
 			return identityResponse ;
 		}
 

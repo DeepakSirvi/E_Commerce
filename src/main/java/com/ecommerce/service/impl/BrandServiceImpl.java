@@ -47,11 +47,17 @@ public class BrandServiceImpl implements BrandService {
 
 	@Override
 	public Map<String, Object> addBrandDetails(BrandRequest brandRequest, MultipartFile multipartFiles) {
+		
 		Map<String, Object> response = new HashMap<>();
+		
 		Brand brand = this.brandRequestToBrand(brandRequest);
+		
 		brand.setStatus(Status.UNVERIFIED);
+		
 		if (multipartFiles != null) {
+			
 			String uploadImage = appUtils.uploadImage(multipartFiles, AppConstant.BRAND_IMAGE_PATH, null);
+			
 			brand.setBrandImage(uploadImage);
 		}
 
@@ -64,6 +70,7 @@ public class BrandServiceImpl implements BrandService {
 	}
 
 	private Brand brandRequestToBrand(BrandRequest brandRequest) {
+		
 		return this.mapper.map(brandRequest, Brand.class);
 	}
 
@@ -118,10 +125,15 @@ public class BrandServiceImpl implements BrandService {
 	}
 
 	private BrandResponse brandToBrandResponse(Brand brand2) {
+		
 		BrandResponse brandResponse = new BrandResponse();
+		
 		brandResponse.setId(brand2.getId());
+		
 		brandResponse.setBrandName(brand2.getBrandName());
+		
 		brandResponse.setBrandDescription(brand2.getBrandDescription());
+		
 		return brandResponse;
 	}
 
@@ -208,11 +220,17 @@ public class BrandServiceImpl implements BrandService {
 	}
 
 	public BrandResponse brandFilter(Brand obj) {
+		
 		BrandResponse brandResponse = new BrandResponse();
+		
 		brandResponse.setId(obj.getId());
+		
 		brandResponse.setBrandDescription(obj.getBrandDescription());
+		
 		brandResponse.setBrandImage(obj.getBrandImage());
+		
 		brandResponse.setBrandName(obj.getBrandName());
+		
 		return brandResponse;
 
 	}

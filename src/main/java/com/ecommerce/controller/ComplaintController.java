@@ -18,7 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ecommerce.payload.ComplaintRequest;
 import com.ecommerce.service.ComplaintService;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 
 @RestController
 @RequestMapping("/ecommerce/complaint")
@@ -32,7 +32,7 @@ public class ComplaintController {
 	 @PostMapping("/addComplaint")
 	 public ResponseEntity<Map<String, Object>> addComplaintDetails(@RequestBody ComplaintRequest  complaintRequest,@RequestPart(value = "file", required = false) MultipartFile multipartFiles){
 	       
-		 ObjectMapper mapper = new ObjectMapper();
+		
 		 
 		 Map<String, Object> response = complaintService .addComplaintDetails(complaintRequest, multipartFiles);
 		 

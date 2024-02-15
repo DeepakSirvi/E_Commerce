@@ -212,6 +212,14 @@ public class AppConstant {
 
 	public static final String COMPLAINT_NOT_FOUND = "complaint not found";
 
+	public static final Object COMPLAINTIMAGE_ADD_SUCCES = "complaintimage add " ;
+
+	public static final Object UPDATE_SUCCESFULLY = "update succesfully " ;
+
+    public  static final Object REMOVE_FROM_COMPLAINT_IMAGE = "complaint image is remove" ;
+
+	public static final String COMPLAINTIMAGE = "complaint image is not remove " ;
+
 	
 }		
 

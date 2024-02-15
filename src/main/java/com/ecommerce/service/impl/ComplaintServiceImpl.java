@@ -154,8 +154,8 @@ public class ComplaintServiceImpl implements ComplaintService {
 		return complaint;
 	}
 
-
 	public Complaint checkComplaint (String id ) { 
+		
 		 return  complaintRepo.findById(id).orElseThrow(()->new ResourceNotFoundException("COMPLAINT_NOT_FOUND"));
 		 
 		 
