@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -34,15 +35,20 @@ import com.ecommerce.payload.UserResponse;
 import com.ecommerce.payload.UserRoleResponse;
 import com.ecommerce.repository.LoginRepo;
 import com.ecommerce.repository.UserRepo;
+import com.ecommerce.repository.UserRoleRepo;
 import com.ecommerce.service.LoginService;
 import com.ecommerce.service.UserService;
 import com.ecommerce.util.AppConstant;
+import com.ecommerce.util.AppUtils;
 
 @Service
 public class UserServiceImpl implements UserService, UserDetailsService {
 
 	@Autowired
 	private UserRepo userRepo;
+
+	@Autowired
+	private UserRoleRepo userRoleRepo;
 
 	@Autowired
 	private LoginService loginService;
@@ -52,6 +58,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 	@Autowired
 	private LoginRepo loginRepo;
+
+	@Autowired
+	private AppUtils appUtils;
 
 	private ApiResponse apiResponse = null;
 
@@ -67,14 +76,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 		}
 
 		Role role = new Role();
-		role.setId(2);
-		role.setRoleName(RoleName.CUSTOMER);
-
+		role.setId(RoleName.CUSTOMER.ordinal());
 		UserRole userRole = new UserRole();
 		userRole.setRole(role);
 		User user = mapper.map(userRequest, User.class);
 		userRole.setUser(user);
-
 		List<UserRole> userRoles = new ArrayList<>();
 		userRoles.add(userRole);
 
@@ -111,15 +117,28 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 	@Override
 	public UserResponse getUserById(String userId) {
-		User user = userRepo.findByIdAndStatus(userId, Status.ACTIVE)
-				.orElseThrow(() -> new ResourceNotFoundException(AppConstant.USER, AppConstant.ID, userId));
-		UserResponse userResponse = new UserResponse();
-		userResponse.userToUserResponse(user);
-		List<UserRoleResponse> collect = user.getUserRole().stream().map(userRole -> {
-			return new UserRoleResponse().userRoleToUserRoleResponse(userRole);
-		}).collect(Collectors.toList());
-		userResponse.setUserRole(collect);
-		return userResponse;
+		User user = userRepo.findById(userId).get();
+		if (!Objects.nonNull(user)) {
+			throw new ResourceNotFoundException(AppConstant.USER, AppConstant.ID, userId);
+		}
+
+		if (!user.getStatus().equals(Status.ACTIVE) && userRoleRepo.existsByUserAndRole(new User(appUtils.getUserId()),
+				new Role(RoleName.ADMIN.ordinal()))) {
+			throw new ResourceNotFoundException(AppConstant.USER, AppConstant.ID, userId);
+		}
+
+		if (user.getStatus().equals(Status.ACTIVE) || userRoleRepo.existsByUserAndRole(new User(appUtils.getUserId()),
+				new Role(RoleName.ADMIN.ordinal()))) {
+			UserResponse userResponse = new UserResponse();
+			userResponse.userToUserResponse(user);
+			List<UserRoleResponse> collect = user.getUserRole().stream().map(userRole -> {
+				return new UserRoleResponse().userRoleToUserRoleResponse(userRole);
+			}).collect(Collectors.toList());
+			userResponse.setUserRole(collect);
+			return userResponse;
+		} else {
+			throw new ResourceNotFoundException(AppConstant.USER, AppConstant.ID, userId);
+		}
 	}
 
 	@Override
@@ -148,9 +167,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	@Override
 	public Map<String, Object> updateUser(UpdateUserRequest userRequest) {
 		Map<String, Object> response = new HashMap<>();
-		System.err.println(userRequest.getId());
 		Optional<User> userOpt = userRepo.findById(userRequest.getId());
-		if (userOpt.isPresent()) {
+		if (appUtils.isUserActive()) {
 			User user = userOpt.get();
 			if (userRequest.getFirstName().trim() != "")
 				user.setFirstName(userRequest.getFirstName());

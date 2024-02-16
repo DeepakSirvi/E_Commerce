@@ -70,21 +70,22 @@ public class AddressServiceImpl implements AddressService {
 	@Override
 	public AddressResponse createAdress(AddressRequest addressRequest) {
 
+		if (!appUtils.isUserActive()) {
+			throw new BadRequestException(AppConstant.USER_DEACTIVE);
+		}
 		Address address = this.addressRequestToAddress(addressRequest);
-		// System.out.println(addressRequest.getLocality());
 		User user = new User();
-
 		user.setId(appUtils.getUserId());
-
 		address.setUserAddress(user);
 		address.setStatus(Boolean.TRUE);
-
 		return this.addressToAddressResponse(this.addressRepo.save(address));
 	}
 
 	@Override
 	public AddressResponse updateAddress(AddressRequest addressRequest) {
-		System.out.println("-------------");
+		if (!appUtils.isUserActive()) {
+			throw new BadRequestException(AppConstant.USER_DEACTIVE);
+		}
 		Optional<Address> address = Optional.of(this.addressRepo.findById(addressRequest.getId())
 				.orElseThrow(() -> new BadRequestException(AppConstant.ADDRESS_NOT_FOUND)));
 
@@ -109,6 +110,9 @@ public class AddressServiceImpl implements AddressService {
 
 	@Override
 	public AddressResponse getbyId(String id) {
+		if (!appUtils.isUserActive()) {
+			throw new BadRequestException(AppConstant.USER_DEACTIVE);
+		}
 		Address address = this.addressRepo.findById(id)
 				.orElseThrow(() -> new BadRequestException(AppConstant.ADDRESS_NOT_FOUND));
 		return this.addressToAddressResponse(address);
@@ -123,6 +127,9 @@ public class AddressServiceImpl implements AddressService {
 //			address.setStatus(false);
 //			this.addressRepo.save(address);
 //		}
+		if (!appUtils.isUserActive()) {
+			throw new BadRequestException(AppConstant.USER_DEACTIVE);
+		}
 		Address address = this.addressRepo.findByIdAndStatus(id, true)
 				.orElseThrow(() -> new BadRequestException(AppConstant.ADDRESS_NOT_FOUND));
 		address.setStatus(false);
@@ -137,7 +144,6 @@ public class AddressServiceImpl implements AddressService {
 		List<Address> listOfAddresses = this.addressRepo.findAddresssByuserId(id);
 		List<AddressResponse> list = listOfAddresses.stream().map(ar -> addressToAddressResponse(ar))
 				.collect(Collectors.toList());
-		System.err.println(list);
 		return list;
 	}
 

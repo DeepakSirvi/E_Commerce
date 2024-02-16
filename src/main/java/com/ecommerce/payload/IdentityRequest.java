@@ -22,9 +22,9 @@ public class IdentityRequest {
 	private String idCardName;
 	@NotBlank
 	private String idCardNumber;
+	@NotBlank
 	private String description;
 	@NotBlank
 	private String image;
 	private Status status;
-	
 }

@@ -5,6 +5,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,14 +32,14 @@ public class VarientCategoryController {
 
 	@PostMapping("/admin")
 	public ResponseEntity<Map<String, Object>> createVarientCategory(
-			@RequestBody VarientCategoryRequest varientCategory) {
+			@RequestBody @Validated VarientCategoryRequest varientCategory) {
 		return new ResponseEntity<Map<String, Object>>(varientCategoryService.addVarientCategory(varientCategory),
 				HttpStatus.CREATED);
 	}
 
 	@PostMapping("/admin/varientAttribute")
 	public ResponseEntity<Map<String, Object>> createVarientAttribute(
-			@RequestBody VarientCategoryAttributeRequest varientCategoryAttribute) {
+			@RequestBody @Validated VarientCategoryAttributeRequest varientCategoryAttribute) {
 		return new ResponseEntity<Map<String, Object>>(
 				varientCategoryService.addVarientCategoryAttribute(varientCategoryAttribute), HttpStatus.CREATED);
 	}
@@ -54,7 +55,6 @@ public class VarientCategoryController {
 			@RequestParam(value = "pageIndex", required = false, defaultValue = AppConstant.DEFAULT_PAGE_NUMBER) Integer pageIndex,
 			@RequestParam(value = "pageSize", required = false, defaultValue = AppConstant.DEFAULT_PAGE_SIZE) Integer pageSize,
 			@RequestParam(value = "sortDir", required = false, defaultValue = AppConstant.DEFAULT_SORT_DIR) String sortDir) {
-		System.out.println(search);
 		return new ResponseEntity<Map<String, Object>>(
 				varientCategoryService.getAllVarientCategory(search, pageIndex, pageSize, sortDir), HttpStatus.OK);
 	}
@@ -73,14 +73,14 @@ public class VarientCategoryController {
 
 	@PutMapping("/admin")
 	public ResponseEntity<Map<String, Object>> updateVarientCategory(
-			@RequestBody VarientCategoryRequest varientCategory) {
+			@RequestBody @Validated VarientCategoryRequest varientCategory) {
 		return new ResponseEntity<Map<String, Object>>(varientCategoryService.updateVarientCategory(varientCategory),
 				HttpStatus.OK);
 	}
 
 	@PutMapping("/admin/varientAttribute")
 	public ResponseEntity<Map<String, Object>> updateVarientAttribute(
-			@RequestBody VarientCategoryAttributeRequest varientCategoryAttribute) {
+			@RequestBody @Validated VarientCategoryAttributeRequest varientCategoryAttribute) {
 		return new ResponseEntity<Map<String, Object>>(
 				varientCategoryService.updateVarientCategoryAttribute(varientCategoryAttribute), HttpStatus.OK);
 	}

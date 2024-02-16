@@ -24,6 +24,7 @@ import com.ecommerce.exception.UnauthorizedException;
 import com.ecommerce.model.Product;
 import com.ecommerce.model.ProductImage;
 import com.ecommerce.model.Role;
+import com.ecommerce.model.RoleName;
 import com.ecommerce.model.Status;
 import com.ecommerce.model.User;
 import com.ecommerce.model.Varient;
@@ -41,7 +42,6 @@ import com.ecommerce.repository.WishListRepo;
 import com.ecommerce.service.VarientService;
 import com.ecommerce.util.AppConstant;
 import com.ecommerce.util.AppUtils;
-import com.ecommerce.util.RoleNameIdConstant;
 
 @Service
 public class VarientServiceImpl implements VarientService {
@@ -76,6 +76,10 @@ public class VarientServiceImpl implements VarientService {
 //	To add varient
 	@Override
 	public Map<String, Object> createVarient(VarientRequest varientRequest, List<MultipartFile> image) {
+
+		if (!appUtils.isUserActive()) {
+			throw new BadRequestException(AppConstant.USER_DEACTIVE);
+		}
 		if (varientRepo.existsByVarientName(varientRequest.getVarientName())) {
 			throw new BadRequestException(AppConstant.VARIENT_TAKEN);
 		}
@@ -103,11 +107,15 @@ public class VarientServiceImpl implements VarientService {
 //	 To update status of varient by admin or vendor
 	@Override
 	public Map<String, Object> updateVarientStatus(UpdateStatusRequest statusRequest) {
+
+		if (!appUtils.isUserActive()) {
+			throw new BadRequestException(AppConstant.USER_DEACTIVE);
+		}
 		Varient varient = varientRepo.findById(statusRequest.getId())
 				.orElseThrow(() -> new ResourceNotFoundException(VARIENT, ID, statusRequest.getId()));
 		Map<String, Object> response = new HashMap<>();
 
-		if (userRepo.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleNameIdConstant.ADMIN))
+		if (userRepo.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleName.ADMIN.ordinal()))
 				|| varient.getCreatedBy().equals(appUtils.getUserId())) {
 			if (statusRequest.getStatus().equals(Status.DEACTIVE)) {
 				saveLaterRepo.deleteByVarient(varient);

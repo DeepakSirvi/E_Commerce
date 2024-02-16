@@ -1,8 +1,6 @@
 package com.ecommerce.payload;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,28 +12,39 @@ import lombok.ToString;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonInclude(Include.NON_NULL)
 public class ProductRequest {
-	
+
 	private String id;
+	@NotBlank
 	private String productName;
 	private Boolean listingStatus;
+	@NotBlank
 	private String brand;
+	@NotBlank
 	private String fullfillmentBy;
+	@NotBlank
 	private String shippingProvider;
+	@NotBlank
 	private String deliveryCharge;
+	@NotBlank
 	private String productWeight;
+	@NotBlank
 	private String productLength;
+	@NotBlank
 	private String productWidth;
+	@NotBlank
 	private String productHeight;
+	@NotBlank
 	private String taxCode;
+	@NotBlank
 	private String countryOfOrigin;
+	@NotBlank
 	private String productType;
-    private SubCategoryRequest subCategory;
-	private ProductDescriptionRequest description;
-	
+	@NotBlank
 	private String productImage;
-	
+	@NotBlank
 	private Float basicPrice;
 
+	private SubCategoryRequest subCategory;
+	private ProductDescriptionRequest description;
 }

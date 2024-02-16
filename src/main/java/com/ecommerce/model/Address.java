@@ -7,6 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
@@ -26,29 +27,32 @@ public class Address extends Audit {
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private String id;
 
-	@Column(length = 50)
+	@Column(length = 50, nullable = true)
 	private String name;
 
-	@Column(length = 15)
+	@Column(length = 15, nullable = true)
 	private String mobile;
+	@Column(nullable = true)
 	private Integer pincode;
 
 	private String locality;
 
-	@Column(length = 30)
+	@Column(length = 30, nullable = true)
 	private String city;
-	@Column(length = 30)
+	@Column(length = 30, nullable = true)
 	private String state;
+	@Column(nullable = true)
 	private String landMark;
 	@Column(length = 15)
 	private String alternateMobile;
 
-	@Column(length = 15)
+	@Column(length = 15, nullable = true)
 	private String addressType;
 
 	private boolean status;
 
 	@ManyToOne
+	@JoinColumn(nullable = true)
 	private User userAddress;
 
 	@OneToMany(mappedBy = "address")

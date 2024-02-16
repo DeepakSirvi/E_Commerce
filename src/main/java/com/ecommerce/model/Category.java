@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -27,6 +28,7 @@ public class Category extends Audit {
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private String id;
 
+	@Column(nullable = false)
 	private String categoryName;
 
 	@OneToMany(cascade = CascadeType.ALL)

@@ -16,7 +16,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @JsonInclude(Include.NON_NULL)
 public class AccountRequest {
-	
+
 	@NotBlank
 	private String accountNumber;
 	@NotBlank
@@ -30,9 +30,5 @@ public class AccountRequest {
 	private String panNumber;
 	private Status status;
 	private UserRequest user;
-
-
-
-
 
 }

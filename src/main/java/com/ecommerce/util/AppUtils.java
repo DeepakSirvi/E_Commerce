@@ -19,6 +19,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ecommerce.exception.BadRequestException;
+import com.ecommerce.model.Status;
+import com.ecommerce.repository.UserRepo;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -28,10 +30,13 @@ public class AppUtils {
 	@Autowired
 	private JwtUtils jwtUtils;
 
+	@Autowired
+	private UserRepo userRepo;
+
 	@Value("${app.path}")
 	private String path;
 
-	private static final String GLOBAL_DIR = System.getProperty("user.dir");
+	public static final String GLOBAL_DIR = System.getProperty("user.dir");
 
 	public Integer generateOtp() {
 		Random r = new Random();
@@ -66,10 +71,18 @@ public class AppUtils {
 	public String uploadImage(MultipartFile file, String dir, String uuid) {
 		String currentDir = GLOBAL_DIR + path + File.separator + dir + File.separator;
 		String originalFilename = StringUtils.cleanPath(file.getOriginalFilename());
+		System.err.println(path);
+		System.err.println(currentDir);
+		File folder = new File(currentDir);
+//		System.err.println(folder.getName());
+		if (!folder.exists()) {
+			System.err.println(dir);
+			folder.mkdirs();
+		}
+
 		if (!Objects.nonNull(uuid))
 			uuid = UUID.randomUUID().toString();
 		String randomName = uuid.concat(originalFilename.substring(originalFilename.lastIndexOf(".")));
-		// System.out.println(currentDir +randomName);
 		try {
 			Files.copy(file.getInputStream(), Paths.get(currentDir, randomName), StandardCopyOption.REPLACE_EXISTING);
 		} catch (IOException e) {
@@ -80,11 +93,29 @@ public class AppUtils {
 
 	public InputStream getImages(String fileName) {
 		try {
-			return new FileInputStream(GLOBAL_DIR + path + File.separator + fileName);
+			return new FileInputStream(fileName);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
+
+	public boolean isUserActive() {
+		return userRepo.findByUserIdAndStatus(getUserId(), Status.ACTIVE);
+	}
+
+//	public static <U, V> PageableResponse<V> getPageableResponse(Page<U> page, Class<V> type) {
+//		List<U> entity = page.getContent();
+//		List<V> dtoList = entity.stream().map(object -> new ModelMapper().map(object, type))
+//				.collect(Collectors.toList());
+//		PageableResponse<V> response = new PageableResponse<>();
+//		response.setContent(dtoList);
+//		response.setPageNumber(page.getNumber());
+//		response.setPageSize(page.getSize());
+//		response.setTotalElements(page.getTotalElements());
+//		response.setTotalPages(page.getTotalPages());
+//		response.setLastPage(page.isLast());
+//		return response;
+//	}
 
 }

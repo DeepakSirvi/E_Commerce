@@ -44,6 +44,7 @@ public class User {
 
 	private String LastName;
 
+	@Column(nullable = false)
 	private String gender;
 
 	@Column(updatable = false, nullable = false)
@@ -99,11 +100,6 @@ public class User {
 
 	public User(String id) {
 		this.id = id;
-	}
-
-	public WishListProduct getWishlist() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

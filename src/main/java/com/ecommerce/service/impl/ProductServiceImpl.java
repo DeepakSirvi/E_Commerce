@@ -51,7 +51,6 @@ import com.ecommerce.repository.UserRoleRepo;
 import com.ecommerce.service.ProductService;
 import com.ecommerce.util.AppConstant;
 import com.ecommerce.util.AppUtils;
-import com.ecommerce.util.RoleNameIdConstant;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -92,7 +91,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public Map<String, Object> getAllProduct(String search, Integer pageIndex, Integer pageSize, String sortDir) {
-		if (userRoleRepo.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleNameIdConstant.ADMIN))) {
+		if (userRoleRepo.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleName.ADMIN.ordinal()))) {
 			Map<String, Object> response = new HashMap<>();
 			AppUtils.validatePageAndSize(pageIndex, pageSize);
 			Sort sort1 = null;
@@ -133,7 +132,7 @@ public class ProductServiceImpl implements ProductService {
 		Product product = productRepo.findById(statusRequest.getId())
 				.orElseThrow(() -> new ResourceNotFoundException(PRODUCT, ID, statusRequest.getId()));
 		if (product.getCreatedBy().equals(appUtils.getUserId()) || userRoleRepo
-				.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleNameIdConstant.ADMIN))) {
+				.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleName.ADMIN.ordinal()))) {
 
 			if (statusRequest.isStatus()) {
 				if (!product.getVerified().equals(Status.VERIFIED)) {
@@ -203,6 +202,9 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public Map<String, Object> addProduct(ProductRequest productRequest, MultipartFile multipartFiles) {
 
+		if (!appUtils.isUserActive()) {
+			throw new BadRequestException(AppConstant.USER_DEACTIVE);
+		}
 		if (productRepo.existsByProductName(productRequest.getProductName())) {
 			throw new BadRequestException(AppConstant.PRODUCT_NAME_TAKEN);
 		}
@@ -229,7 +231,7 @@ public class ProductServiceImpl implements ProductService {
 		Product product = productRepo.findById(productId)
 				.orElseThrow(() -> new ResourceNotFoundException(PRODUCT, ID, productId));
 		if (product.getListingStatus() || product.getCreatedBy().equals(appUtils.getUserId()) || userRoleRepo
-				.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleNameIdConstant.ADMIN))) {
+				.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleName.ADMIN.ordinal()))) {
 			Map<String, Object> response = new HashMap<>();
 			ProductResponse productResponse = new ProductResponse();
 			productResponse.productToProductResponse(product);

@@ -42,4 +42,15 @@ public class JwtUtils {
 		Claims claims = getClaims(token);
 		return claims.get("userId", String.class);
 	}
+
+	public void logout() {
+//		HttpServletRequest httpRequest = RequestContextHolder.getRequest();
+//		if (httpRequest != null) {
+//			System.out.println("Logout");
+//			String token = httpRequest.getParameter("Authorization");
+//			Jwts.parser().setSigningKey(secret.getBytes()).parseClaimsJws(token).getBody()
+//					.setExpiration(new Date(System.currentTimeMillis()));
+//		}
+	}
+
 }

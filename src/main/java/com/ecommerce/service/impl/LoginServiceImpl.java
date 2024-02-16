@@ -12,6 +12,7 @@ import com.ecommerce.exception.BadRequestException;
 import com.ecommerce.model.Login;
 import com.ecommerce.model.Status;
 import com.ecommerce.model.User;
+import com.ecommerce.payload.ApiResponse;
 import com.ecommerce.payload.LoginRequest;
 import com.ecommerce.payload.OtpResponse;
 import com.ecommerce.payload.UserResponse;
@@ -41,9 +42,15 @@ public class LoginServiceImpl implements LoginService {
 	@Override
 	public OtpResponse generateOtp(String phoneNumber) {
 		OtpResponse otpResponse = null;
+		String regexPattern = "^\\d{10}$";
+
+		if (!phoneNumber.matches(regexPattern)) {
+			throw new BadRequestException(AppConstant.INVALID_PHONE_NUMBER);
+		}
+
 		if (userRepo.existsByUserMobile(phoneNumber)) {
 			Optional<User> user = userRepo.findByUserMobile(phoneNumber);
-			if (user.get().getStatus().equals(Status.ACTIVE)) {
+			if (user.get().getStatus().equals(Status.ACTIVE) || user.get().getStatus().equals(Status.DEACTIVE)) {
 				Integer otp = appUtils.generateOtp();
 				Login login = new Login();
 				Optional<Login> oldLogin = loginRepo.findByPhoneNumber(phoneNumber);
@@ -56,8 +63,6 @@ public class LoginServiceImpl implements LoginService {
 				login.setExperiedAt(LocalDateTime.now().plusMinutes(15));
 				loginRepo.save(login);
 				otpResponse = new OtpResponse(otp, AppConstant.OTP_GENERATED);
-			} else if (user.get().getStatus().equals(Status.DEACTIVE)) {
-				throw new BadRequestException(AppConstant.USER_DEACTIVE);
 			} else if (user.get().getStatus().equals(Status.BLOCK)) {
 				throw new BadRequestException(AppConstant.USER_BLOCK);
 			}
@@ -76,20 +81,22 @@ public class LoginServiceImpl implements LoginService {
 
 				if (login.get().getExperiedAt().compareTo(LocalDateTime.now()) >= 0) {
 
-					Optional<User> user = userRepo.findByUserMobile(login.get().getPhoneNumber());
-					if (user.get().getStatus().equals(Status.ACTIVE)) {
+					User user = userRepo.findByUserMobile(login.get().getPhoneNumber()).get();
+					if (user.getStatus().equals(Status.ACTIVE) || user.getStatus().equals(Status.DEACTIVE)) {
+
+						if (user.getStatus().equals(Status.DEACTIVE)) {
+							user.setStatus(Status.ACTIVE);
+							userRepo.save(user);
+						}
 						UserResponse currentUser = new UserResponse();
-						currentUser.userToUserResponse(user.get());
-						List<UserRoleResponse> collect = user.get().getUserRole().stream().map(userRole -> {
+						currentUser.userToUserResponse(user);
+						List<UserRoleResponse> collect = user.getUserRole().stream().map(userRole -> {
 							return new UserRoleResponse().userRoleToUserRoleResponse(userRole);
 						}).collect(Collectors.toList());
 						currentUser.setUserRole(collect);
-
 						currentUser.setToken(jwtUtils.generateToken(login.get().getPhoneNumber(), currentUser.getId()));
 						return currentUser;
-					} else if (user.get().getStatus().equals(Status.DEACTIVE)) {
-						throw new BadRequestException(AppConstant.USER_DEACTIVE);
-					} else if (user.get().getStatus().equals(Status.BLOCK)) {
+					} else if (user.getStatus().equals(Status.BLOCK)) {
 						throw new BadRequestException(AppConstant.USER_BLOCK);
 					}
 				} else {
@@ -103,6 +110,12 @@ public class LoginServiceImpl implements LoginService {
 			throw new BadRequestException(AppConstant.INVALID_PHONE_NUMBER);
 		}
 		return null;
+	}
+
+	@Override
+	public ApiResponse logoutUser() {
+		jwtUtils.logout();
+		return new ApiResponse(AppConstant.LOGOUT_SUCCESSFULL);
 	}
 
 }

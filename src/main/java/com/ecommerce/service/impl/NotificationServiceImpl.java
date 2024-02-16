@@ -28,6 +28,7 @@ import com.ecommerce.exception.ResourceNotFoundException;
 import com.ecommerce.exception.UnauthorizedException;
 import com.ecommerce.model.Notifications;
 import com.ecommerce.model.Role;
+import com.ecommerce.model.RoleName;
 import com.ecommerce.model.Status;
 import com.ecommerce.model.User;
 import com.ecommerce.payload.NotificationRequest;
@@ -38,7 +39,6 @@ import com.ecommerce.repository.NotificationRepo;
 import com.ecommerce.repository.UserRoleRepo;
 import com.ecommerce.service.NotificationService;
 import com.ecommerce.util.AppUtils;
-import com.ecommerce.util.RoleNameIdConstant;
 
 @Service
 public class NotificationServiceImpl implements NotificationService {
@@ -80,7 +80,7 @@ public class NotificationServiceImpl implements NotificationService {
 		}
 		Notifications notification = notificationRepo.findById(notificationRequest.getId())
 				.orElseThrow(() -> new ResourceNotFoundException(NOTIFICATION, ID, notificationRequest.getId()));
-		if (userRepo.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleNameIdConstant.ADMIN))
+		if (userRepo.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleName.ADMIN.ordinal()))
 				|| notification.getCreatedBy().equals(appUtils.getUserId())) {
 
 			notification.setTitle(notificationRequest.getTitle());
@@ -98,7 +98,7 @@ public class NotificationServiceImpl implements NotificationService {
 		Notifications notification = notificationRepo.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException(NOTIFICATION, ID, id));
 		if (notification.getStatus().equals(Status.ACTIVE) || notification.getCreatedBy().equals(appUtils.getUserId())
-				|| userRepo.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleNameIdConstant.ADMIN))) {
+				|| userRepo.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleName.ADMIN.ordinal()))) {
 			NotificationResponse notificationResponse = notificationToNotificationResponse(notification);
 			response.put(NOTIFICATION, notificationResponse);
 			return response;
@@ -113,7 +113,7 @@ public class NotificationServiceImpl implements NotificationService {
 				.orElseThrow(() -> new ResourceNotFoundException(NOTIFICATION, ID, id));
 
 		if (notification.getCreatedBy().equals(appUtils.getUserId())
-				|| userRepo.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleNameIdConstant.ADMIN))) {
+				|| userRepo.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleName.ADMIN.ordinal()))) {
 			notification.setStatus(Status.DEACTIVE);
 			notificationRepo.save(notification);
 			response.put(RESPONSE_MESSAGE, NOTIFICATION_DELETED);
