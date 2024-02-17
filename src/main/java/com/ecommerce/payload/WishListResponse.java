@@ -1,7 +1,5 @@
 package com.ecommerce.payload;
 
-import com.ecommerce.model.User;
-import com.ecommerce.model.Varient;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -16,10 +14,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @JsonInclude(value = Include.NON_NULL)
 public class WishListResponse {
-	
-        private String id;
-	    private VarientResponse varient;
-	    private UserResponse user;
 
+	private String id;
+	private VarientResponse varient;
+	private UserResponse user;
 
 }

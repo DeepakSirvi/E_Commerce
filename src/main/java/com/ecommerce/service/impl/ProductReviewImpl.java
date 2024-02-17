@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,7 +18,6 @@ import com.ecommerce.model.ProductReview;
 import com.ecommerce.model.ReviewImage;
 import com.ecommerce.model.User;
 import com.ecommerce.payload.ProductReviewRespomce;
-import com.ecommerce.repository.OrderRepo;
 import com.ecommerce.repository.ProductRepo;
 import com.ecommerce.repository.ProductReviewRepo;
 import com.ecommerce.repository.UserRepo;
@@ -39,8 +37,6 @@ public class ProductReviewImpl implements ProductReviewService {
 
 	@Autowired
 	private AppUtils appUtils;
-	@Autowired
-	private OrderRepo orderRepo;
 
 	@Value("${app.path}")
 	private String FILE_PATH;
@@ -50,17 +46,15 @@ public class ProductReviewImpl implements ProductReviewService {
 			List<MultipartFile> image, String title) {
 		Map<String, Object> map = new HashMap<>();
 
-		 User user = userrepo.findById(appUtils.getUserId()).get();
+		User user = userrepo.findById(appUtils.getUserId()).get();
 		List<Orders> order2 = user.getOrder();
 
-		boolean isPresent = order2.stream()
-			    .flatMap(obj -> obj.getOrderItem().stream())
-			    .anyMatch(e -> e.getId() == productid);
-
+		boolean isPresent = order2.stream().flatMap(obj -> obj.getOrderItem().stream())
+				.anyMatch(e -> e.getId() == productid);
 
 		if (!isPresent) {
 			map.put(AppConstant.MESSAGE, AppConstant.PLESE_ORDER_PRODUCT);
-			return new ResponseEntity<>(map,HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(map, HttpStatus.BAD_REQUEST);
 		}
 		user.setId(appUtils.getUserId());
 

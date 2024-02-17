@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ecommerce.payload.AddressRequest;
@@ -21,12 +21,13 @@ import com.ecommerce.service.AddressService;
 
 @RestController
 @RequestMapping("/ecommerce/address")
-@CrossOrigin("*")
+@CrossOrigin
 public class AddressController {
 	@Autowired
 	private AddressService addressService;
 
-	@PostMapping("/create")
+//	@PostMapping("/create")
+	@RequestMapping(value = "/create", method = RequestMethod.POST)
 	public ResponseEntity<AddressResponse> createAddress(@RequestBody AddressRequest addressRequest) {
 		return new ResponseEntity<AddressResponse>(this.addressService.createAdress(addressRequest),
 				HttpStatus.CREATED);
@@ -56,6 +57,6 @@ public class AddressController {
 	@GetMapping("/GetAddressByUserId/{id}")
 	public ResponseEntity<List<AddressResponse>> findAddressbyUserId(@PathVariable String id) {
 		return new ResponseEntity<List<AddressResponse>>(this.addressService.getAddressbyUserid(id), HttpStatus.OK);
-	 // return new ResponseEntity<List<AddressResponse>>(null ,HttpStatus.OK);
+		// return new ResponseEntity<List<AddressResponse>>(null ,HttpStatus.OK);
 	}
 }

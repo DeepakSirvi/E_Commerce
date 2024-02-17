@@ -10,19 +10,19 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
 @Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(Include.NON_NULL)
 public class RoleResponse extends Audit {
-	
-	public RoleResponse(Integer id2, RoleName roleName2) {
-		this.id=id2;
-		this.roleName=roleName2;
-	}
+
 	private Integer id;
 	private RoleName roleName;
 	private String description;
+
+	public RoleResponse(Integer id, RoleName roleName) {
+		this.id = id;
+		this.roleName = roleName;
+	}
 }

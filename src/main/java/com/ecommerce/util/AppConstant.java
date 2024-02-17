@@ -1,22 +1,22 @@
 package com.ecommerce.util;
 
 public class AppConstant {
-	
+
 	public static final String MESSAGE = "message";
-	
+
 //	Default value
 	public static final String DEFAULT_PAGE_NUMBER = "0";
-	public static final String DEFAULT_PAGE_SIZE = "10"; 
+	public static final String DEFAULT_PAGE_SIZE = "10";
 	public static final Integer MAX_PAGE_SIZE = 25;
 	public static final String DEFAULT_SORT_DIR = "DESC";
-	
+
 //	Map key and unauthorizes
-	public static final String RESPONSE_MESSAGE="response";
-	public static final String UNAUTHORIZED="You don't have permission to make this operation";
+	public static final String RESPONSE_MESSAGE = "response";
+	public static final String UNAUTHORIZED = "You don't have permission to make this operation";
 	public static final String INTERNAL_SERVER_ERROR = "Internal Server Error";
 	public static final String INVALID_REQUEST = "Invalid request";
-	
-	
+	public static final String LOGOUT_SUCCESSFULL = "User LogOut Successfully";
+
 //	User registration and login
 	public static final String RESGISTRATION_SUCCESSFULLY = "User resgistration successfully";
 	public static final String INVALID_PHONE_NUMBER = "Invalid mobile number";
@@ -34,8 +34,7 @@ public class AppConstant {
 	public static final String UPDATE_FAILED = "User Update Failed";
 //	Role
 	public static final String ROLE_ALREADY_SAVE = "This role is already save";
-	
-	
+
 //	Product Constant
 	public static final String PRODUCT_NOT_FOUND = "Product is not found";
 	public static final String PRODUCT_ADDED = "Product added succesfully";
@@ -44,7 +43,6 @@ public class AppConstant {
 	public static final String PRODUCT_NOT_VERIFIED = "Product is not verified please wait to get verification from admin";
 	public static final String PRODUCT_NAME_TAKEN = "This product name is already taken";
 
-	
 //	Address Constant
 	public static final String ADDRESS_ADDED = "Address added succesfully";
 	public static final String ADDRESS_NOT_FOUND = "This product name is already taken";
@@ -62,10 +60,10 @@ public class AppConstant {
 	public static final String SUBCATEGORY_ADDED = "SubCAtegory added successfully";
 	public static final String SUBCATEGORY_DELETED = "SubCategory Deleted Successfully";
 	public static final String SUB_CATEGORY_NOT_FOUND = "SubCategory Not found";
-	
+
 //	varient category and varient category attribute constant
 	public static final String VARIENTCAT_TAKEN = "Varient name already taken";
-	public static final String VARIENTCAT_ADDED="Varient Added Successfully";
+	public static final String VARIENTCAT_ADDED = "Varient Added Successfully";
 	public static final String DELETE_ALL_ATTRIBUTE = "First delete all its child attribute";
 	public static final String VARIENTCAT_DELETED = "Varient Successfully deleted";
 	public static final String VARIENT_CATEGORY_NOT_FOUND = "Varient category not found";
@@ -76,11 +74,10 @@ public class AppConstant {
 	public static final String VARIENT_ATTRIBUTE_ADD = "Varient attribute added";
 	public static final String VARIENT_ATTIBUTE_NOT_FOUND = "Attribute is not found";
 	public static final String VARIENT_ATTRIBUTE_UPDATE = "Attribute updated";
-	
 
 //	Bank Account constant
 
-	public static final String ACCOUNT_NUMBER_TAKEN ="Account number is already in use";
+	public static final String ACCOUNT_NUMBER_TAKEN = "Account number is already in use";
 	public static final String ACCOUNT_NOT_FOUND = "Account not found";
 	public static final String ERROR_UPDATING_ACCOUNT_STATUS = "Error updating account status";
 	public static final String ACCOUNT_DEACTIVATED = "Account Deactivated";
@@ -95,26 +92,22 @@ public class AppConstant {
 
 //	Image path
 	public static final String PRODUCT_IMAGE_PATH = "productImage";
-	
-	
+
 //	Notification constant
 	public static final String NOTIFICATION_TITLE_TAKEN = "Title is already use";
 	public static final String NOTIFICATION_ADDED = "Notification send";
 	public static final String NOTIFICATION_DELETED = "Notification deleted successfully";
 	public static final String NOTIFICATION_UPDATE = "Notification updated";
 
-	
 //  Product varient constant
 	public static final String NO_ACTIVE_VARIENT = "No active varient present";
 	public static final String VARIENT_TAKEN = "Varient Name is taken ";
 	public static final String VARIENT_ADDED = "Varient added successfully";
 	public static final String VARIENT_NOT_FOUND = "Varient not found";
-	
-	
+
 // Vendor constant
 	public static final String VENDOR_NOT_FOUND = "Vendor is not found";
 
-	
 // Entity Constant
 	public static final String MOBILE = "Mobile";
 	public static final String USER = "User";
@@ -133,16 +126,11 @@ public class AppConstant {
 	public static final Object BRAND_ADD_SUCCES = "Add Brand";
 	public static final String STATUS = "status verified";
 
-	
-	
-	
 	public static final String OUT_OF_STOCK = "This product out of stock";
 	public static final String AVAILABLE_STOCK = "Product is out of avalibility";
 	public static final Object PRODUCT_ADD_TO_CART = "This product is added to card ";
 	public static final Object PRODUCT_REMOVE = "Product successfully remove";
-	
-	
-	
+
 	public static final String STATUS_UPDATE = "Status is sucessfully update";
 	public static final Object ADDWISHLIST = "Product add to wishlist";
 	public static final Object PRODUCT_ALREADY_IN_WISHLIST = "Product already add wishlist";
@@ -158,14 +146,9 @@ public class AppConstant {
 
 	public static final String MESSAGE1 = "Message";
 
-	//public static final Object PRODUCT_SAVE_FOR_LATER = "";
+	// public static final Object PRODUCT_SAVE_FOR_LATER = "";
 
-	
-	
-
-
-
-	public static final  String  PRODUCT_ADDED_SUCCESS= "Added Successfully";
+	public static final String PRODUCT_ADDED_SUCCESS = "Added Successfully";
 	public static final String PRODUCTREVIEW_NOT_FOUND = "Product REview NOt Found";
 	public static final Object UPDATE_PRODUCT_REVIEW = "ProductReview Update Successfully";
 	public static final Object PLESE_ORDER_PRODUCT = "Order this Product";
@@ -202,24 +185,10 @@ public class AppConstant {
 
 	public static final Object ALL_VERFIED_BRAND = "verfied brand";
 
-	public static final Object ALL_ACTIVE_IDENTITY = "identity active successfully" ;
+	public static final Object ALL_ACTIVE_IDENTITY = "identity active successfully";
 
-	public static final String COMPLAINT_IMAGE_PATH = "complaintImage" ;
+	public static final String Photo = "Image";
 
-	public static final Object COMPLAINT_ADD_SUCCES = "add complaint" ;
+	public static final String DUPLICATE_NOT_ALLOWED = "Duplicate Name Not Allowed";
 
-	public static final Object UPDATE_COMPLAINT = "complaint update ";
-
-	public static final String COMPLAINT_NOT_FOUND = "complaint not found";
-
-	public static final Object COMPLAINTIMAGE_ADD_SUCCES = "complaintimage add " ;
-
-	public static final Object UPDATE_SUCCESFULLY = "update succesfully " ;
-
-    public  static final Object REMOVE_FROM_COMPLAINT_IMAGE = "complaint image is remove" ;
-
-	public static final String COMPLAINTIMAGE = "complaint image is not remove " ;
-
-	
-}		
-
+}

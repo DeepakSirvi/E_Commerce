@@ -1,13 +1,8 @@
 package com.ecommerce.model;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-import org.hibernate.annotations.GeneratorType;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.CascadeType;
@@ -48,6 +43,6 @@ public class ProductReview extends Audit {
 	private User user;
 
 	@ManyToOne
-	//@JsonIgnore
+	// @JsonIgnore
 	private Product product;
 }

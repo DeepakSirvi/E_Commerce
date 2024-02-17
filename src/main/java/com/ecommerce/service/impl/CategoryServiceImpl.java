@@ -6,12 +6,10 @@ import static com.ecommerce.util.AppConstant.UNAUTHORIZED;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
-
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -28,7 +26,7 @@ import com.ecommerce.exception.ResourceNotFoundException;
 import com.ecommerce.exception.UnauthorizedException;
 import com.ecommerce.model.Category;
 import com.ecommerce.model.Role;
-
+import com.ecommerce.model.RoleName;
 import com.ecommerce.model.SubCategory;
 import com.ecommerce.model.User;
 import com.ecommerce.payload.ApiResponse;
@@ -44,7 +42,6 @@ import com.ecommerce.repository.UserRoleRepo;
 import com.ecommerce.service.CategoryService;
 import com.ecommerce.util.AppConstant;
 import com.ecommerce.util.AppUtils;
-import com.ecommerce.util.RoleNameIdConstant;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -66,7 +63,10 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public ApiResponse addSubCategory(SubCategoryRequest subCategoryRequest) {
-//               System.out.println("Deepak" + subCategoryRequest.getSubCategory() +" "+ subCategoryRequest.getCategory().getId());
+
+		if (!appUtils.isUserActive()) {
+			throw new BadRequestException(AppConstant.USER_DEACTIVE);
+		}
 		if (subCategoryRepo.existsBySubCategoryAndCategory(subCategoryRequest.getSubCategory(),
 				new Category(subCategoryRequest.getCategory().getId()))) {
 			throw new BadRequestException(AppConstant.SUBCATEGORY_TAKEN);
@@ -103,6 +103,9 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public ApiResponse updateSubCategory(SubCategoryRequest subCategoryRequest) {
+		if (!appUtils.isUserActive()) {
+			throw new BadRequestException(AppConstant.USER_DEACTIVE);
+		}
 		SubCategory subCategory = subCategoryRepo.findById(subCategoryRequest.getId())
 				.orElseThrow(() -> new BadRequestException(AppConstant.SUB_CATEGORY_NOT_FOUND));
 		if (subCategoryRepo.existsBySubCategoryAndCategory(subCategoryRequest.getSubCategory(),
@@ -117,11 +120,18 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public ApiResponse addCategory(CategoryRequest categoryRequest) {
+		if (!appUtils.isUserActive()) {
+			throw new BadRequestException(AppConstant.USER_DEACTIVE);
+		}
 		if (categoryRepo.existsByCategoryName(categoryRequest.getCategoryName())) {
 			throw new BadRequestException(AppConstant.CATEGORY_TAKEN);
 		}
+
 		Category category = modelMapper.map(categoryRequest, Category.class);
-		category.getSubCategory().stream().map(subCat->{
+		if (hasDuplicateSubCategoryName(category.getSubCategory())) {
+			throw new BadRequestException(AppConstant.DUPLICATE_NOT_ALLOWED);
+		}
+		category.getSubCategory().stream().map(subCat -> {
 			subCat.setCategory(category);
 			return null;
 		}).collect(Collectors.toList());
@@ -131,15 +141,38 @@ public class CategoryServiceImpl implements CategoryService {
 		return apiResponse;
 	}
 
+	private boolean hasDuplicateSubCategoryName(List<SubCategory> subCategories) {
+		if (subCategories == null || subCategories.isEmpty()) {
+			return false; // No duplicates if the list is null or empty
+		}
+
+		for (SubCategory subCategory : subCategories) {
+			String name = subCategory != null ? subCategory.getSubCategory() : null;
+			if (name == null || name.trim().isEmpty()) {
+				return false; // If found null, empty, or blank name, return false immediately
+			}
+		}
+
+		Map<String, Long> subCategoryCounts = subCategories.stream()
+				.collect(Collectors.groupingBy(SubCategory::getSubCategory, Collectors.counting()));
+
+		Predicate<Long> isDuplicate = count -> count > 1;
+
+		return subCategoryCounts.values().stream().anyMatch(isDuplicate);
+	}
+
 	@Override
 	public ApiResponse deleteCategoryById(String id) {
+		if (!appUtils.isUserActive()) {
+			throw new BadRequestException(AppConstant.USER_DEACTIVE);
+		}
 		Category category = categoryRepo.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException(CATEGORY, ID, id));
 		if (category.getSubCategory().size() != 0)
 			throw new BadRequestException(AppConstant.DELETE_SUBCATEGORY);
 
 		if (category.getCreatedBy().equals(appUtils.getUserId()) || userRoleRepo
-				.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleNameIdConstant.ADMIN))) {
+				.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleName.ADMIN.ordinal()))) {
 			categoryRepo.deleteById(id);
 			return new ApiResponse(Boolean.TRUE, AppConstant.CATEGORY_DELETED, HttpStatus.OK);
 		}
@@ -148,15 +181,19 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public ApiResponse deleteSubCategoryById(String id) {
+		if (!appUtils.isUserActive()) {
+			throw new BadRequestException(AppConstant.USER_DEACTIVE);
+		}
 		SubCategory subCategory = subCategoryRepo.findById(id)
 				.orElseThrow(() -> new BadRequestException(AppConstant.SUB_CATEGORY_NOT_FOUND));
-		if (subCategory.getProduct().size() != 0)
-			throw new BadRequestException(AppConstant.DELETE_PRODUCT);
+
 		if (subCategory.getCreatedBy().equals(appUtils.getUserId()) || userRoleRepo
-				.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleNameIdConstant.ADMIN))) {
-			subCategoryRepo.deleteById(id);
+				.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleName.ADMIN.ordinal()))) {
+			subCategoryRepo.delete(subCategory);
 			return new ApiResponse(Boolean.TRUE, AppConstant.SUBCATEGORY_DELETED, HttpStatus.OK);
 		}
+		if (subCategory.getProduct().size() != 0)
+			throw new BadRequestException(AppConstant.DELETE_PRODUCT);
 		throw new UnauthorizedException(UNAUTHORIZED);
 	}
 
@@ -208,6 +245,10 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public ApiResponse updateCategory(CategoryRequest categoryRequest) {
+		if (!appUtils.isUserActive()) {
+			throw new BadRequestException(AppConstant.USER_DEACTIVE);
+		}
+
 		Category category = categoryRepo.findById(categoryRequest.getId())
 				.orElseThrow(() -> new BadRequestException(AppConstant.CATEGORY_NOT_FOUND));
 

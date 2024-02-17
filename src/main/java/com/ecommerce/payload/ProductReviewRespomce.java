@@ -1,15 +1,11 @@
 package com.ecommerce.payload;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-import com.ecommerce.model.ProductReview;
 import com.ecommerce.model.ReviewImage;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Setter
@@ -20,7 +16,7 @@ public class ProductReviewRespomce {
 
 	private String description;
 
-	private List<ReviewImage> image=new ArrayList<>();
+	private List<ReviewImage> image = new ArrayList<>();
 
 	public ProductReviewRespomce(Integer numberOfStar, String title, String description, List<ReviewImage> image) {
 		super();

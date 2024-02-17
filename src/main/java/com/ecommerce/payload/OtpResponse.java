@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonInclude(Include.NON_NULL)
+@JsonInclude(value = Include.NON_NULL)
 public class OtpResponse {
 
 	private Integer otp;

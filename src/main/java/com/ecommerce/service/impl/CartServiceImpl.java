@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,10 +35,10 @@ public class CartServiceImpl implements CartService {
 
 	@Autowired
 	private UserRepo userRepo;
-	
+
 	@Autowired
 	private VarientRepo varientRepo;
-	
+
 	@Autowired
 	private AppUtils appUtils;
 
@@ -63,14 +62,15 @@ public class CartServiceImpl implements CartService {
 			cart2 = cartRepo.save(cart2);
 		}
 		Map<String, Object> response = new HashMap<>();
-		response.put(AppConstant.MESSAGE,AppConstant.ADD_TO_CART);
+		response.put(AppConstant.MESSAGE, AppConstant.ADD_TO_CART);
 		return response;
 	}
 
 	@Override
 	public Map<String, Object> getCartByUserId(String userId) {
 		Map<String, Object> response = new HashMap<>();
-	    User user = userRepo.findByIdAndStatus(userId,Status.ACTIVE).orElseThrow(()->new ResourceNotFoundException(AppConstant.USER,AppConstant.ID,userId));
+		userRepo.findByIdAndStatus(userId, Status.ACTIVE)
+				.orElseThrow(() -> new ResourceNotFoundException(AppConstant.USER, AppConstant.ID, userId));
 
 		List<Cart> cartList = cartRepo.findByUser(new User(userId));
 		List<CartResponse> cartResponses = cartList.stream().map(carts -> {
@@ -82,29 +82,25 @@ public class CartServiceImpl implements CartService {
 
 	@Override
 	public Map<String, Object> deleteCartById(String cartId) {
-		Map<String , Object> response = new HashMap<>();
+		Map<String, Object> response = new HashMap<>();
 		Optional<Cart> cart = cartRepo.findById(cartId);
-		if(cart.isPresent()) {
-			if(cart.get().getUser().getId().equals(appUtils.getUserId())) {
-			cartRepo.deleteById(cartId);
-			response.put(AppConstant.MESSAGE, AppConstant.CART_ITEM_REMOVE);
-			return response;
-			}
-			else
-			{
+		if (cart.isPresent()) {
+			if (cart.get().getUser().getId().equals(appUtils.getUserId())) {
+				cartRepo.deleteById(cartId);
+				response.put(AppConstant.MESSAGE, AppConstant.CART_ITEM_REMOVE);
+				return response;
+			} else {
 				throw new UnauthorizedException(AppConstant.UNAUTHORIZED);
 			}
+		} else {
+			throw new ResourceNotFoundException(AppConstant.CART, AppConstant.ID, cartId);
 		}
-		else
-		{
-			throw new ResourceNotFoundException(AppConstant.CART,AppConstant.ID,cartId);
-		}	
 	}
 
 	@Override
 	public Map<String, Object> getCount() {
 		Map<String, Object> response = new HashMap<>();
-		List<Object> count=cartRepo.fetchCountofWishAndCartItem(appUtils.getUserId());
+		List<Object> count = cartRepo.fetchCountofWishAndCartItem(appUtils.getUserId());
 		response.put(AppConstant.Count, count);
 		return response;
 	}
