@@ -1,7 +1,5 @@
 package com.ecommerce.payload;
 
-import com.ecommerce.model.ProductImage;
-import com.ecommerce.model.Varient;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -20,8 +18,8 @@ import lombok.ToString;
 public class ProductImageRequest {
 
 	private String id;
-	
+
 	private String imageUrl;
-	
+
 //	private VarientRequest varientImage;
 }

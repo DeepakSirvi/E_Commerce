@@ -16,7 +16,8 @@ import lombok.Setter;
 @JsonInclude(Include.NON_NULL)
 public class RoleRequest {
 
+	private Integer id;
 	private RoleName roleName;
 	private String description;
-	private Integer id;
+
 }

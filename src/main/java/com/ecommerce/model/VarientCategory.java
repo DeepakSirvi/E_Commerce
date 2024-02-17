@@ -1,8 +1,10 @@
 package com.ecommerce.model;
-import java.util.HashSet;
-import java.util.Set;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,21 +23,23 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 public class VarientCategory extends Audit {
-	
-	public VarientCategory(String id) {
-		this.id=id;
-	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private String id;
+	@Column(unique = true, nullable = true)
 	private String name;
-	
+
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "varient_Category_Id")
-	private Set<VarientCategoryAttribute> categoryAttributes = new HashSet<>();
-	
+	private List<VarientCategoryAttribute> categoryAttributes = new ArrayList<>();
+
 	@ManyToOne
+	@JoinColumn(nullable = true)
 	private User user;
+
+	public VarientCategory(String id) {
+		this.id = id;
+	}
 
 }

@@ -2,9 +2,6 @@ package com.ecommerce.exception;
 
 import org.springframework.http.HttpStatus;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,10 +16,10 @@ public class ExceptionResponse {
 	private Boolean success;
 	private String message;
 	private HttpStatus status;
-	
+
 	public ExceptionResponse(String message) {
-		this.message=message;
-		this.success=Boolean.TRUE;
-		this.status=HttpStatus.OK;
+		this.message = message;
+		this.success = Boolean.TRUE;
+		this.status = HttpStatus.OK;
 	}
 }

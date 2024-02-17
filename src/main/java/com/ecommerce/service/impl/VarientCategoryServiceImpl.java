@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -43,7 +44,6 @@ import com.ecommerce.repository.VarientCategoryRepo;
 import com.ecommerce.service.VarientCategoryService;
 import com.ecommerce.util.AppConstant;
 import com.ecommerce.util.AppUtils;
-import com.ecommerce.util.RoleNameIdConstant;
 
 @Service
 public class VarientCategoryServiceImpl implements VarientCategoryService {
@@ -69,13 +69,17 @@ public class VarientCategoryServiceImpl implements VarientCategoryService {
 	@Override
 	public Map<String, Object> addVarientCategory(VarientCategoryRequest varientCategory) {
 
+		if (!appUtils.isUserActive()) {
+			throw new BadRequestException(AppConstant.USER_DEACTIVE);
+		}
 		if (varienCategoryRepo.existsByName(varientCategory.getName())) {
 			throw new BadRequestException(AppConstant.VARIENTCAT_TAKEN);
 		}
-
 		Map<String, Object> response = new HashMap<>();
 		VarientCategory varientCategory2 = modelMapper.map(varientCategory, VarientCategory.class);
-
+		if (hasDuplicateAttributeName(varientCategory2.getCategoryAttributes())) {
+			throw new BadRequestException(AppConstant.DUPLICATE_NOT_ALLOWED);
+		}
 		varientCategory2.setUser(new User(appUtils.getUserId()));
 		varienCategoryRepo.save(varientCategory2);
 
@@ -84,10 +88,27 @@ public class VarientCategoryServiceImpl implements VarientCategoryService {
 		return response;
 	}
 
+	private boolean hasDuplicateAttributeName(List<VarientCategoryAttribute> attributes) {
+		if (attributes == null || attributes.isEmpty()) {
+			return false; // No duplicates if the list is null or empty
+		}
+
+		Map<String, Long> attributeCounts = attributes.stream().filter(
+				attr -> attr != null && attr.getAttributeName() != null && !attr.getAttributeName().trim().isEmpty())
+				.collect(Collectors.groupingBy(VarientCategoryAttribute::getAttributeName, Collectors.counting()));
+
+		Predicate<Long> isDuplicate = count -> count > 1;
+
+		return attributeCounts.values().stream().anyMatch(isDuplicate);
+	}
+
 //	To add variant attribute like black, blue, 8GB, 16 GB
 	@Override
 	public Map<String, Object> addVarientCategoryAttribute(VarientCategoryAttributeRequest varientCategoryAttribute) {
 
+		if (!appUtils.isUserActive()) {
+			throw new BadRequestException(AppConstant.USER_DEACTIVE);
+		}
 		if (attributeRepo.existsByAttributeNameAndVarientCategory(varientCategoryAttribute.getAttributeName(),
 				new VarientCategory(varientCategoryAttribute.getVarientCategory().getId()))) {
 			throw new BadRequestException(AppConstant.VARIENT_ATTRIBUTE_TAKEN);
@@ -103,6 +124,9 @@ public class VarientCategoryServiceImpl implements VarientCategoryService {
 	@Override
 	public Map<String, Object> deleteVarientCategoryById(String id) {
 
+		if (!appUtils.isUserActive()) {
+			throw new BadRequestException(AppConstant.USER_DEACTIVE);
+		}
 		VarientCategory varientCategory = varienCategoryRepo.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException(VARIENTCATEGORY, ID, id));
 
@@ -110,8 +134,7 @@ public class VarientCategoryServiceImpl implements VarientCategoryService {
 			throw new BadRequestException(AppConstant.DELETE_ALL_ATTRIBUTE);
 		}
 
-		if (userRepo.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleName.ADMIN)) || userRoleRepo
-				.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleNameIdConstant.ADMIN))) {
+		if (userRoleRepo.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleName.ADMIN.ordinal()))) {
 			Map<String, Object> response = new HashMap<>();
 			varienCategoryRepo.deleteById(id);
 			ApiResponse apiResonse = new ApiResponse(Boolean.TRUE, AppConstant.VARIENTCAT_DELETED, HttpStatus.OK);
@@ -124,13 +147,15 @@ public class VarientCategoryServiceImpl implements VarientCategoryService {
 	@Override
 	public Map<String, Object> deleteVarientCategoryAttributeById(String id) {
 
+		if (!appUtils.isUserActive()) {
+			throw new BadRequestException(AppConstant.USER_DEACTIVE);
+		}
 		VarientCategoryAttribute categoryAttribute = attributeRepo.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException(VARIENTCATEGORYATTRIBUTE, ID, id));
 		if (categoryAttribute.getCategoryJoins().size() != 0) {
 			throw new BadRequestException(AppConstant.DELETE_ALL_PRODUCT);
 		}
-		if (userRepo.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleName.ADMIN)) || userRoleRepo
-				.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleNameIdConstant.ADMIN))) {
+		if (userRepo.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleName.ADMIN.ordinal()))) {
 			Map<String, Object> response = new HashMap<>();
 			attributeRepo.deleteById(id);
 			ApiResponse apiResonse = new ApiResponse(Boolean.TRUE, AppConstant.ATTRIBUTE_DELETED, HttpStatus.OK);
@@ -144,6 +169,9 @@ public class VarientCategoryServiceImpl implements VarientCategoryService {
 	@Override
 	public Map<String, Object> updateVarientCategory(VarientCategoryRequest varientCategoryRequest) {
 
+		if (!appUtils.isUserActive()) {
+			throw new BadRequestException(AppConstant.USER_DEACTIVE);
+		}
 		VarientCategory varientCategory = varienCategoryRepo.findById(varientCategoryRequest.getId())
 				.orElseThrow(() -> new ResourceNotFoundException(VARIENTCATEGORY, ID, varientCategoryRequest.getId()));
 		Optional.of(varienCategoryRepo.existsByNameAndIdNot(varientCategoryRequest.getName(), varientCategory.getId()))
@@ -175,6 +203,9 @@ public class VarientCategoryServiceImpl implements VarientCategoryService {
 	@Override
 	public Map<String, Object> updateVarientCategoryAttribute(
 			VarientCategoryAttributeRequest varientCategoryAttribute) {
+		if (!appUtils.isUserActive()) {
+			throw new BadRequestException(AppConstant.USER_DEACTIVE);
+		}
 		Map<String, Object> response = new HashMap<>();
 		VarientCategoryAttribute attribute = attributeRepo.findById(varientCategoryAttribute.getId())
 				.orElseThrow(() -> new BadRequestException(AppConstant.VARIENT_ATTIBUTE_NOT_FOUND));

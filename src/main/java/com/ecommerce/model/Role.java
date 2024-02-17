@@ -4,13 +4,8 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
@@ -25,31 +20,31 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Role{
+public class Role {
 
 	@Id
 	private Integer id;
-	@Column(unique = true,length=30)
+	@Column(unique = true, length = 30, nullable = false)
 	@Enumerated(EnumType.STRING)
 	private RoleName roleName;
-	
-	@Column(length=2000)
+
+	@Column(length = 2000)
 	private String description;
-	
-	@Column(updatable = false,nullable = false)
+
+	@Column(updatable = false, nullable = false)
 	private LocalDateTime createdAt;
 
 	@Column(nullable = false)
 	private LocalDateTime updatedAt;
-	
+
 	@OneToMany(mappedBy = "role")
-	private Set<UserRole> userRole= new HashSet<>();
-	
+	private Set<UserRole> userRole = new HashSet<>();
+
 	public Role(RoleName roleName) {
-		this.roleName=roleName;
+		this.roleName = roleName;
 	}
 
 	public Role(int i) {
-		id=i;
+		id = i;
 	}
 }

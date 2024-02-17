@@ -1,7 +1,6 @@
 package com.ecommerce.payload;
 
 import java.util.List;
-import java.util.Set;
 
 import com.ecommerce.model.VarientCategory;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -18,17 +17,16 @@ import lombok.Setter;
 @NoArgsConstructor
 @JsonInclude(Include.NON_NULL)
 public class VarientCategoryReponse {
-	
+
 	private String id;
 	private String name;
 	private List<VarientCategoryAttributeResponse> categoryAttributes;
 	private UserResponse user;
+
 	public VarientCategoryReponse vatCatToResponse(VarientCategory varientCategory) {
 		this.setId(varientCategory.getId());
 		this.setName(varientCategory.getName());
 		return this;
 	}
-	
-	
 
 }

@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -36,31 +35,30 @@ public class VarientPController {
 	@Autowired
 	private VarientService varientService;
 
-	
-	@PostMapping(path="/")
-	public ResponseEntity<Map<String, Object>> addProductVarient(@RequestPart(value = "varientRequest") String varientRequest,
-		
-			@RequestPart(value="file",required = false) List<MultipartFile> multipartFiles){
+	@PostMapping(path = "/")
+	public ResponseEntity<Map<String, Object>> addProductVarient(
+			@RequestPart(value = "varientRequest") String varientRequest,
+
+			@RequestPart(value = "file", required = false) List<MultipartFile> multipartFiles) {
 		System.out.println(multipartFiles);
-		VarientRequest request=null;
+		VarientRequest request = null;
 		ObjectMapper mapper = new ObjectMapper();
 		try {
-			request=mapper.readValue(varientRequest, VarientRequest.class);
+			request = mapper.readValue(varientRequest, VarientRequest.class);
 			System.err.println(request);
-		}
-		catch (JsonMappingException e) {
+		} catch (JsonMappingException e) {
 			// TODO Auto-generated catch block
 			System.out.println("sdf");
 			e.printStackTrace();
 		} catch (JsonProcessingException e) {
 			System.out.println("3123");
 			e.printStackTrace();
-		}
-		catch(Exception e) {
+		} catch (Exception e) {
 			System.out.println("asda");
 		}
-				//System.out.println(request.getVarientName());
-		return new ResponseEntity<Map<String,Object>>(varientService.createVarient(request,multipartFiles),HttpStatus.CREATED);
+		// System.out.println(request.getVarientName());
+		return new ResponseEntity<Map<String, Object>>(varientService.createVarient(request, multipartFiles),
+				HttpStatus.CREATED);
 
 	}
 
@@ -86,19 +84,23 @@ public class VarientPController {
 	@PatchMapping("/admin/status")
 	public ResponseEntity<Map<String, Object>> updateVarientStatus(@RequestBody UpdateStatusRequest statusRequest) {
 
-		return new ResponseEntity<Map<String, Object>>(varientService.updateVarientStatus(statusRequest), HttpStatus.CREATED);
+		return new ResponseEntity<Map<String, Object>>(varientService.updateVarientStatus(statusRequest),
+				HttpStatus.CREATED);
 	}
 
 	@GetMapping("/permitAll/varientByProduct/{productId}")
-	public ResponseEntity<Map<String, Object>> getActiveVarientByProductId(@PathVariable(value = "productId") String productId) {
-		return new ResponseEntity<Map<String, Object>>(varientService.getActiveOneVarientByProductId(productId), HttpStatus.CREATED);
+	public ResponseEntity<Map<String, Object>> getActiveVarientByProductId(
+			@PathVariable(value = "productId") String productId) {
+		return new ResponseEntity<Map<String, Object>>(varientService.getActiveOneVarientByProductId(productId),
+				HttpStatus.CREATED);
 	}
-	
+
 	@PostMapping("/permitAll/catJoin/{attributeId}/{productId}")
 	public ResponseEntity<Map<String, Object>> getActiveVarientByCatJoin(@RequestBody List<String> attributeJoin,
 			@PathVariable(name = "attributeId") String attributeId,
 			@PathVariable(name = "productId") String productId) {
-		return new ResponseEntity<Map<String, Object>>(varientService.getActiveVarientByCat(attributeJoin,attributeId,productId), HttpStatus.CREATED);
+		return new ResponseEntity<Map<String, Object>>(
+				varientService.getActiveVarientByCat(attributeJoin, attributeId, productId), HttpStatus.CREATED);
 	}
 
 }

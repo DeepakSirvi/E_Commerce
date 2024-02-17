@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +23,7 @@ import com.ecommerce.util.AppUtils;
 public class AddressServiceImpl implements AddressService {
 	@Autowired
 	private AddressRepo addressRepo;
-	
+
 	@Autowired
 	private AppUtils appUtils;
 	@Autowired
@@ -36,7 +35,7 @@ public class AddressServiceImpl implements AddressService {
 
 		AddressResponse as = new AddressResponse();
 		as.setAddressType(address.getAddressType());
-		//System.err.println(address.getAddressType());
+		// System.err.println(address.getAddressType());
 		as.setCity(address.getCity());
 		as.setLandMark(address.getLandMark());
 		as.setPincode(address.getPincode());
@@ -45,8 +44,8 @@ public class AddressServiceImpl implements AddressService {
 		as.setMobile(address.getMobile());
 		as.setName(address.getName());
 		as.setId(address.getId());
-		as.setState(address.getState());					
-        as.setAlternateMobile(address.getAlternateMobile());
+		as.setState(address.getState());
+		as.setAlternateMobile(address.getAlternateMobile());
 		return as;
 	}
 
@@ -54,7 +53,7 @@ public class AddressServiceImpl implements AddressService {
 		// return this.modelMapper.map(addressRequest, Address.class);
 		Address as = new Address();
 		as.setAddressType(addressRequest.getAddressType());
-		//System.err.println(addressRequest.getAddressType());
+		// System.err.println(addressRequest.getAddressType());
 		as.setCity(addressRequest.getCity());
 		as.setLandMark(addressRequest.getLandMark());
 		as.setPincode(addressRequest.getPincode());
@@ -71,21 +70,22 @@ public class AddressServiceImpl implements AddressService {
 	@Override
 	public AddressResponse createAdress(AddressRequest addressRequest) {
 
+		if (!appUtils.isUserActive()) {
+			throw new BadRequestException(AppConstant.USER_DEACTIVE);
+		}
 		Address address = this.addressRequestToAddress(addressRequest);
-		// System.out.println(addressRequest.getLocality());
 		User user = new User();
-
 		user.setId(appUtils.getUserId());
-
 		address.setUserAddress(user);
 		address.setStatus(Boolean.TRUE);
-
 		return this.addressToAddressResponse(this.addressRepo.save(address));
 	}
 
 	@Override
 	public AddressResponse updateAddress(AddressRequest addressRequest) {
-		//System.out.println("-------------");
+		if (!appUtils.isUserActive()) {
+			throw new BadRequestException(AppConstant.USER_DEACTIVE);
+		}
 		Optional<Address> address = Optional.of(this.addressRepo.findById(addressRequest.getId())
 				.orElseThrow(() -> new BadRequestException(AppConstant.ADDRESS_NOT_FOUND)));
 
@@ -110,6 +110,9 @@ public class AddressServiceImpl implements AddressService {
 
 	@Override
 	public AddressResponse getbyId(String id) {
+		if (!appUtils.isUserActive()) {
+			throw new BadRequestException(AppConstant.USER_DEACTIVE);
+		}
 		Address address = this.addressRepo.findById(id)
 				.orElseThrow(() -> new BadRequestException(AppConstant.ADDRESS_NOT_FOUND));
 		return this.addressToAddressResponse(address);
@@ -124,11 +127,14 @@ public class AddressServiceImpl implements AddressService {
 //			address.setStatus(false);
 //			this.addressRepo.save(address);
 //		}
+		if (!appUtils.isUserActive()) {
+			throw new BadRequestException(AppConstant.USER_DEACTIVE);
+		}
 		Address address = this.addressRepo.findByIdAndStatus(id, true)
 				.orElseThrow(() -> new BadRequestException(AppConstant.ADDRESS_NOT_FOUND));
-		     address.setStatus(false);
-		    this.addressRepo.save(address);
-		
+		address.setStatus(false);
+		this.addressRepo.save(address);
+
 		return true;
 	}
 
@@ -138,7 +144,6 @@ public class AddressServiceImpl implements AddressService {
 		List<Address> listOfAddresses = this.addressRepo.findAddresssByuserId(id);
 		List<AddressResponse> list = listOfAddresses.stream().map(ar -> addressToAddressResponse(ar))
 				.collect(Collectors.toList());
-		//System.err.println(list);
 		return list;
 	}
 

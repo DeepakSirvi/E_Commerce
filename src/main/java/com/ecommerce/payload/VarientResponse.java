@@ -1,9 +1,7 @@
 package com.ecommerce.payload;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.ecommerce.model.Status;
@@ -11,7 +9,6 @@ import com.ecommerce.model.Varient;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
-import jakarta.validation.metadata.ValidateUnwrappedValue;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -41,16 +38,15 @@ public class VarientResponse extends AuditResponse {
 		this.setVarientName(varient.getVarientName());
 		this.setCreatedAt(varient.getCreatedAt());
 		this.setStatus(varient.getStatus());
-		
+
 		this.setProductImage(varient.getProductImage().stream().map(productImage -> {
 			ProductImageRespone imageRespone = new ProductImageRespone();
 			return imageRespone.imageToImageResponse(productImage);
 		}).collect(Collectors.toList()));
-		
-		
+
 		this.setCategoryJoins(varient.getCategoryJoins().stream().map(catJoin -> {
-					VarientCategoryJoinResonse joinResonse=new VarientCategoryJoinResonse();
-					return joinResonse.varientJoinToResponse(catJoin);
+			VarientCategoryJoinResonse joinResonse = new VarientCategoryJoinResonse();
+			return joinResonse.varientJoinToResponse(catJoin);
 		}).collect(Collectors.toList()));
 		return this;
 	}
@@ -67,7 +63,7 @@ public class VarientResponse extends AuditResponse {
 			ProductImageRespone imageRespone = new ProductImageRespone();
 			return imageRespone.imageToImageResponse(productImage);
 		}).collect(Collectors.toList()));
-		
+
 		this.setProduct(new ProductResponse().productToProductResponse(varient.getProduct()));
 		return this;
 	}

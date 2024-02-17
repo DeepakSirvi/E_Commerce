@@ -1,6 +1,5 @@
 package com.ecommerce.model;
 
-import jakarta.annotation.Generated;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -20,16 +19,15 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 public class Notifications extends Audit {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private String id;
-	
+
 	private String title;
-	
-	@Column(length=5000)
+
+	@Column(length = 5000)
 	private String description;
-	
 
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)

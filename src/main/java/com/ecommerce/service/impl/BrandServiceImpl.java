@@ -22,7 +22,6 @@ import com.ecommerce.model.User;
 import com.ecommerce.payload.BrandRequest;
 import com.ecommerce.payload.BrandResponse;
 import com.ecommerce.repository.BrandRepo;
-import com.ecommerce.repository.UserRepo;
 import com.ecommerce.service.BrandService;
 import com.ecommerce.util.AppConstant;
 import com.ecommerce.util.AppUtils;
@@ -31,7 +30,6 @@ import com.ecommerce.util.AppUtils;
 public class BrandServiceImpl implements BrandService {
 
 	private static final String ID = null;
-	private static final String USER = null;
 	private static final String BRAND = null;
 	@Autowired
 	private BrandRepo brandRepo;
@@ -40,24 +38,13 @@ public class BrandServiceImpl implements BrandService {
 	@Autowired
 	private AppUtils appUtils;
 
-	@Autowired
-	private UserRepo userRepo;
-
-	private Map<String, Object> response;
-
 	@Override
 	public Map<String, Object> addBrandDetails(BrandRequest brandRequest, MultipartFile multipartFiles) {
-		
 		Map<String, Object> response = new HashMap<>();
-		
 		Brand brand = this.brandRequestToBrand(brandRequest);
-		
 		brand.setStatus(Status.UNVERIFIED);
-		
 		if (multipartFiles != null) {
-			
 			String uploadImage = appUtils.uploadImage(multipartFiles, AppConstant.BRAND_IMAGE_PATH, null);
-			
 			brand.setBrandImage(uploadImage);
 		}
 
@@ -66,30 +53,28 @@ public class BrandServiceImpl implements BrandService {
 		brandRepo.save(brand);
 		response.put("response", AppConstant.BRAND_ADD_SUCCES);
 		return response;
-
 	}
 
 	private Brand brandRequestToBrand(BrandRequest brandRequest) {
-		
 		return this.mapper.map(brandRequest, Brand.class);
 	}
 
 	@Override
 	public Map<String, Object> updateStatusById(String brandId) {
-		
 		Map<String, Object> response = new HashMap<>();
 
 		Optional<Brand> optionalBrand = brandRepo.findById(brandId);
 
 		if (optionalBrand.isPresent()) {
-			
 			Brand brand = optionalBrand.get();
-			
-			if (brand.getStatus().equals(Status.VERIFIED))
-				
-				brand.setStatus(Status.UNVERIFIED);
-			else
-				brand.setStatus(Status.VERIFIED);
+
+			brand.setStatus(Status.VERIFIED);
+
+			if (optionalBrand.isPresent()) {
+				Brand brand1 = optionalBrand.get();
+
+				brand1.setStatus(Status.UNVERIFIED);
+			}
 			brandRepo.save(brand);
 
 			response.put("response", AppConstant.UPDATE_STATUS);
@@ -125,15 +110,10 @@ public class BrandServiceImpl implements BrandService {
 	}
 
 	private BrandResponse brandToBrandResponse(Brand brand2) {
-		
 		BrandResponse brandResponse = new BrandResponse();
-		
 		brandResponse.setId(brand2.getId());
-		
 		brandResponse.setBrandName(brand2.getBrandName());
-		
 		brandResponse.setBrandDescription(brand2.getBrandDescription());
-		
 		return brandResponse;
 	}
 
@@ -198,7 +178,6 @@ public class BrandServiceImpl implements BrandService {
 		return response;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String, Object> getAllVerfiedBrand(Integer pageIndex, Integer pagesize, String sortDir) {
 		Map<String, Object> response = new HashMap<>();
@@ -220,17 +199,11 @@ public class BrandServiceImpl implements BrandService {
 	}
 
 	public BrandResponse brandFilter(Brand obj) {
-		
 		BrandResponse brandResponse = new BrandResponse();
-		
 		brandResponse.setId(obj.getId());
-		
 		brandResponse.setBrandDescription(obj.getBrandDescription());
-		
 		brandResponse.setBrandImage(obj.getBrandImage());
-		
 		brandResponse.setBrandName(obj.getBrandName());
-		
 		return brandResponse;
 
 	}

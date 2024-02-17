@@ -21,6 +21,6 @@ public interface IdentityService {
 	 
 	 public Map<String , Object > getAllIdentity(Integer page, Integer size, String sortDir);
 	 
-	
+	 
 	
   }
