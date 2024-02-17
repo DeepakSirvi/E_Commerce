@@ -103,7 +103,6 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Override
 	public ApiResponse updateSubCategory(SubCategoryRequest subCategoryRequest) {
-
 		if (!appUtils.isUserActive()) {
 			throw new BadRequestException(AppConstant.USER_DEACTIVE);
 		}
