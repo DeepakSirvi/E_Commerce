@@ -1,7 +1,5 @@
 package com.ecommerce.model;
 
-import java.util.List;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,17 +16,15 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 public class WishListProduct extends Audit {
-	
+
 	@Id
-	@GeneratedValue(strategy =GenerationType.UUID )
+	@GeneratedValue(strategy = GenerationType.UUID)
 	private String id;
-	
+
 	@ManyToOne
 	private User user;
-	
+
 	@ManyToOne
 	private Varient varient;
-
-	
 
 }

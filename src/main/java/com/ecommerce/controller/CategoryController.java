@@ -5,6 +5,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ecommerce.model.Category;
 import com.ecommerce.payload.ApiResponse;
 import com.ecommerce.payload.CategoryRequest;
 import com.ecommerce.payload.CategoryResponse;
@@ -34,7 +34,7 @@ public class CategoryController {
 	private CategoryService categoryService;
 
 	@PostMapping("/admin")
-	public ResponseEntity<ApiResponse> createCategory(@RequestBody CategoryRequest categoryRequest) {
+	public ResponseEntity<ApiResponse> createCategory(@RequestBody @Validated CategoryRequest categoryRequest) {
 		return new ResponseEntity<ApiResponse>(categoryService.addCategory(categoryRequest), HttpStatus.CREATED);
 	}
 
@@ -53,10 +53,9 @@ public class CategoryController {
 		return new ResponseEntity<SubCategoryResponse>(categoryService.getSubCategoryById(id), HttpStatus.OK);
 	}
 
-	
 	@GetMapping("/admin")
 	public ResponseEntity<Map<String, Object>> getAllCategory(
-			@RequestParam(value = "categorySearch", required = false ) String search,
+			@RequestParam(value = "categorySearch", required = false) String search,
 			@RequestParam(value = "pageIndex", required = false, defaultValue = AppConstant.DEFAULT_PAGE_NUMBER) Integer pageIndex,
 			@RequestParam(value = "pageSize", required = false, defaultValue = AppConstant.DEFAULT_PAGE_SIZE) Integer pageSize,
 			@RequestParam(value = "sortDir", required = false, defaultValue = AppConstant.DEFAULT_SORT_DIR) String sortDir) {
@@ -70,7 +69,7 @@ public class CategoryController {
 	}
 
 	@PutMapping("/admin")
-	public ResponseEntity<ApiResponse> updateCategory(@RequestBody Category categoryRequest) {
+	public ResponseEntity<ApiResponse> updateCategory(@RequestBody CategoryRequest categoryRequest) {
 		return new ResponseEntity<ApiResponse>(categoryService.updateCategory(categoryRequest), HttpStatus.OK);
 	}
 

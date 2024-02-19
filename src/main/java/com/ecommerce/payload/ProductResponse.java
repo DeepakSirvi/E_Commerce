@@ -1,11 +1,10 @@
 package com.ecommerce.payload;
 
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.ecommerce.model.Product;
-import com.ecommerce.model.ProductDescription;
 import com.ecommerce.model.Status;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -21,7 +20,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @JsonInclude(Include.NON_NULL)
 public class ProductResponse extends AuditResponse {
-	
+
 	private String id;
 	private String productName;
 	private Boolean listingStatus;
@@ -37,16 +36,16 @@ public class ProductResponse extends AuditResponse {
 	private String taxCode;
 	private String countryOfOrigin;
 	private String productType;
-    
+
 	private UserResponse vendor;
 	private SubCategoryResponse subCategory;
-	private Set<VarientResponse> varient;
-	private ProductDescriptionResponse description=new ProductDescriptionResponse();
-	
+	private List<VarientResponse> varient;
+	private ProductDescriptionResponse description = new ProductDescriptionResponse();
+
 	private String productImage;
-	
+
 	private Float basicPrice;
-	
+
 	public ProductResponse productToProductResponse(Product product) {
 		this.setId(product.getId());
 		this.setProductName(product.getProductName());
@@ -64,29 +63,30 @@ public class ProductResponse extends AuditResponse {
 		this.setProductType(product.getProductType());
 		this.getDescription().setDescription(product.getDescription().getDescription());
 		this.setBasicPrice(product.getBasicPrice());
-		
-		if(Objects.nonNull(product.getProductImage()))
-		{
+
+		if (Objects.nonNull(product.getProductImage())) {
 			this.setProductImage(product.getProductImage());
 		}
-		if(Objects.nonNull(product.getVarient())) {
-		this.setVarient( product.getVarient().stream()
-				.map(varient-> {
-					VarientResponse varientResponse=new VarientResponse();
-				  return varientResponse.varientToVarientResponse(varient);
-				}).collect(Collectors.toSet()));
+		if (Objects.nonNull(product.getVarient())) {
+			this.setVarient(product.getVarient().stream().map(varient -> {
+				VarientResponse varientResponse = new VarientResponse();
+				return varientResponse.varientToVarientResponse(varient);
+			}).collect(Collectors.toList()));
 		}
-		if(Objects.nonNull(product.getSubCategory()))
-		{
-			SubCategoryResponse categoryResponse=new SubCategoryResponse();
+		if (Objects.nonNull(product.getSubCategory())) {
+			SubCategoryResponse categoryResponse = new SubCategoryResponse();
 			categoryResponse.subCategoryToResponseWithCategory(product.getSubCategory());
 			this.setSubCategory(categoryResponse);
 		}
 		return this;
 	}
-	
 
-	  public ProductResponse productToProductResponseList(Product product) {
+	/***
+	 * 
+	 * @param product
+	 * @return
+	 */
+	public ProductResponse productToProductResponseList(Product product) {
 		this.setId(product.getId());
 		this.setProductName(product.getProductName());
 		this.setListingStatus(product.getListingStatus());
@@ -95,10 +95,11 @@ public class ProductResponse extends AuditResponse {
 		this.setProductType(product.getProductType());
 		this.setCreatedAt(product.getCreatedAt());
 		this.setVerified(product.getVerified());
-		if(Objects.nonNull(product.getProductImage()))
-		{
+		if (Objects.nonNull(product.getProductImage())) {
 			this.setProductImage(product.getProductImage());
 		}
+		UserResponse response = new UserResponse();
+		this.setVendor(response.userToUserResponse(product.getVendor()));
 		this.setBasicPrice(product.getBasicPrice());
 		return this;
 	}

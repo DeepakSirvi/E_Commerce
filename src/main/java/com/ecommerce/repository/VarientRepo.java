@@ -17,5 +17,4 @@ public interface VarientRepo extends JpaRepository<Varient, String> {
 
 	public List<Varient> findByProductIdAndStatus(String id, Status active, Pageable pageable);
 
-
 }

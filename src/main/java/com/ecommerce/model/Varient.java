@@ -1,9 +1,7 @@
 package com.ecommerce.model;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import com.ecommerce.payload.VarientResponse;
+import java.util.ArrayList;
+import java.util.List;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -22,48 +20,50 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
-@Setter
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 public class Varient extends Audit {
-	
+
 	public Varient(String id2) {
-		this.id=id2;
+		this.id = id2;
 	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
 
 	private String id;
-	@Column(unique = true)
+	@Column(unique = false)
 	private String varientName;
+	@Column(nullable = false)
 	private Float price;
+	@Column(nullable = false)
 	private Integer stock;
-	
+
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
 	private Status status;
-	
+
 	@ManyToOne
+	@JoinColumn(nullable = false)
 	private Product product;
-	
-	@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "varient_Id")
-	private Set<VarientCategoryJoin> categoryJoins;
-	
-	@OneToMany(mappedBy = "varientImage",cascade = CascadeType.ALL)
-	private Set<ProductImage> productImage = new HashSet<>();
-	
-	@OneToMany(mappedBy = "varient") 
-	private Set<Cart> cart;
-	
+	private List<VarientCategoryJoin> categoryJoins;
+
+	@OneToMany(mappedBy = "varientImage", cascade = CascadeType.ALL)
+	private List<ProductImage> productImage = new ArrayList<>();
+
 	@OneToMany(mappedBy = "varient")
-	private Set<WishListProduct> wishList;
-	
+	private List<Cart> cart;
+
+	@OneToMany(mappedBy = "varient", cascade = CascadeType.ALL)
+	private List<WishListProduct> wishList;
+
 	@OneToMany(mappedBy = "varient")
-	private Set<ProductSaveForLater> saveLater;
-	
+	private List<ProductSaveForLater> saveLater;
+
 }

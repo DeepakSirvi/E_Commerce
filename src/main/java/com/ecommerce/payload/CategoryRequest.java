@@ -19,10 +19,14 @@ import lombok.Setter;
 @NoArgsConstructor
 @JsonInclude(Include.NON_NULL)
 public class CategoryRequest {
-	
-	  private String id;
-	  @NotBlank
-	  @Size(min=1 , max=255)
-	 private String categoryName;
-	 private Set<SubCategoryRequest> subCategory = new HashSet<>();
+
+	private String id;
+	@NotBlank
+	@Size(min = 1, max = 255)
+	private String categoryName;
+	private Set<SubCategoryRequest> subCategory = new HashSet<>();
+
+	public CategoryRequest(String id) {
+		this.id = id;
+	}
 }

@@ -6,6 +6,9 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.ecommerce.model.ProductSaveForLater;
+import com.ecommerce.model.Varient;
+
+import jakarta.transaction.Transactional;
 
 
 public interface ProductSaveLaterRepo extends JpaRepository<ProductSaveForLater , String> {
@@ -18,6 +21,11 @@ public interface ProductSaveLaterRepo extends JpaRepository<ProductSaveForLater 
 		
 
 		boolean deleteById(ProductSaveForLater product);
+
+		boolean existsByUserIdAndVarientId(String userId, String vid);
+		
+		@Transactional
+		Integer deleteByVarient(Varient varient);
 
 	
 

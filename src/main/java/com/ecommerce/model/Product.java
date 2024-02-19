@@ -1,13 +1,12 @@
 package com.ecommerce.model;
 
-import java.util.Set;
+import java.util.List;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -32,30 +31,46 @@ public class Product extends Audit {
 	private String id;
 	@Column(unique = true)
 	private String productName;
+	@Column(nullable = false)
 	private Boolean listingStatus;
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
 	private Status verified;
+	@Column(nullable = false)
 	private String brand;
+	@Column(nullable = false)
 	private String fullfillmentBy;
+	@Column(nullable = false)
 	private String shippingProvider;
+	@Column(nullable = false)
 	private String deliveryCharge;
+	@Column(nullable = false)
 	private String productWeight;
+	@Column(nullable = false)
 	private String productLength;
+	@Column(nullable = false)
 	private String productWidth;
+	@Column(nullable = false)
 	private String productHeight;
+	@Column(nullable = false)
 	private String taxCode;
+	@Column(nullable = false)
 	private String countryOfOrigin;
+	@Column(nullable = false)
 	private String productType;
 
 	@ManyToOne
+	@JoinColumn(nullable = false)
 	private User vendor;
 
 	@ManyToOne
-	private SubCategory subCategory;
+	@JoinColumn(nullable = false)
+	private SubCategory subCategory = new SubCategory();
 
+	@Column(nullable = false, unique = true)
 	private String productImage;
 
+	@Column(nullable = false)
 	private Float basicPrice;
 
 	@OneToOne(cascade = CascadeType.ALL)
@@ -63,19 +78,19 @@ public class Product extends Audit {
 	private ProductDescription description;
 
 	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-	private Set<Varient> varient;
+	private List<Varient> varient;
 
 	@OneToMany(mappedBy = "product")
-	private Set<ProductReview> productReview;
+	private List<ProductReview> productReview;
 
 	@OneToMany(mappedBy = "product")
-	private Set<Complaint> complaint;
+	private List<Complaint> complaint;
 
 	@OneToMany(mappedBy = "product")
-	private Set<ProductFAQ> faq;
+	private List<ProductFAQ> faq;
 
 	@OneToMany(mappedBy = "product")
-	private Set<OrderItem> orderItem;
+	private List<OrderItem> orderItem;
 
 	public Product(String id) {
 		this.id = id;

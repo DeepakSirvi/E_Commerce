@@ -10,7 +10,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 @Setter
 @Getter
@@ -18,11 +17,11 @@ import lombok.ToString;
 @NoArgsConstructor
 @Entity
 public class VarientCategoryJoin {
-	
+
 	@Id
-	@GeneratedValue(strategy = GenerationType.UUID )
+	@GeneratedValue(strategy = GenerationType.UUID)
 	private String id;
-	
+
 	@ManyToOne
 	private VarientCategoryAttribute varAttribute;
 

@@ -1,8 +1,8 @@
 package com.ecommerce.model;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -17,7 +17,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,88 +28,78 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 public class User {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private String id;
-	
-	
-	@Column(unique = true,nullable = false)
+
+	@Column(unique = true, nullable = false)
 	private String userMobile;
-	
-	@Column(unique = true,nullable=false )
+
+	@Column(unique = true, nullable = false)
 	private String userEmail;
-	
+
 	@Column(nullable = false)
 	private String firstName;
-	
+
 	private String LastName;
-	
+
+	@Column(nullable = false)
 	private String gender;
-	
-	@Column(updatable = false,nullable = false)
+
+	@Column(updatable = false, nullable = false)
 	private LocalDateTime createdAt;
 
 	@Column(nullable = false)
 	private LocalDateTime updatedAt;
-	
+
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
 	private Status status;
-	
-	@OneToMany(mappedBy="user",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JsonIgnoreProperties(value = "user")
-	private Set<UserRole> userRole = new HashSet<>();
-	
-	@OneToMany(mappedBy = "user")
-	private Set<Category> category;
-	
-	@OneToMany(mappedBy = "user")
-	private Set<VarientCategory> varientCategory;
+	private List<UserRole> userRole = new ArrayList<>();
 
-
-	
-	@OneToMany(mappedBy="userAddress")
-	private Set<Address> userAddress = new HashSet<>();
-	
-	@OneToOne(mappedBy = "user")
-	private Identity userIdentity;
-	
 	@OneToMany(mappedBy = "user")
-	private Set<Account> accountId = new HashSet<>();
-	
-	
+	private List<Category> category;
+
+	@OneToMany(mappedBy = "user")
+	private List<VarientCategory> varientCategory;
+
+	@OneToMany(mappedBy = "userAddress")
+	private List<Address> userAddress = new ArrayList<>();
+
+	@OneToMany(mappedBy = "user")
+	private List<Identity> user = new ArrayList<>();
+
+	@OneToMany(mappedBy = "user")
+	private List<Account> accountId = new ArrayList<>();
+
 	@OneToMany(mappedBy = "vendor")
-	private Set<Product> product = new HashSet<>();
-	
-	@OneToOne(mappedBy = "user")
-	private Cart cart;
-	
-	
+	private List<Product> product = new ArrayList<>();
+
 	@OneToMany(mappedBy = "user")
-	private Set<ProductReview> productReview;
-	
+	private List<Cart> cart;
+
 	@OneToMany(mappedBy = "user")
-	private Set<ProductSaveForLater> saveLater;
-	
+	private List<ProductReview> productReview;
+
+	@OneToMany(mappedBy = "user")
+	private List<ProductSaveForLater> saveLater;
+
 	@OneToMany
 	@JoinColumn(name = "user_id")
-	private Set<Notifications> notification;
-	
-	@OneToMany(mappedBy = "user")
-	private Set<TermsAndCondition> termsAndConditons;
-	
-	@OneToMany(mappedBy = "user")
-	private Set<Orders> order;
+	private List<Notifications> notification;
 
-	public User(String id){
-		this.id=id;		
+	@OneToMany(mappedBy = "user")
+	private List<TermsAndCondition> termsAndConditons;
+
+	@OneToMany(mappedBy = "user")
+	private List<Orders> order;
+
+	public User(String id) {
+		this.id = id;
 	}
 
-	public WishListProduct getWishlist() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	
 }

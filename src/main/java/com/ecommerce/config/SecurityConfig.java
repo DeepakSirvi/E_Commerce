@@ -24,7 +24,6 @@ public class SecurityConfig {
 	private AuthenticationEntryPoint authenticationEntryPoint;
 	@Autowired
 	private SecurityFilter filter;
-	
 
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
@@ -42,21 +41,17 @@ public class SecurityConfig {
 	// Authorization
 	@Bean
 	public SecurityFilterChain configuraPaths(HttpSecurity http) throws Exception {
-		
-		http.csrf()
-		.disable()  
-		.authorizeRequests()
-		.requestMatchers("ecommerce/auth/**","ecommerce/image/**","**/permitAll/**").permitAll()
-		.requestMatchers("ecommerce/category/admin/**","ecommerce/varient/admin/**","ecommerce/product/admin/**")
-		.hasAuthority("ADMIN")
-		.anyRequest().authenticated()
-		.and()
-		.exceptionHandling()
-		.authenticationEntryPoint(authenticationEntryPoint)
-		.and()
-		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-		.and()
-		.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
+
+		http.csrf().disable().cors().disable().authorizeRequests()
+				.requestMatchers("ecommerce/auth/login", "ecommerce/auth/signup", "ecommerce/auth/",
+						"ecommerce/image/**", "**/permitAll/**")
+				.permitAll()
+				.requestMatchers("ecommerce/category/admin/**", "ecommerce/varient/admin/**",
+						"ecommerce/product/admin/**")
+				.hasAuthority("ADMIN").anyRequest().authenticated().and().exceptionHandling()
+				.authenticationEntryPoint(authenticationEntryPoint).and().sessionManagement()
+				.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+				.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
 		return http.build();
 	}
 }

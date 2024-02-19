@@ -2,9 +2,6 @@ package com.ecommerce.exception;
 
 import org.springframework.http.HttpStatus;
 
-import com.ecommerce.payload.ApiResponse;
-
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,12 +11,14 @@ import lombok.Setter;
 @NoArgsConstructor
 public class UnauthorizedException extends RuntimeException {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private ExceptionResponse exceptionResponse;
-	
-	
-	public UnauthorizedException(String message)
-	{
-		exceptionResponse=new ExceptionResponse();
+
+	public UnauthorizedException(String message) {
+		exceptionResponse = new ExceptionResponse();
 		exceptionResponse.setSuccess(Boolean.FALSE);
 		exceptionResponse.setMessage(message);
 		exceptionResponse.setStatus(HttpStatus.BAD_REQUEST);

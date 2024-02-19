@@ -1,11 +1,9 @@
 package com.ecommerce.payload;
 
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.List;
 
 import com.ecommerce.model.Status;
 import com.ecommerce.model.User;
-import com.ecommerce.model.UserRole;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -26,24 +24,24 @@ public class UserResponse {
 	private String userMobile;
 
 	private String userEmail;
-	
+
 	private String firstName;
-	
+
 	private String LastName;
-	
+
 	private String gender;
-	
+
 	private Status status;
-	
-	@JsonIgnoreProperties(value = {"user"})
-	private Set<UserRoleResponse> userRole;
-	
+
+	@JsonIgnoreProperties(value = { "user" })
+	private List<UserRoleResponse> userRole;
+
 	private String token;
-	
+
 	public UserResponse(String id) {
-		this.id=id;
+		this.id = id;
 	}
-	
+
 	public UserResponse userToUserResponse(User user) {
 		this.setFirstName(user.getFirstName());
 		this.setLastName(user.getLastName());

@@ -1,6 +1,6 @@
 package com.ecommerce.payload;
 
-import java.util.Set;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -10,7 +10,7 @@ import lombok.Data;
 @Data
 @JsonInclude(Include.NON_NULL)
 public class PageResponse<T> {
-	private Set<T> content;
+	private List<T> content;
 	private int page;
 	private int size;
 	private long totalElements;

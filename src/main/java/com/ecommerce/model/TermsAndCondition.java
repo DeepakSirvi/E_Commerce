@@ -1,6 +1,6 @@
 package com.ecommerce.model;
 
-import java.util.Set;
+import java.util.List;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -19,13 +19,12 @@ import lombok.Setter;
 public class TermsAndCondition extends Audit {
 	@Id
 	private String id;
-	
+
 	private String title;
-	
-	
+
 	@OneToMany(mappedBy = "terms")
-	private Set<TermDescription> desc;
-	
+	private List<TermDescription> desc;
+
 	@ManyToOne
 	private User user;
 

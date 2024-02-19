@@ -1,16 +1,14 @@
 package com.ecommerce.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 import com.ecommerce.model.Product;
 import com.ecommerce.model.Status;
 import com.ecommerce.model.SubCategory;
-import com.ecommerce.model.VarientCategory;
 
 public interface ProductRepo extends JpaRepository<Product, String> {
 
@@ -39,5 +37,16 @@ public interface ProductRepo extends JpaRepository<Product, String> {
 	Page<Product> findFeaturedProductsBySubCategoryId(@Param("subCategoryId") String subCategoryId,
 			@Param("listingStatus") Boolean listingStatus, @Param("verifiedStatus") Status verifiedStatus,
 			Pageable pageable);
+
+	@Query("SELECT p FROM Product p " + "WHERE p.verified = :status " + "And (p.listingStatus = :listingStatus) "
+			+ "And p.subCategory.category.id = :catId "
+			+ "And (p.createdAt LIKE CONCAT('%', :date, '%') OR p.updatedAt LIKE CONCAT('%', :date, '%'))")
+	public Page<Product> findProductByFilter(@Param("catId") String catId, @Param("date") String date,
+			@Param("status") Status status, @Param("listingStatus") boolean listingStatus, Pageable pageable);
+
+	@Query("SELECT p FROM Product p " + "WHERE p.subCategory.category.id = :catId " + "And p.verified = :status "
+			+ "And (p.createdAt LIKE CONCAT('%', :date, '%') OR p.updatedAt LIKE CONCAT('%', :date, '%'))")
+	public Page<Product> findProductByFilterWithOutListing(@Param("catId") String catId, @Param("date") String date,
+			@Param("status") Status status, Pageable pageable);
 
 }

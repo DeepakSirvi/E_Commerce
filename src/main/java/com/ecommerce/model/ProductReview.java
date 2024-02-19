@@ -1,11 +1,8 @@
 package com.ecommerce.model;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.hibernate.annotations.GeneratorType;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.CascadeType;
@@ -40,12 +37,12 @@ public class ProductReview extends Audit {
 
 	@OneToMany(mappedBy = "imageReview", cascade = CascadeType.ALL)
 	@JsonIgnoreProperties(value = { "imageReview" })
-	private Set<ReviewImage> image = new HashSet<>();;
+	private List<ReviewImage> image = new ArrayList<>();;
 
 	@ManyToOne
 	private User user;
 
 	@ManyToOne
-	//@JsonIgnore
+	// @JsonIgnore
 	private Product product;
 }
