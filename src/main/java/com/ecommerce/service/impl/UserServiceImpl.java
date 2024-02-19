@@ -143,12 +143,19 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 	@Override
 	public ApiResponse deativateAccount(LoginRequest loginRequest) {
+
+		if(loginRepo.existsByPhoneNumber(loginRequest.getMobileNumber()))
+		{
+			Optional<Login> login = loginRepo.findByPhoneNumberAndOtp(loginRequest.getMobileNumber(), loginRequest.getOtp());
+			if(login.isPresent()) {
+				if(login.get().getExperiedAt().compareTo(LocalDateTime.now())>=0){
+			    
+				
 		if (loginRepo.existsByPhoneNumber(loginRequest.getMobileNumber())) {
 			Optional<Login> login = loginRepo.findByPhoneNumberAndOtp(loginRequest.getMobileNumber(),
 					loginRequest.getOtp());
 			if (login.isPresent()) {
 				if (login.get().getExperiedAt().compareTo(LocalDateTime.now()) >= 0) {
-
 					Optional<User> user = userRepo.findByUserMobile(loginRequest.getMobileNumber());
 					user.get().setStatus(Status.DEACTIVE);
 					userRepo.save(user.get());
