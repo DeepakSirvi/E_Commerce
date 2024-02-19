@@ -1,29 +1,20 @@
-package com.ecommerce.model;
+package com.ecommerce.payload;
 
 import java.time.LocalDateTime;
 
-import org.hibernate.annotations.GeneratorType;
-
 import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Setter
-@Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-public class PromoCode extends Audit {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.UUID)
-	private String id;
+@Setter
+@Getter
+public class PromoCodeResponce {
+
+private String id;
 	
 	private String code;
 	private Integer discountPrice;
@@ -39,6 +30,4 @@ public class PromoCode extends Audit {
 	
 	private String status;
 	private String repeatAllow;
-	
-	
 }
