@@ -52,8 +52,11 @@ public class ComplaintServiceImpl implements ComplaintService {
         	 
        	  String uploadImage= appUtils.uploadImage(multipartFile ,AppConstant.COMPLAINT_IMAGE_PATH, null);
        	  
+
        	// complaint.getImage().add(uploadImage); 	
          }
+//       	complaint.setComplaintImage(uploadImage); 	
+       
           
          complaint.setUser(new User(appUtils.getUserId()));
          

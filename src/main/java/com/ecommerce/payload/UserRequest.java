@@ -25,8 +25,8 @@ public class UserRequest {
 	@Pattern(regexp = "^\\d{10}$")
 	private String userMobile;
 
-	@Email
 	@NotBlank
+	@Pattern(regexp = "^[A-Za-z0-9.]+@[A-Za-z]+.[A-Za-z]{2,}$")
 	private String userEmail;
 
 	@NotBlank
