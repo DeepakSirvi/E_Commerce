@@ -11,16 +11,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ecommerce.exception.BadRequestException;
 import com.ecommerce.exception.ResourceNotFoundException;
-import com.ecommerce.model.Account;
-import com.ecommerce.model.Brand;
 import com.ecommerce.model.Complaint;
-
 import com.ecommerce.model.User;
-import com.ecommerce.model.VarientCategory;
-import com.ecommerce.payload.AccountResponse;
 import com.ecommerce.payload.ComplaintRequest;
 import com.ecommerce.payload.ComplaintResponse;
-import com.ecommerce.payload.VarientCategoryReponse;
 import com.ecommerce.repository.ComplaintRepo;
 import com.ecommerce.repository.ProductRepo;
 import com.ecommerce.service.ComplaintService;
@@ -58,8 +52,8 @@ public class ComplaintServiceImpl implements ComplaintService {
         	 
        	  String uploadImage= appUtils.uploadImage(multipartFile ,AppConstant.COMPLAINT_IMAGE_PATH, null);
        	  
-       	complaint.setComplaintImage(uploadImage); 	
-         }	 
+       	// complaint.getImage().add(uploadImage); 	
+         }
           
          complaint.setUser(new User(appUtils.getUserId()));
          
