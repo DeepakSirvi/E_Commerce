@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 
 @Component
@@ -18,7 +19,7 @@ public class JwtUtils {
 	private String secret;
 
 	public String getUserName(String token) {
-		return getClaims(token).getSubject();
+		return getClaims(token).getSubject();		
 	}
 
 	public String generateToken(String subject, String userId) {
@@ -34,8 +35,13 @@ public class JwtUtils {
 				.signWith(SignatureAlgorithm.HS256, secret.getBytes()).compact();
 	}
 
-	private Claims getClaims(String token) {
+	private Claims getClaims(String token) throws MalformedJwtException {
+		try {
 		return Jwts.parser().setSigningKey(secret.getBytes()).parseClaimsJws(token).getBody();
+		}
+		catch(MalformedJwtException e) {
+			throw e;
+		}
 	}
 
 	public String getUserIdFromToken(String token) {

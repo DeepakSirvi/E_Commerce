@@ -208,7 +208,7 @@ public class VarientCategoryServiceImpl implements VarientCategoryService {
 		}
 		Map<String, Object> response = new HashMap<>();
 		VarientCategoryAttribute attribute = attributeRepo.findById(varientCategoryAttribute.getId())
-				.orElseThrow(() -> new BadRequestException(AppConstant.VARIENT_ATTIBUTE_NOT_FOUND));
+				.orElseThrow(() -> new ResourceNotFoundException(AppConstant.VARIENT_ATTIBUTE_NOT_FOUND));
 
 		Optional.of(attributeRepo.existsByAttributeNameAndIdNot(varientCategoryAttribute.getAttributeName(),
 				varientCategoryAttribute.getId()))
@@ -224,7 +224,7 @@ public class VarientCategoryServiceImpl implements VarientCategoryService {
 	@Override
 	public Map<String, Object> getVarientCategoryAttributeById(String id) {
 		VarientCategoryAttribute varientCategoryAttribute = attributeRepo.findById(id)
-				.orElseThrow(() -> new BadRequestException(AppConstant.VARIENT_ATTIBUTE_NOT_FOUND));
+				.orElseThrow(() -> new ResourceNotFoundException(AppConstant.VARIENT_ATTIBUTE_NOT_FOUND));
 		Map<String, Object> response = new HashMap<>();
 		VarientCategoryAttributeResponse responseAttribute = attributeToAttributResponse(varientCategoryAttribute);
 		response.put("varientAttribute", responseAttribute);
@@ -235,7 +235,7 @@ public class VarientCategoryServiceImpl implements VarientCategoryService {
 	public Map<String, Object> getVarientCategoryById(String id) {
 
 		VarientCategory varientCategory = varienCategoryRepo.findById(id)
-				.orElseThrow(() -> new BadRequestException(AppConstant.VARIENT_CATEGORY_NOT_FOUND));
+				.orElseThrow(() -> new ResourceNotFoundException(AppConstant.VARIENT_CATEGORY_NOT_FOUND));
 		Map<String, Object> response = new HashMap<>();
 		VarientCategoryReponse varientCategoryReponse = varientCategoryToResponse(varientCategory);
 		response.put("varientCategory", varientCategoryReponse);
