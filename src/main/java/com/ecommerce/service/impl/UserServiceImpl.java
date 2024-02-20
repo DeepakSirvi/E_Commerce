@@ -144,34 +144,35 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	@Override
 	public ApiResponse deativateAccount(LoginRequest loginRequest) {
 
+
 		if(loginRepo.existsByPhoneNumber(loginRequest.getMobileNumber()))
 		{
 			Optional<Login> login = loginRepo.findByPhoneNumberAndOtp(loginRequest.getMobileNumber(), loginRequest.getOtp());
 			if(login.isPresent()) {
 				if(login.get().getExperiedAt().compareTo(LocalDateTime.now())>=0){
 			    
-				
-		if (loginRepo.existsByPhoneNumber(loginRequest.getMobileNumber())) {
-			Optional<Login> login = loginRepo.findByPhoneNumberAndOtp(loginRequest.getMobileNumber(),
-					loginRequest.getOtp());
-			if (login.isPresent()) {
-				if (login.get().getExperiedAt().compareTo(LocalDateTime.now()) >= 0) {
+				// Code to deactivte account
 					Optional<User> user = userRepo.findByUserMobile(loginRequest.getMobileNumber());
 					user.get().setStatus(Status.DEACTIVE);
 					userRepo.save(user.get());
-				} else {
-					throw new BadRequestException(AppConstant.OTP_EXPERED);
 				}
-			} else {
-				throw new BadRequestException(AppConstant.INVALID_OTP);
+				else
+				{
+					   throw new BadRequestException(AppConstant.OTP_EXPERED);
+				}	
 			}
-		} else {
-			throw new BadRequestException(AppConstant.INVALID_PHONE_NUMBER);
+			else
+			{
+				   throw new BadRequestException(AppConstant.INVALID_OTP);	
+			}	
 		}
-		return new ApiResponse(AppConstant.ACCOUNT_DEACTIVATE);
-	}
-
-	@Override
+		else
+		{
+			   throw new BadRequestException(AppConstant.INVALID_PHONE_NUMBER);
+		}
+		return new ApiResponse(AppConstant.ACCOUNT_DEACTIVATE); 
+	}			
+				@Override
 	public Map<String, Object> updateUser(UpdateUserRequest userRequest) {
 		Map<String, Object> response = new HashMap<>();
 		Optional<User> userOpt = userRepo.findById(userRequest.getId());
