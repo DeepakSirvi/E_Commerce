@@ -191,19 +191,23 @@ public class AppConstant {
 
 	public static final String DUPLICATE_NOT_ALLOWED = "Duplicate Name Not Allowed";
 
+
+	public static final Object COMPLAINTIMAGE_ADD_SUCCES = null;
+
+	public static final String COMPLAINT_IMAGE_PATH = null;
+
+	public static final Object UPDATE_SUCCESFULLY = null;
+
+	public static final Object REMOVE_FROM_COMPLAINT_IMAGE = null;
+
+	public static final String COMPLAINTIMAGE = null;
+
 	public static final Object COMPLAINT_ADD_SUCCES = null;
 
 	public static final Object UPDATE_COMPLAINT = null;
 
 	public static final String COMPLAINT_NOT_FOUND = null;
 
-	public static final Object REMOVE_FROM_COMPLAINT_IMAGE = null;
-
-	public static final String COMPLAINTIMAGE = null;
-
-	public static final Object UPDATE_SUCCESFULLY = null;
-
-	public static final Object COMPLAINTIMAGE_ADD_SUCCES = null;
 
 
 }
