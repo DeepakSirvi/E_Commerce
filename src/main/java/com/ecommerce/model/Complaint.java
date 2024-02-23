@@ -37,4 +37,7 @@ public class Complaint extends Audit {
 	@OneToMany(mappedBy = "complaint")
 	private List<ComplaintImage> image;
 
+
+	
+
 }

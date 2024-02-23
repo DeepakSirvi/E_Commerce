@@ -144,11 +144,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 	@Override
 	public ApiResponse deativateAccount(LoginRequest loginRequest) {
+
 		if (loginRepo.existsByPhoneNumber(loginRequest.getMobileNumber())) {
 			Optional<Login> login = loginRepo.findByPhoneNumberAndOtp(loginRequest.getMobileNumber(),
 					loginRequest.getOtp());
 			if (login.isPresent()) {
 				if (login.get().getExperiedAt().compareTo(LocalDateTime.now()) >= 0) {
+
 					Optional<User> user = userRepo.findByUserMobile(loginRequest.getMobileNumber());
 					if(user.get().getStatus().equals(Status.ACTIVE))
 					{
@@ -161,10 +163,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 					}
 				} else {
 					throw new BadRequestException(AppConstant.OTP_EXPERED);
+
 				}
-			} else {
-				throw new BadRequestException(AppConstant.INVALID_OTP);
+				else
+				{
+					   throw new BadRequestException(AppConstant.OTP_EXPERED);
+				}	
 			}
+
 		} else {
 			Optional<User> findByUserMobile = userRepo.findByUserMobile(loginRequest.getMobileNumber());
 			if(findByUserMobile.isPresent())
@@ -172,11 +178,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 				throw new BadRequestException("Login first time then deactivate account");
 			}
 			throw new BadRequestException(AppConstant.INVALID_PHONE_NUMBER);
-		}
-		return new ApiResponse(AppConstant.ACCOUNT_DEACTIVATE);
-	}
 
-	@Override
+		}
+		else
+		{
+			   throw new BadRequestException(AppConstant.INVALID_PHONE_NUMBER);
+		}
+		return new ApiResponse(AppConstant.ACCOUNT_DEACTIVATE); 
+	}			
+				@Override
 	public Map<String, Object> updateUser(UpdateUserRequest userRequest) {
 		Map<String, Object> response = new HashMap<>();
 		Optional<User> userOpt = userRepo.findById(userRequest.getId());

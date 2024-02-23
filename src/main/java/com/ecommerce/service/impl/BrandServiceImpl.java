@@ -45,11 +45,15 @@ public class BrandServiceImpl implements BrandService {
 			throw new BadRequestException(AppConstant.USER_DEACTIVE);
 		}
 		Map<String, Object> response = new HashMap<>();
+		System.err.println("---");
 		Brand brand = this.brandRequestToBrand(brandRequest);
 		brand.setStatus(Status.UNVERIFIED);
 		if (multipartFiles != null) {
 			String uploadImage = appUtils.uploadImage(multipartFiles, AppConstant.BRAND_IMAGE_PATH, null);
+			System.err.println(multipartFiles);
+		
 			brand.setBrandImage(uploadImage);
+			
 		}
 
 		brand.setUser(new User(appUtils.getUserId()));
