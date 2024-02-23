@@ -134,7 +134,8 @@ public class VarientCategoryServiceImpl implements VarientCategoryService {
 			throw new BadRequestException(AppConstant.DELETE_ALL_ATTRIBUTE);
 		}
 
-		if (userRoleRepo.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleName.ADMIN.ordinal()))) {
+		if (userRoleRepo.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleName.ADMIN.ordinal())) ||
+				varientCategory.getUser().getId().equals(appUtils.getUserId())) {
 			Map<String, Object> response = new HashMap<>();
 			varienCategoryRepo.deleteById(id);
 			ApiResponse apiResonse = new ApiResponse(Boolean.TRUE, AppConstant.VARIENTCAT_DELETED, HttpStatus.OK);
@@ -155,7 +156,8 @@ public class VarientCategoryServiceImpl implements VarientCategoryService {
 		if (categoryAttribute.getCategoryJoins().size() != 0) {
 			throw new BadRequestException(AppConstant.DELETE_ALL_PRODUCT);
 		}
-		if (userRepo.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleName.ADMIN.ordinal()))) {
+		if (userRepo.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleName.ADMIN.ordinal())) ||
+				categoryAttribute.getVarientCategory().getUser().getId().equals(appUtils.getUserId())) {
 			Map<String, Object> response = new HashMap<>();
 			attributeRepo.deleteById(id);
 			ApiResponse apiResonse = new ApiResponse(Boolean.TRUE, AppConstant.ATTRIBUTE_DELETED, HttpStatus.OK);
@@ -177,6 +179,8 @@ public class VarientCategoryServiceImpl implements VarientCategoryService {
 		Optional.of(varienCategoryRepo.existsByNameAndIdNot(varientCategoryRequest.getName(), varientCategory.getId()))
 				.orElseThrow(() -> new BadRequestException(AppConstant.VARIENTCAT_TAKEN));
 
+		if (userRepo.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleName.ADMIN.ordinal())) ||
+				varientCategory.getUser().getId().equals(appUtils.getUserId())) {
 		varientCategoryRequest.getCategoryAttributes().stream().map(varAtt -> {
 			if (Objects.isNull(varAtt.getId()) || varAtt.getId().equals("")) {
 				VarientCategoryAttributeRequest attributeRequest = new VarientCategoryAttributeRequest();
@@ -198,6 +202,9 @@ public class VarientCategoryServiceImpl implements VarientCategoryService {
 		ApiResponse apiResonse = new ApiResponse(Boolean.TRUE, AppConstant.VARIENTCAT_UPDATED, HttpStatus.OK);
 		response.put(AppConstant.RESPONSE_MESSAGE, apiResonse);
 		return response;
+		}
+		throw new UnauthorizedException(UNAUTHORIZED);
+
 	}
 
 	@Override
@@ -214,11 +221,16 @@ public class VarientCategoryServiceImpl implements VarientCategoryService {
 				varientCategoryAttribute.getId()))
 				.orElseThrow(() -> new BadRequestException(AppConstant.VARIENT_ATTRIBUTE_TAKEN));
 
+		if (userRepo.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleName.ADMIN.ordinal())) ||
+				attribute.getVarientCategory().getUser().getId().equals(appUtils.getUserId())) {
 		attribute.setAttributeName(varientCategoryAttribute.getAttributeName());
 		attributeRepo.save(attribute);
 		ApiResponse apiResonse = new ApiResponse(Boolean.TRUE, AppConstant.VARIENT_ATTRIBUTE_UPDATE, HttpStatus.OK);
 		response.put(AppConstant.RESPONSE_MESSAGE, apiResonse);
 		return response;
+		}
+		throw new UnauthorizedException(UNAUTHORIZED);
+
 	}
 
 	@Override

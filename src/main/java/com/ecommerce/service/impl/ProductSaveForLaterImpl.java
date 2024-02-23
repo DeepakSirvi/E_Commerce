@@ -14,7 +14,9 @@ import org.springframework.stereotype.Service;
 
 import com.ecommerce.exception.BadRequestException;
 import com.ecommerce.exception.ResourceNotFoundException;
+import com.ecommerce.exception.UnauthorizedException;
 import com.ecommerce.model.ProductSaveForLater;
+import com.ecommerce.model.Status;
 import com.ecommerce.model.User;
 import com.ecommerce.model.Varient;
 import com.ecommerce.payload.ApiResponse;
@@ -26,19 +28,18 @@ import com.ecommerce.service.ProductSaveForLaterService;
 import com.ecommerce.util.AppConstant;
 import com.ecommerce.util.AppUtils;
 
-
 @Service
 public class ProductSaveForLaterImpl implements ProductSaveForLaterService {
 
 	@Autowired
 	private ProductSaveLaterRepo laterRepo;
-	
+
 	@Autowired
 	private ModelMapper mapper;
-	
+
 	@Autowired
 	private AppUtils appUtils;
-	
+
 	@Autowired
 	private VarientRepo repo;
 
@@ -57,10 +58,17 @@ public class ProductSaveForLaterImpl implements ProductSaveForLaterService {
 //		// TODO Auto-generated method stub
 		Map<String, String> responce = new HashMap<>();
 		Optional<Varient> findById = this.repo.findById(vid);
-	    if(laterRepo.existsByUserIdAndVarientId(appUtils.getUserId(),vid)) {
-	    	throw new BadRequestException(AppConstant.ALREADY_ADDED);
-	    }
-	    
+		if (findById.get().getStatus().equals(Status.DEACTIVE)) {
+			throw new BadRequestException(AppConstant.VARIENT_INACTIVE);
+		}
+
+		if (laterRepo.existsByUserIdAndVarientId(appUtils.getUserId(), vid)) {
+			throw new BadRequestException(AppConstant.ALREADY_ADDED);
+		}
+		if (!appUtils.isUserActive()) {
+			throw new BadRequestException(AppConstant.USER_DEACTIVE);
+		}
+
 		ProductSaveForLater productSaveForLater = new ProductSaveForLater();
 		if (findById.isPresent()) {
 			Varient varient = new Varient();
@@ -80,35 +88,38 @@ public class ProductSaveForLaterImpl implements ProductSaveForLaterService {
 	@Override
 	public Map<String, Object> getAllSaveForLaterByUserId() {
 		// TODO Auto-generated method stub
-		Map<String , Object> responce =new HashMap<>();
-		 List<ProductSaveForLater> forLaters= laterRepo.findByUserId(appUtils.getUserId());
-		 //System.out.println(forLaters);
-		 List<ProductSaveForLaterResponse> forLaterResponses= forLaters.stream().map(savedLaterProduct -> {
-			 ProductSaveForLaterResponse laterResponse=new ProductSaveForLaterResponse();
-			 return laterResponse.savedLaterToResponse(savedLaterProduct);
-		 }).collect(Collectors.toList());
+		Map<String, Object> responce = new HashMap<>();
+		List<ProductSaveForLater> forLaters = laterRepo.findByUserId(appUtils.getUserId());
+		// System.out.println(forLaters);
+		List<ProductSaveForLaterResponse> forLaterResponses = forLaters.stream().map(savedLaterProduct -> {
+			ProductSaveForLaterResponse laterResponse = new ProductSaveForLaterResponse();
+			return laterResponse.savedLaterToResponse(savedLaterProduct);
+		}).collect(Collectors.toList());
 
+		responce.put("saveforlate", forLaterResponses);
 
-        responce.put("saveforlate",forLaterResponses);
-       
-          return responce;
-          }
+		return responce;
+	}
 
 	@Override
 	public ResponseEntity<?> deleteSaveForLater(String id) {
-		Map<Object , Object> responce =new HashMap<>();
-
-		 Optional<ProductSaveForLater> product = this.laterRepo.findById(id);
-		if(product.isPresent()) {
-		this.laterRepo.delete(product.get());
+		Map<Object, Object> responce = new HashMap<>();
+		if (!appUtils.isUserActive()) {
+			throw new BadRequestException(AppConstant.USER_DEACTIVE);
 		}
-		else
-		{
-			throw new ResourceNotFoundException(AppConstant.PRODUCTSAVEFORLATER_NOT_FOUND, AppConstant.ID, id);
-			
+
+		Optional<ProductSaveForLater> product = this.laterRepo.findById(id);
+		if (product.get().getUser().getId().equals(appUtils.getUserId())) {
+			if (product.isPresent()) {
+				this.laterRepo.delete(product.get());
+			} else {
+				throw new ResourceNotFoundException(AppConstant.PRODUCTSAVEFORLATER_NOT_FOUND, AppConstant.ID, id);
+			}
+		} else {
+			throw new UnauthorizedException(AppConstant.UNAUTHORIZED);
 		}
 		responce.put(AppConstant.MESSAGE, AppConstant.DELETE_SUCCESS);
-		return new ResponseEntity<>(responce,HttpStatus.OK);	
+		return new ResponseEntity<>(responce, HttpStatus.OK);
 	}
 
 }

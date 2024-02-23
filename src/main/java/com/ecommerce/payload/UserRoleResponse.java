@@ -1,5 +1,7 @@
 package com.ecommerce.payload;
 
+import java.io.Serializable;
+
 import com.ecommerce.model.UserRole;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -15,7 +17,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(Include.NON_NULL)
-public class UserRoleResponse {
+public class UserRoleResponse implements Serializable {
 	
 
 	private String id;

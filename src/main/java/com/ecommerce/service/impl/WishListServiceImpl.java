@@ -1,11 +1,13 @@
 package com.ecommerce.service.impl;
 
+import static com.ecommerce.util.AppConstant.UNAUTHORIZED;
 import static com.ecommerce.util.AppConstant.VARIENT;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import com.ecommerce.exception.BadRequestException;
 import com.ecommerce.exception.ResourceNotFoundException;
+import com.ecommerce.exception.UnauthorizedException;
 import com.ecommerce.model.Status;
 import com.ecommerce.model.User;
 import com.ecommerce.model.Varient;
@@ -59,14 +62,11 @@ public class WishListServiceImpl implements WishListService {
 			response.put("response", AppConstant.ALREADY_ADDED);
 			return response;
 		} else {
-
 			User user = new User(appUtils.getUserId());
 			WishListProduct wishListProduct = new WishListProduct();
 			wishListProduct.setVarient(varient);
 			wishListProduct.setUser(user);
-
 			wishListRepo.save(wishListProduct);
-
 			response.put("response", AppConstant.ADDWISHLIST);
 			return response;
 		}
@@ -80,15 +80,17 @@ public class WishListServiceImpl implements WishListService {
 
 		if (wishListRepo.existsById(wishlistId)) {
 
-			wishListRepo.deleteById(wishlistId);
-
-			response.put("response", AppConstant.REMOVE_FROM_WISHLIST);
-
+			WishListProduct wishlist = wishListRepo.findById(wishlistId).get();
+			if (wishlist.getUser().getId().equals(appUtils.getUserId())) {
+				wishListRepo.deleteById(wishlistId);
+				response.put("response", AppConstant.REMOVE_FROM_WISHLIST);
+			} else {
+				throw new UnauthorizedException(UNAUTHORIZED);
+			}
 		} else {
 
 			throw new ResourceNotFoundException(AppConstant.WISHLIST, AppConstant.ID, wishlistId);
 		}
-
 		return response;
 	}
 
@@ -110,38 +112,35 @@ public class WishListServiceImpl implements WishListService {
 
 		WishListProduct findByVarientId = wishListRepo.findByVarientId(varientId);
 		Map<String, Object> response = new HashMap<>();
-
 		if (Objects.nonNull(findByVarientId)) {
-			wishListRepo.deleteByVarientIdAndUserId(varientId, appUtils.getUserId());
-			response.put(AppConstant.RESPONSE_MESSAGE, AppConstant.REMOVE_FROM_WISHLIST);
-			return response;
+			if (findByVarientId.getUser().getId().equals(appUtils.getUserId())) {
+				wishListRepo.deleteByVarientIdAndUserId(varientId, appUtils.getUserId());
+				response.put(AppConstant.RESPONSE_MESSAGE, AppConstant.REMOVE_FROM_WISHLIST);
+				return response;
+			} else {
+				throw new UnauthorizedException(UNAUTHORIZED);
+			}
 		} else {
 			throw new ResourceNotFoundException(AppConstant.WISHLIST, ID, varientId);
 		}
-
 	}
 
 	@Override
 	public Map<String, Object> getWishlistByUserId() {
-
-		User user = userRepo.findById(appUtils.getUserId())
+		userRepo.findById(appUtils.getUserId())
 				.orElseThrow(() -> new ResourceNotFoundException(AppConstant.USER, ID, appUtils.getUserId()));
-
 		List<WishListProduct> wishListProducts = wishListRepo.findByUserId(appUtils.getUserId());
 		Map<String, Object> response = new HashMap<>();
-
 		List<WishListResponse> wishListResponse = wishListProducts.stream().map(wishlist -> {
 			WishListResponse listResponse = new WishListResponse();
 			listResponse.setId(wishlist.getId());
 			UserResponse userResponse = new UserResponse();
 			listResponse.setUser(userResponse.userToUserResponse(wishlist.getUser()));
-
 			VarientResponse varientResponse = new VarientResponse();
 			listResponse.setVarient(varientResponse.varientToVarientResponseForCard(wishlist.getVarient()));
 			return listResponse;
 		}).collect(Collectors.toList());
 		response.put("WishList", wishListResponse);
-
 		return response;
 	}
 }

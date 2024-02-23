@@ -1,5 +1,6 @@
 package com.ecommerce.payload;
 
+import java.io.Serializable;
 import java.util.List;
 
 import com.ecommerce.model.Status;
@@ -18,7 +19,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(Include.NON_NULL)
-public class UserResponse {
+public class UserResponse implements Serializable {
 
 	private String id;
 	private String userMobile;

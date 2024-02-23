@@ -11,6 +11,8 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -98,7 +100,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) {
-		System.out.println("Load By User Method" + username);
 		Optional<User> findByUserName = userRepo.findByUserMobile(username);
 		if (findByUserName.isPresent()) {
 			User user = findByUserName.get();
@@ -143,22 +144,21 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 	@Override
 	public ApiResponse deativateAccount(LoginRequest loginRequest) {
-
-		if(loginRepo.existsByPhoneNumber(loginRequest.getMobileNumber()))
-		{
-			Optional<Login> login = loginRepo.findByPhoneNumberAndOtp(loginRequest.getMobileNumber(), loginRequest.getOtp());
-			if(login.isPresent()) {
-				if(login.get().getExperiedAt().compareTo(LocalDateTime.now())>=0){
-			    
-				
 		if (loginRepo.existsByPhoneNumber(loginRequest.getMobileNumber())) {
 			Optional<Login> login = loginRepo.findByPhoneNumberAndOtp(loginRequest.getMobileNumber(),
 					loginRequest.getOtp());
 			if (login.isPresent()) {
 				if (login.get().getExperiedAt().compareTo(LocalDateTime.now()) >= 0) {
 					Optional<User> user = userRepo.findByUserMobile(loginRequest.getMobileNumber());
+					if(user.get().getStatus().equals(Status.ACTIVE))
+					{
 					user.get().setStatus(Status.DEACTIVE);
 					userRepo.save(user.get());
+					}
+					else
+					{
+						return new ApiResponse(AppConstant.ACCOUNT_DEACTIVATE);
+					}
 				} else {
 					throw new BadRequestException(AppConstant.OTP_EXPERED);
 				}
@@ -166,6 +166,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 				throw new BadRequestException(AppConstant.INVALID_OTP);
 			}
 		} else {
+			Optional<User> findByUserMobile = userRepo.findByUserMobile(loginRequest.getMobileNumber());
+			if(findByUserMobile.isPresent())
+			{
+				throw new BadRequestException("Login first time then deactivate account");
+			}
 			throw new BadRequestException(AppConstant.INVALID_PHONE_NUMBER);
 		}
 		return new ApiResponse(AppConstant.ACCOUNT_DEACTIVATE);
@@ -192,6 +197,5 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 		}
 		response.put(AppConstant.MESSAGE, AppConstant.UPDATE_FAILED);
 		return response;
-
 	}
 }

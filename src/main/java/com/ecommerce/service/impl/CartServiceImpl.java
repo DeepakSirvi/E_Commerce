@@ -44,7 +44,13 @@ public class CartServiceImpl implements CartService {
 
 	@Override
 	public Map<String, Object> addProductToCart(String id, short quantity) {
-		varientRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException(VARIENT, ID, id));
+		if (!appUtils.isUserActive()) {
+			throw new BadRequestException(AppConstant.USER_DEACTIVE);
+		}
+		Varient varient = varientRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException(VARIENT, ID, id));
+		
+		if(varient.getStatus().equals(Status.ACTIVE))
+		{
 		Optional<Cart> cart = cartRepo.findByUserAndVarient(new User(appUtils.getUserId()), new Varient(id));
 		Cart cart2 = new Cart();
 		if (cart.isPresent()) {
@@ -64,6 +70,9 @@ public class CartServiceImpl implements CartService {
 		Map<String, Object> response = new HashMap<>();
 		response.put(AppConstant.MESSAGE, AppConstant.ADD_TO_CART);
 		return response;
+		}
+		throw new BadRequestException(AppConstant.VARIENT_INACTIVE);
+
 	}
 
 	@Override
@@ -82,6 +91,9 @@ public class CartServiceImpl implements CartService {
 
 	@Override
 	public Map<String, Object> deleteCartById(String cartId) {
+		if (!appUtils.isUserActive()) {
+			throw new BadRequestException(AppConstant.USER_DEACTIVE);
+		}
 		Map<String, Object> response = new HashMap<>();
 		Optional<Cart> cart = cartRepo.findById(cartId);
 		if (cart.isPresent()) {
