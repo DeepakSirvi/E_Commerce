@@ -152,41 +152,31 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 				if (login.get().getExperiedAt().compareTo(LocalDateTime.now()) >= 0) {
 
 					Optional<User> user = userRepo.findByUserMobile(loginRequest.getMobileNumber());
-					if(user.get().getStatus().equals(Status.ACTIVE))
-					{
-					user.get().setStatus(Status.DEACTIVE);
-					userRepo.save(user.get());
-					}
-					else
-					{
+					if (user.get().getStatus().equals(Status.ACTIVE)) {
+						user.get().setStatus(Status.DEACTIVE);
+						userRepo.save(user.get());
+					} else {
 						return new ApiResponse(AppConstant.ACCOUNT_DEACTIVATE);
 					}
 				} else {
 					throw new BadRequestException(AppConstant.OTP_EXPERED);
 
 				}
-				else
-				{
-					   throw new BadRequestException(AppConstant.OTP_EXPERED);
-				}	
 			}
 
 		} else {
 			Optional<User> findByUserMobile = userRepo.findByUserMobile(loginRequest.getMobileNumber());
-			if(findByUserMobile.isPresent())
-			{
+			if (findByUserMobile.isPresent()) {
 				throw new BadRequestException("Login first time then deactivate account");
 			}
 			throw new BadRequestException(AppConstant.INVALID_PHONE_NUMBER);
 
 		}
-		else
-		{
-			   throw new BadRequestException(AppConstant.INVALID_PHONE_NUMBER);
-		}
-		return new ApiResponse(AppConstant.ACCOUNT_DEACTIVATE); 
-	}			
-				@Override
+
+		return new ApiResponse(AppConstant.ACCOUNT_DEACTIVATE);
+	}
+
+	@Override
 	public Map<String, Object> updateUser(UpdateUserRequest userRequest) {
 		Map<String, Object> response = new HashMap<>();
 		Optional<User> userOpt = userRepo.findById(userRequest.getId());
