@@ -15,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ecommerce.exception.BadRequestException;
 import com.ecommerce.exception.ResourceNotFoundException;
 import com.ecommerce.model.Brand;
 import com.ecommerce.model.Status;
@@ -40,6 +41,9 @@ public class BrandServiceImpl implements BrandService {
 
 	@Override
 	public Map<String, Object> addBrandDetails(BrandRequest brandRequest, MultipartFile multipartFiles) {
+		if (!appUtils.isUserActive()) {
+			throw new BadRequestException(AppConstant.USER_DEACTIVE);
+		}
 		Map<String, Object> response = new HashMap<>();
 		System.err.println("---");
 		Brand brand = this.brandRequestToBrand(brandRequest);
@@ -65,31 +69,25 @@ public class BrandServiceImpl implements BrandService {
 
 	@Override
 	public Map<String, Object> updateStatusById(String brandId) {
+		if (!appUtils.isUserActive()) {
+			throw new BadRequestException(AppConstant.USER_DEACTIVE);
+		}
+		
 		Map<String, Object> response = new HashMap<>();
-
 		Optional<Brand> optionalBrand = brandRepo.findById(brandId);
-
 		if (optionalBrand.isPresent()) {
 			Brand brand = optionalBrand.get();
-
 			brand.setStatus(Status.VERIFIED);
-
 			if (optionalBrand.isPresent()) {
 				Brand brand1 = optionalBrand.get();
-
 				brand1.setStatus(Status.UNVERIFIED);
 			}
 			brandRepo.save(brand);
-
 			response.put("response", AppConstant.UPDATE_STATUS);
-
 			response.put(AppConstant.STATUS, brand.getStatus().toString());
-
 		} else {
-
 			throw new ResourceNotFoundException(BRAND, ID, brandId);
 		}
-
 		return response;
 	}
 

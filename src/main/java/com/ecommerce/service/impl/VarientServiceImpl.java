@@ -85,8 +85,7 @@ public class VarientServiceImpl implements VarientService {
 		}
 		Varient varient = modelMapper.map(varientRequest, Varient.class);
 		varient.setStatus(Status.DEACTIVE);
-		System.out.println(varientRequest.getProductId());
-		varient.setProduct(new Product(varientRequest.getProductId()));
+    	varient.setProduct(new Product(varientRequest.getProductId()));
 		if (image != null) {
 			for (MultipartFile file : image) {
 				String uploadImage = appUtils.uploadImage(file, AppConstant.PRODUCT_IMAGE_PATH, null);
@@ -130,14 +129,11 @@ public class VarientServiceImpl implements VarientService {
 						productRepo.save(varient.getProduct());
 					}
 				}
-
 			}
-
 			if (varient.getProduct().getVerified().equals(Status.VERIFIED)) {
 				varient.setStatus(statusRequest.getStatus());
 				varientRepo.save(varient);
 				response.put("response", AppConstant.STATUS_UPDATE + " " + statusRequest.getStatus());
-
 			} else {
 				response.put("response", "First Product should get verified from admin side");
 			}

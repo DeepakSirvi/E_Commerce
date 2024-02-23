@@ -133,7 +133,9 @@ public class ProductServiceImpl implements ProductService {
 				.orElseThrow(() -> new ResourceNotFoundException(PRODUCT, ID, statusRequest.getId()));
 		if (product.getCreatedBy().equals(appUtils.getUserId()) || userRoleRepo
 				.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleName.ADMIN.ordinal()))) {
-
+           if(product.getListingStatus() == statusRequest.isStatus()) {
+				throw new BadRequestException("Product is already updated");
+           }
 			if (statusRequest.isStatus()) {
 				if (!product.getVerified().equals(Status.VERIFIED)) {
 					throw new BadRequestException(AppConstant.PRODUCT_NOT_VERIFIED);
@@ -154,7 +156,6 @@ public class ProductServiceImpl implements ProductService {
 					varient.setStatus(Status.DEACTIVE);
 					return varient;
 				}).collect(Collectors.toList()));
-
 				productRepo.save(product);
 			}
 			response.put(AppConstant.RESPONSE_MESSAGE,
@@ -401,15 +402,10 @@ public class ProductServiceImpl implements ProductService {
 		} else if (statusRequest.getStatus().equals(Status.VERIFIED)) {
 			product.setVerified(statusRequest.getStatus());
 			product.setListingStatus(Boolean.FALSE);
-			productRepo.save(product);
-		} else {
-			product.setVerified(statusRequest.getStatus());
-			product.setListingStatus(Boolean.FALSE);
 			product.setVarient(product.getVarient().stream().map(varient -> {
 				varient.setStatus(Status.DEACTIVE);
 				return varient;
 			}).collect(Collectors.toList()));
-
 			productRepo.save(product);
 		}
 		response.put(AppConstant.RESPONSE_MESSAGE, AppConstant.STATUS_UPDATE + " " + statusRequest.getStatus());

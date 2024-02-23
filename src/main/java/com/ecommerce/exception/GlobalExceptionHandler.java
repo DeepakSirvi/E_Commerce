@@ -12,6 +12,8 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import java.sql.SQLIntegrityConstraintViolationException;
+
 
 import io.jsonwebtoken.MalformedJwtException;
 
@@ -24,7 +26,12 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
 	}
 
-	
+	@ExceptionHandler(SQLIntegrityConstraintViolationException.class)
+	public ResponseEntity<ExceptionResponse> resolveException(SQLIntegrityConstraintViolationException exception) {
+		ExceptionResponse exceptionResponse = new ExceptionResponse(exception.getMessage());
+		return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+	}
+
 	@ExceptionHandler(MethodArgumentNotValidException.class) 
 	public ResponseEntity<Map<String,String>> handlerMethodArgsNotVAlidException(MethodArgumentNotValidException ex)
 	{

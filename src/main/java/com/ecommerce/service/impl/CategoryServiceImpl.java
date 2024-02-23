@@ -106,8 +106,14 @@ public class CategoryServiceImpl implements CategoryService {
 		if (!appUtils.isUserActive()) {
 			throw new BadRequestException(AppConstant.USER_DEACTIVE);
 		}
+		
+		
 		SubCategory subCategory = subCategoryRepo.findById(subCategoryRequest.getId())
 				.orElseThrow(() -> new BadRequestException(AppConstant.SUB_CATEGORY_NOT_FOUND));
+		
+		if (subCategory.getCreatedBy().equals(appUtils.getUserId()) || userRoleRepo
+				.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleName.ADMIN.ordinal()))) {
+		
 		if (subCategoryRepo.existsBySubCategoryAndCategory(subCategoryRequest.getSubCategory(),
 				new Category(subCategoryRequest.getCategory().getId()))
 				&& !subCategory.getSubCategory().equals(subCategoryRequest.getSubCategory())) {
@@ -116,6 +122,9 @@ public class CategoryServiceImpl implements CategoryService {
 		subCategory = modelMapper.map(subCategoryRequest, SubCategory.class);
 		subCategoryRepo.save(subCategory);
 		return new ApiResponse(Boolean.TRUE, AppConstant.SUBCATEGORY_UPDATED, HttpStatus.OK);
+		}
+		throw new UnauthorizedException(UNAUTHORIZED);
+
 	}
 
 	@Override
@@ -255,7 +264,9 @@ public class CategoryServiceImpl implements CategoryService {
 		if (categoryRepo.existsByCategoryNameAndIdNot(categoryRequest.getCategoryName(), categoryRequest.getId())) {
 			throw new BadRequestException(AppConstant.CATEGORY_TAKEN);
 		}
-
+		if (category.getCreatedBy().equals(appUtils.getUserId()) || userRoleRepo
+				.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleName.ADMIN.ordinal()))) {
+		
 		categoryRequest.getSubCategory().stream().map(subCat -> {
 			if (Objects.isNull(subCat.getId()) || subCat.getId().equals("")) {
 				SubCategoryRequest subCategoryRequest = new SubCategoryRequest();
@@ -274,6 +285,10 @@ public class CategoryServiceImpl implements CategoryService {
 		category.setCategoryName(categoryRequest.getCategoryName());
 		categoryRepo.save(category);
 		return new ApiResponse(Boolean.TRUE, AppConstant.CATEGORY_UPDATED, HttpStatus.OK);
+		
+		}
+		throw new UnauthorizedException(UNAUTHORIZED);
+
 	}
 
 	@Override
