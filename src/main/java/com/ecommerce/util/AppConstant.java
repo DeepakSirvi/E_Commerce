@@ -191,6 +191,7 @@ public class AppConstant {
 
 	public static final String DUPLICATE_NOT_ALLOWED = "Duplicate Name Not Allowed";
 
+
 	public static final Object COMPLAINTIMAGE_ADD_SUCCES = null;
 
 	public static final String COMPLAINT_IMAGE_PATH = null;

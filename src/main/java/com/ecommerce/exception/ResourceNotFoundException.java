@@ -23,7 +23,7 @@ public class ResourceNotFoundException extends RuntimeException {
 		exceptionResponse = new ExceptionResponse();
 		exceptionResponse.setSuccess(Boolean.FALSE);
 		exceptionResponse.setMessage(message);
-		exceptionResponse.setStatus(HttpStatus.BAD_REQUEST);
+		exceptionResponse.setStatus(HttpStatus.NOT_FOUND);
 	}
 
 	private String resourceName;

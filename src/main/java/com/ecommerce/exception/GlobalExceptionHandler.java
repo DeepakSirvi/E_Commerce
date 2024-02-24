@@ -5,12 +5,17 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import java.sql.SQLIntegrityConstraintViolationException;
+
+
+import io.jsonwebtoken.MalformedJwtException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -21,7 +26,12 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
 	}
 
-	
+	@ExceptionHandler(SQLIntegrityConstraintViolationException.class)
+	public ResponseEntity<ExceptionResponse> resolveException(SQLIntegrityConstraintViolationException exception) {
+		ExceptionResponse exceptionResponse = new ExceptionResponse(exception.getMessage());
+		return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+	}
+
 	@ExceptionHandler(MethodArgumentNotValidException.class) 
 	public ResponseEntity<Map<String,String>> handlerMethodArgsNotVAlidException(MethodArgumentNotValidException ex)
 	{
@@ -39,6 +49,12 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(ResourceNotFoundException.class)
 	public ResponseEntity<ExceptionResponse> resolveException(ResourceNotFoundException exception) {
 		ExceptionResponse exceptionResponse = exception.getExceptionResponse();
+		return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
+	}
+	
+	@ExceptionHandler(MalformedJwtException.class)
+	public ResponseEntity<ExceptionResponse> resolveException(MalformedJwtException exception) {
+		ExceptionResponse exceptionResponse = new ExceptionResponse(Boolean.FALSE, "Token is in invalid formate", HttpStatus.INTERNAL_SERVER_ERROR);
 		return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
 	}
 	

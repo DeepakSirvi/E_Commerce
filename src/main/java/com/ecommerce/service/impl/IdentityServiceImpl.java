@@ -46,26 +46,22 @@ public class IdentityServiceImpl implements IdentityService {
 	@Override
 	public Map<String, Object> addIdentityDetails(IdentityRequest identityRequest, MultipartFile multipartFiles) {
 
+		if (!appUtils.isUserActive()) {
+			throw new BadRequestException(AppConstant.USER_DEACTIVE);
+		}
 		Map<String, Object> response = new HashMap<>();
-
 		Identity identity = this.IdentityRequestToIdentity(identityRequest);
 		identity.setStatus(Status.DEACTIVE);
-
 		if (identityRepo.findByIdCardNumber(identityRequest.getIdCardNumber()).isPresent()) {
 			throw new BadRequestException(AppConstant.IDENTITY_NOT_ADD_SUCCES);
 		}
-
 		if (multipartFiles != null) {
-
 			String uploadImage = appUtils.uploadImage(multipartFiles, AppConstant.Identity_IMAGE_PATH, null);
 			identity.setImage(uploadImage);
 		}
-
 		identity.setUser(new User(appUtils.getUserId()));
-
 		identityRepo.save(identity);
 		response.put("response", AppConstant.IDENTITY_ADD_SUCCES);
-
 		return response;
 	}
 
@@ -76,25 +72,20 @@ public class IdentityServiceImpl implements IdentityService {
 
 	@Override
 	public Map<String, Object> updateStatusById(String identityId) {
-
+		if (!appUtils.isUserActive()) {
+			throw new BadRequestException(AppConstant.USER_DEACTIVE);
+		}
 		Map<String, Object> response = new HashMap<>();
-
 		Optional<Identity> optionalIdentity = identityRepo.findById(identityId);
-
 		if (optionalIdentity.isPresent()) {
 			Identity identity = optionalIdentity.get();
 			identity.setStatus(Status.ACTIVE);
-
 			if (optionalIdentity.isPresent()) {
-
 				Identity identity1 = optionalIdentity.get();
 				identity1.setStatus(Status.DEACTIVE);
 			}
-
 			identityRepo.save(identity);
-
 			response.put("response", AppConstant.UPDATE_STATUS);
-
 			response.put(AppConstant.STATUS, identity.getStatus().toString());
 
 		} else {
@@ -106,9 +97,7 @@ public class IdentityServiceImpl implements IdentityService {
 
 	@Override
 	public Map<String, Object> getAllIdentityById(String userId) {
-
 		Map<String, Object> response = new HashMap<>();
-
 		List<Identity> identity = identityRepo.findAllByUserId(userId);
 		List<IdentityResponse> identityResponses = identity.stream().map(obj -> identityResponse(obj))
 				.collect(Collectors.toList());
