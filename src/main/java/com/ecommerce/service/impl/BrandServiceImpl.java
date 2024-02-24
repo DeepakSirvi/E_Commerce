@@ -15,6 +15,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ecommerce.FileService.CloudService;
+import com.ecommerce.exception.BadRequestException;
 import com.ecommerce.exception.ResourceNotFoundException;
 import com.ecommerce.model.Brand;
 import com.ecommerce.model.Status;
@@ -37,6 +39,8 @@ public class BrandServiceImpl implements BrandService {
 	private ModelMapper mapper;
 	@Autowired
 	private AppUtils appUtils;
+	@Autowired
+	private CloudService cloudService;
 
 	@Override
 	public Map<String, Object> addBrandDetails(BrandRequest brandRequest, MultipartFile multipartFiles) {
@@ -45,11 +49,13 @@ public class BrandServiceImpl implements BrandService {
 		Brand brand = this.brandRequestToBrand(brandRequest);
 		brand.setStatus(Status.UNVERIFIED);
 		if (multipartFiles != null) {
-			String uploadImage = appUtils.uploadImage(multipartFiles, AppConstant.BRAND_IMAGE_PATH, null);
-			System.err.println(multipartFiles);
-		
-			brand.setBrandImage(uploadImage);
-			
+			String profileName = cloudService.uploadFileInFolder(multipartFiles, AppConstant.BRAND_IMAGE_PATH);
+
+//			String uploadImage = appUtils.uploadImage(multipartFiles, AppConstant.BRAND_IMAGE_PATH, null);
+//			System.err.println(multipartFiles);
+
+			brand.setBrandImage(profileName);
+
 		}
 
 		brand.setUser(new User(appUtils.getUserId()));
@@ -118,6 +124,7 @@ public class BrandServiceImpl implements BrandService {
 		brandResponse.setId(brand2.getId());
 		brandResponse.setBrandName(brand2.getBrandName());
 		brandResponse.setBrandDescription(brand2.getBrandDescription());
+		brandResponse.setBrandImage(brand2.getBrandImage());
 		return brandResponse;
 	}
 
@@ -137,24 +144,27 @@ public class BrandServiceImpl implements BrandService {
 	}
 
 	@Override
-	public Map<String, Object> getAllBrand(Integer page, Integer size, String sortDir) {
+	public Map<String, List<BrandResponse>> getAllBrand(Integer page, Integer size, String sortDir) {
 
-		Map<String, Object> response = new HashMap<>();
+		Map<String, List<BrandResponse>> response = new HashMap<>();
 		AppUtils.validatePageAndSize(page, size);
 
+		 
 		Sort sort1 = null;
 		if (sortDir.equals("DESC")) {
 			sort1 = Sort.by(Sort.Order.desc("updatedAt"));
 		} else {
 			sort1 = Sort.by(Sort.Order.asc("updatedAt"));
 		}
+
+		// Sort.by(Sort.Direction.DESC,"updatedAt")
 		Pageable pageable = PageRequest.of(page, size, sort1);
-		Page<Brand> brandSet = null;
-		brandSet = brandRepo.findAll(pageable);
+
+		Page<Brand> brandSet = brandRepo.findByStatusNot(pageable,"DEACTIVE");
 		if (!brandSet.isEmpty()) {
-			List<BrandResponse> brandResponses = brandSet.stream().map(this::brandToBrandResponse)
-					.collect(Collectors.toList());
+			List<BrandResponse> brandResponses = brandSet.getContent().stream().map(this::brandToBrandResponse).toList();
 			response.put("AllBrand", brandResponses);
+			System.err.println();
 		} else {
 			throw new ResourceNotFoundException();
 		}
@@ -212,4 +222,20 @@ public class BrandServiceImpl implements BrandService {
 
 	}
 
+	@Override
+	public boolean deleteAdress(String id) {
+		System.err.println("///////////////////////");
+		Optional<Brand> findById = this.brandRepo.findById(id);
+		if(findById.isPresent()) {
+			Brand brand =  findById.get();
+			brand.setStatus(Status.DEACTIVE);
+			this.brandRepo.save(brand);
+		}
+		else {
+			throw new  ResourceNotFoundException();
+		}
+		return false;
+	}
 }
+
+
