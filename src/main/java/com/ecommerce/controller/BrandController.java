@@ -20,7 +20,8 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-
+import com.ecommerce.payload.AddressRequest;
+import com.ecommerce.payload.AddressResponse;
 import com.ecommerce.payload.BrandRequest;
 import com.ecommerce.payload.BrandResponse;
 import com.ecommerce.service.BrandService;
@@ -54,6 +55,30 @@ public class BrandController {
 		 return ResponseEntity.ok(response);
 	 
 }
+	 
+	 
+	 @PutMapping("/updateBrand")
+	 public ResponseEntity<Map<String, Object>> updatBrandDetails(@RequestPart  String brandRequest,@RequestPart(value = "brandImage", required = false) MultipartFile brandImage){
+	        
+		 ObjectMapper mapper = new ObjectMapper();
+		 BrandRequest request = null;
+		 
+		 try {
+			request = mapper.readValue(brandRequest, BrandRequest.class);
+			System.err.println(request.getId());
+		} catch (JsonProcessingException e) {
+			
+			e.printStackTrace();
+		}
+		 Map<String, Object> response = brandService.updateAddress(request, brandImage);
+		 
+		 return ResponseEntity.ok(response);
+	 
+}
+	 
+
+	 
+	 
 	 
 	 @PutMapping("/updateStatus/{brandId}")
 	    public ResponseEntity<Map<String, Object>> updateStatus(@PathVariable String brandId) {
@@ -103,9 +128,17 @@ public class BrandController {
 	   
 	 @DeleteMapping("/delete/{id}")
 	 public ResponseEntity<Boolean> deleteById(@PathVariable String id) {
-			return ResponseEntity.ok(this.brandService.deleteAdress(id));
+			return ResponseEntity.ok(this.brandService.deleteBrand(id));
 	 
 	 }
+	 @PutMapping("/update/{id}")
+		public ResponseEntity<Map<String, Object>> updateBrand(@RequestBody BrandRequest brandRequest,
+				@PathVariable String id) {
+		 
+		 Map<String ,Object > responce = brandService.getBrandById(id);
+		 return ResponseEntity.ok(responce);
+			
+		}
 	   
 } 
 	 
