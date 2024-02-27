@@ -13,5 +13,15 @@
     "name": "cloud.api-key",
     "type": "java.lang.String",
     "description": "A description for 'cloud.api-key'"
+  },
+  {
+    "name": "app.secret",
+    "type": "java.lang.String",
+    "description": "A description for 'app.secret'"
+  },
+  {
+    "name": "app.path",
+    "type": "java.lang.String",
+    "description": "A description for 'app.path'"
   }
 ]}

@@ -20,9 +20,12 @@ import com.ecommerce.FileService.CloudService;
 
 import com.ecommerce.exception.BadRequestException;
 import com.ecommerce.exception.ResourceNotFoundException;
+import com.ecommerce.model.Address;
 import com.ecommerce.model.Brand;
 import com.ecommerce.model.Status;
 import com.ecommerce.model.User;
+import com.ecommerce.payload.AddressRequest;
+import com.ecommerce.payload.AddressResponse;
 import com.ecommerce.payload.BrandRequest;
 import com.ecommerce.payload.BrandResponse;
 import com.ecommerce.repository.BrandRepo;
@@ -43,6 +46,28 @@ public class BrandServiceImpl implements BrandService {
 	private AppUtils appUtils;
 	@Autowired
 	private CloudService cloudService;
+	
+	public Brand  brandRequestToBrand1(BrandRequest brandRequest) {
+		Brand brand = new Brand();
+		brand.setBrandDescription(brandRequest.getBrandDescription());
+		brand.setBrandImage(brandRequest.getBrandImage());
+		brand.setBrandName(brandRequest.getBrandName());
+		brand.setStatus(Status.UNVERIFIED);
+		return brand;
+	}
+
+	
+	
+	public  BrandResponse brandToBrandResponse1(Brand brand) {
+		BrandResponse brandResponse = new BrandResponse();
+		brandResponse.setBrandDescription(brand.getBrandDescription());
+		brandResponse.setBrandImage(brand.getBrandImage());
+		brandResponse.setBrandName(brand.getBrandName());
+		brandResponse.setStatus(Status.UNVERIFIED);
+		return brandResponse ;
+	}
+	
+	
 
 	@Override
 	public Map<String, Object> addBrandDetails(BrandRequest brandRequest, MultipartFile multipartFiles) {
@@ -51,8 +76,8 @@ public class BrandServiceImpl implements BrandService {
 		}
 		Map<String, Object> response = new HashMap<>();
 		System.err.println("---");
-		Brand brand = this.brandRequestToBrand(brandRequest);
-		brand.setStatus(Status.UNVERIFIED);
+		Brand brand = this.brandRequestToBrand1(brandRequest);
+	brand.setStatus(Status.UNVERIFIED);
 		if (multipartFiles != null) {
 			String profileName = cloudService.uploadFileInFolder(multipartFiles, AppConstant.BRAND_IMAGE_PATH);
 
@@ -70,9 +95,7 @@ public class BrandServiceImpl implements BrandService {
 		return response;
 	}
 
-	private Brand brandRequestToBrand(BrandRequest brandRequest) {
-		return this.mapper.map(brandRequest, Brand.class);
-	}
+	
 
 	@Override
 	public Map<String, Object> updateStatusById(String brandId) {
@@ -84,10 +107,10 @@ public class BrandServiceImpl implements BrandService {
 		Optional<Brand> optionalBrand = brandRepo.findById(brandId);
 		if (optionalBrand.isPresent()) {
 			Brand brand = optionalBrand.get();
-			brand.setStatus(Status.VERIFIED);
+			brand.setStatus(Status.UNVERIFIED);
 			if (optionalBrand.isPresent()) {
 				Brand brand1 = optionalBrand.get();
-				brand1.setStatus(Status.UNVERIFIED);
+				brand1.setStatus(Status.ACTIVE);
 			}
 			brandRepo.save(brand);
 			response.put("response", AppConstant.UPDATE_STATUS);
@@ -107,7 +130,7 @@ public class BrandServiceImpl implements BrandService {
 		if (brandOptional.isPresent()) {
 			Brand brand = brandOptional.get();
 
-			BrandResponse brandResponse = brandToBrandResponse(brand);
+			BrandResponse brandResponse = brandToBrandResponse1(brand);
 			response.put("brand", brandResponse);
 
 		} else {
@@ -121,6 +144,7 @@ public class BrandServiceImpl implements BrandService {
 	private BrandResponse brandToBrandResponse(Brand brand2) {
 		BrandResponse brandResponse = new BrandResponse();
 		brandResponse.setId(brand2.getId());
+		
 		brandResponse.setBrandName(brand2.getBrandName());
 		brandResponse.setBrandDescription(brand2.getBrandDescription());
 		brandResponse.setBrandImage(brand2.getBrandImage());
@@ -134,7 +158,7 @@ public class BrandServiceImpl implements BrandService {
 
 		List<Brand> brands = brandRepo.findAllByUserId(userId);
 
-		List<BrandResponse> brandResponse = brands.stream().map(this::brandToBrandResponse)
+		List<BrandResponse> brandResponse = brands.stream().map(this::brandToBrandResponse1)
 				.collect(Collectors.toList());
 
 		response.put("brand", brandResponse);
@@ -159,9 +183,9 @@ public class BrandServiceImpl implements BrandService {
 		// Sort.by(Sort.Direction.DESC,"updatedAt")
 		Pageable pageable = PageRequest.of(page, size, sort1);
 
-		Page<Brand> brandSet = brandRepo.findByStatusNot(pageable,"DEACTIVE");
+		Page<Brand> brandSet = brandRepo.findByStatusNot(pageable,"Deactived");
 		if (!brandSet.isEmpty()) {
-			List<BrandResponse> brandResponses = brandSet.getContent().stream().map(this::brandToBrandResponse).toList();
+			List<BrandResponse> brandResponses = brandSet.getContent().stream().map(d->this.brandToBrandResponse(d)).collect(Collectors.toList());
 			response.put("AllBrand", brandResponses);
 			System.err.println();
 		} else {
@@ -221,9 +245,11 @@ public class BrandServiceImpl implements BrandService {
 
 	}
 
+	
+
 	@Override
-	public boolean deleteAdress(String id) {
-		System.err.println("///////////////////////");
+	public boolean deleteBrand(String id) {
+		
 		Optional<Brand> findById = this.brandRepo.findById(id);
 		if(findById.isPresent()) {
 			Brand brand =  findById.get();
@@ -234,7 +260,51 @@ public class BrandServiceImpl implements BrandService {
 			throw new  ResourceNotFoundException();
 		}
 		return false;
+		
 	}
-}
+	
+	@Override
+	public Map<String, Object> updateAddress(BrandRequest brandRequest, MultipartFile multipartFiles) {
+	
+		System.err.println(brandRequest.getId());
+
+		Map<String, Object> responce = new HashMap<>();
+		
+		Optional<Brand> findById = this.brandRepo.findById(brandRequest.getId());
+		
+		if(findById.isEmpty()) {
+			 throw new BadRequestException(AppConstant.BRAND_UPDATE);
+			
+		}
+		else
+		{
+		
+			Brand brand = findById.get();
+			brand.setId(brandRequest.getId());
+			brand.setBrandDescription(brandRequest.getBrandDescription());
+			brand.setBrandImage(brandRequest.getBrandImage());
+			brand.setStatus(Status.UNVERIFIED);
+			brand.setBrandName(brandRequest.getBrandName());
+			
+			 
+				if (multipartFiles != null) {
+					String profileName = cloudService.uploadFileInFolder(multipartFiles, AppConstant.BRAND_IMAGE_PATH);
+
+
+					brand.setBrandImage(profileName);
+
+				}
+				this.brandRepo.save(brand);
+			 
+			 responce.put(AppConstant.RESPONSE_MESSAGE,AppConstant.UPDATE_SUCCESSFULLY );
+		}
+		
+		return responce;
+	}
+
+		
+	}
+
+
 
 

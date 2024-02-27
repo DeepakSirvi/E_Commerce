@@ -19,7 +19,7 @@ public class BrandRequest {
 	
 	 private String Id;
 	
-	 private String brandname;
+	 private String brandName;
 	
      private Status status;
 	

@@ -207,6 +207,11 @@ public class AppConstant {
 	public static final Object UPDATE_COMPLAINT = null;
 
 	public static final String COMPLAINT_NOT_FOUND = null;
+	
+	public static final String  BRAND_UPDATE = "Brand  Update Successfully";
+	
+	
+	
 
 
 
