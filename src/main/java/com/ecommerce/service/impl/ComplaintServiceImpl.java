@@ -50,7 +50,7 @@ public class ComplaintServiceImpl implements ComplaintService {
 		
          if(multipartFile != null) {
         	 
-       	  String uploadImage= appUtils.uploadImage(multipartFile ,AppConstant.COMPLAINT_IMAGE_PATH, null);
+       	  String uploadImage= appUtils.uploadImage(multipartFile ,AppConstant.COMPLAINT_IMAGE_PATH , null);
        	  
 
        	// complaint.getImage().add(uploadImage); 	
