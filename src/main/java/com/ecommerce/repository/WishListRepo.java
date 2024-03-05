@@ -29,4 +29,5 @@ public interface WishListRepo extends JpaRepository<WishListProduct, String> {
 	@Transactional
 	public void deleteByVarient(Varient varient);
 
+
 }
