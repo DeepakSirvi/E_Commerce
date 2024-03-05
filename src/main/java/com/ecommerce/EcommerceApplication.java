@@ -13,9 +13,6 @@ import com.cloudinary.Cloudinary;
 @SpringBootApplication
 public class EcommerceApplication {
 
-	
-	
-	
 	@Value("${cloud.name}")
 	private String cloudName;
 	@Value("${cloud.api-key}")
@@ -26,7 +23,6 @@ public class EcommerceApplication {
 	@Bean
 	public Cloudinary cloudinary() {
 		return new Cloudinary(String.format("cloudinary://%s:%s@%s",cloudApiKey,apiSecretKey,cloudName ));
-	
 	}
 
 	public static void main(String[] args) {
@@ -38,7 +34,4 @@ public class EcommerceApplication {
 		System.out.println("Available Proccessor " + runtime.availableProcessors());
 		System.out.println("Used memory " + (runtime.totalMemory() - runtime.freeMemory())/(1024*1024));
 		}
-	
-	
-	
 }

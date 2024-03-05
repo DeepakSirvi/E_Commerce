@@ -23,7 +23,6 @@ public class CloudServiceImpl  implements CloudService{
 	@Override
 	public String uploadFileInFolder(MultipartFile myFile, String destinationPath) {
 		String randomName= (UUID.randomUUID().toString() + myFile.getOriginalFilename());
-
 		String fileName = StringUtils.cleanPath(randomName);
 		Map uploadResponse;
 		try {
