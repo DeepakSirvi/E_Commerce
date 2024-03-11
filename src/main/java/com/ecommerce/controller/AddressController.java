@@ -26,7 +26,7 @@ public class AddressController {
 	@Autowired
 	private AddressService addressService;
 
-//	@PostMapping("/create")
+
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
 	public ResponseEntity<AddressResponse> createAddress(@RequestBody AddressRequest addressRequest) {
 		return new ResponseEntity<AddressResponse>(this.addressService.createAdress(addressRequest),
@@ -57,6 +57,6 @@ public class AddressController {
 	@GetMapping("/GetAddressByUserId/{id}")
 	public ResponseEntity<List<AddressResponse>> findAddressbyUserId(@PathVariable String id) {
 		return new ResponseEntity<List<AddressResponse>>(this.addressService.getAddressbyUserid(id), HttpStatus.OK);
-		// return new ResponseEntity<List<AddressResponse>>(null ,HttpStatus.OK);
+		
 	}
 }

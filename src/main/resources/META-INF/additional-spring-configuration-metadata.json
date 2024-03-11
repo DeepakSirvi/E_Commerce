@@ -13,5 +13,100 @@
     "name": "cloud.api-key",
     "type": "java.lang.String",
     "description": "A description for 'cloud.api-key'"
+  },
+  {
+    "name": "app.secret",
+    "type": "java.lang.String",
+    "description": "A description for 'app.secret'"
+  },
+  {
+    "name": "app.secret",
+    "type": "java.lang.String",
+    "description": "A description for 'app.secret'"
+  },
+  {
+    "name": "app.path",
+    "type": "java.lang.String",
+    "description": "A description for 'app.path'"
+  },
+  {
+    "name": "app.secret",
+    "type": "java.lang.String",
+    "description": "A description for 'app.secret'"
+  },
+  {
+    "name": "app.secret",
+    "type": "java.lang.String",
+    "description": "A description for 'app.secret'"
+  },
+  {
+    "name": "app.path",
+    "type": "java.lang.String",
+    "description": "A description for 'app.path'"
+  },
+  {
+    "name": "app.secret",
+    "type": "java.lang.String",
+    "description": "A description for 'app.secret'"
+  },
+  {
+    "name": "app.path",
+    "type": "java.lang.String",
+    "description": "A description for 'app.path'"
+  },
+  {
+    "name": "cloud.name",
+    "type": "java.lang.String",
+    "description": "A description for 'cloud.name'"
+  },
+  {
+    "name": "cloud.api-key",
+    "type": "java.lang.String",
+    "description": "A description for 'cloud.api-key'"
+  },
+  {
+    "name": "cloud.secret-key",
+    "type": "java.lang.String",
+    "description": "A description for 'cloud.secret-key'"
+  },
+  {
+    "name": "app.secret",
+    "type": "java.lang.String",
+    "description": "A description for 'app.secret'"
+  },
+  {
+    "name": "app.path",
+    "type": "java.lang.String",
+    "description": "A description for 'app.path'"
+  },
+  {
+    "name": "app.secret",
+    "type": "java.lang.String",
+    "description": "A description for 'app.secret'"
+  },
+  {
+    "name": "cloud.name",
+    "type": "java.lang.String",
+    "description": "A description for 'cloud.name'"
+  },
+  {
+    "name": "cloud.secret-key",
+    "type": "java.lang.String",
+    "description": "A description for 'cloud.secret-key'"
+  },
+  {
+    "name": "app.path",
+    "type": "java.lang.String",
+    "description": "A description for 'app.path'"
+  },
+  {
+    "name": "app.path",
+    "type": "java.lang.String",
+    "description": "A description for 'app.path'"
+  },
+  {
+    "name": "app.secret",
+    "type": "java.lang.String",
+    "description": "A description for 'app.secret'"
   }
 ]}

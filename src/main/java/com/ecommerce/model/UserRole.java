@@ -1,5 +1,6 @@
 package com.ecommerce.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Entity;
@@ -28,6 +29,7 @@ public class UserRole {
 	@ManyToOne
 	@JsonIgnoreProperties("userRole")
 	@JoinColumn(nullable = false)
+	@JsonIgnore
 	private Role role;
 
 	@ManyToOne(fetch = FetchType.EAGER)
