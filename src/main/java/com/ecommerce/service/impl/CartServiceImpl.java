@@ -23,6 +23,7 @@ import com.ecommerce.payload.CartResponse;
 import com.ecommerce.repository.CartRepo;
 import com.ecommerce.repository.UserRepo;
 import com.ecommerce.repository.VarientRepo;
+import com.ecommerce.repository.WishListRepo;
 import com.ecommerce.service.CartService;
 import com.ecommerce.util.AppConstant;
 import com.ecommerce.util.AppUtils;
@@ -41,6 +42,9 @@ public class CartServiceImpl implements CartService {
 
 	@Autowired
 	private AppUtils appUtils;
+	
+	@Autowired
+	private WishListRepo wishListRepo;
 
 	@Override
 	public Map<String, Object> addProductToCart(String id, short quantity) {
@@ -67,6 +71,7 @@ public class CartServiceImpl implements CartService {
 			cart2.setVarient(new Varient(id));
 			cart2 = cartRepo.save(cart2);
 		}
+		wishListRepo.deleteByVarientIdAndUserId(id, appUtils.getUserId());
 		Map<String, Object> response = new HashMap<>();
 		response.put(AppConstant.MESSAGE, AppConstant.ADD_TO_CART);
 		return response;

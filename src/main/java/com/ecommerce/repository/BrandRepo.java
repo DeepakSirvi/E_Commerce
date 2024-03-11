@@ -15,7 +15,7 @@ public interface BrandRepo extends JpaRepository<Brand, String> {
 
 	@Query("SELECT   b  FROM   Brand b WHERE b.status = VERIFIED")
 	Page<Brand> findAllVerfiedBrand(Pageable pageable);
-
+     @Query (" SELECT b FROM  Brand b where b.status = UNVERIFIED")
 	Page<Brand> findByStatusNot(Pageable pageable, String string);
 
 }

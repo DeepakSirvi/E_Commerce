@@ -33,8 +33,8 @@ public class Brand extends Audit {
     
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
-    
-	private Status status;
+
+	private Status status; 
 	
 	private String brandImage;
 	
@@ -43,6 +43,7 @@ public class Brand extends Audit {
     
     @ManyToOne
     private User user ;
+
 
 
     
