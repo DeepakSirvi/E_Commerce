@@ -1,18 +1,17 @@
 package com.ecommerce.controller;
 
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.ecommerce.payload.ApiResponse;
 import com.ecommerce.payload.LoginRequest;
 import com.ecommerce.payload.OtpResponse;
@@ -48,6 +47,12 @@ public class UserController {
 		return new ResponseEntity<UserResponse>(userService.getUserById(appUtils.getUserId()), HttpStatus.OK);
 	}
 
+	@GetMapping("/byrole/{roleTitle}")
+	public ResponseEntity<?> getUserByRoletitle(@PathVariable String roleTitle ) {
+		return new ResponseEntity<Map>(userService.getAllUsersbyGivenRole(roleTitle), HttpStatus.OK);
+		
+	}
+	
 	@PutMapping("")
 	public ResponseEntity<Map<String, Object>> updateUser(@RequestBody UpdateUserRequest userRequest) {
 

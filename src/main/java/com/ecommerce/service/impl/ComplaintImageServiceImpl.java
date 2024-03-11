@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ecommerce.exception.BadRequestException;
 import com.ecommerce.exception.ResourceNotFoundException;
 import com.ecommerce.model.Complaint;
 import com.ecommerce.model.ComplaintImage;
@@ -30,7 +31,11 @@ public class ComplaintImageServiceImpl implements ComplaintImageService {
 
 	@Override
 	public Map<String, Object> createComplaintImage(String complaintId, MultipartFile file) {
-
+		
+		if (!appUtils.isUserActive()) {
+			throw new BadRequestException(AppConstant.USER_DEACTIVE);
+		}
+	
 		Map<String, Object> response = new HashMap<>();
 
 		Complaint complaint = complaintRepo.findById(complaintId)

@@ -20,6 +20,8 @@ import com.ecommerce.payload.AccountRequest;
 import com.ecommerce.payload.ApiResponse;
 import com.ecommerce.service.AccountService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/ecommerce/account")
 @CrossOrigin
@@ -32,7 +34,7 @@ public class AccountController {
 	}
 
 	@PostMapping("/create")
-	public ResponseEntity<ApiResponse> addAccount(@RequestBody AccountRequest accountRequest) {
+	public ResponseEntity<ApiResponse> addAccount( @RequestBody AccountRequest accountRequest) {
 		return new ResponseEntity<ApiResponse>(this.accountService.addaccount(accountRequest), HttpStatus.CREATED);
 	}
 

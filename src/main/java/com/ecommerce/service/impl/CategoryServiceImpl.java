@@ -86,6 +86,8 @@ public class CategoryServiceImpl implements CategoryService {
 			return new SubCategoryResponse().subCategoryToSubCategoryResponse(subCat);
 		}).collect(Collectors.toList());
 		categoryResponse.setSubCategory(collect);
+		
+		
 
 		UserResponse user = new UserResponse(category.getUser().getId());
 		categoryResponse.setUser(user);
