@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 
 import com.cloudinary.Cloudinary;
 
+
 @SpringBootApplication
 public class EcommerceApplication {
 

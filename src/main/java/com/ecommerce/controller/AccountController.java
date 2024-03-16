@@ -35,7 +35,9 @@ public class AccountController {
 	}
 
 	@PostMapping("/create")
+
 	public ResponseEntity<ApiResponse> addAccount(@RequestBody @Valid AccountRequest accountRequest) {
+
 		return new ResponseEntity<ApiResponse>(this.accountService.addaccount(accountRequest), HttpStatus.CREATED);
 	}
 

@@ -4,7 +4,6 @@ import com.ecommerce.custome.validation.StatusValid;
 import com.ecommerce.model.Status;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,11 +17,11 @@ import lombok.Setter;
 @JsonInclude(Include.NON_NULL)
 public class AccountRequest {
 
-	@NotBlank
+	@NotBlank 
 	private String accountNumber;
 	@NotBlank
 	private String accountHolderName;
-	@NotBlank
+	@NotBlank 
 	private String bankName;
 	@NotBlank
 	private String bankIFSCcode;

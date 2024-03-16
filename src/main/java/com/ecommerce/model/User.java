@@ -3,9 +3,7 @@ package com.ecommerce.model;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -58,44 +56,57 @@ public class User {
 	private Status status;
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JsonIgnoreProperties(value = "user")
+	//@JsonIgnoreProperties(value = "user")
+	@JsonIgnore
 	private List<UserRole> userRole = new ArrayList<>();
 
 	@OneToMany(mappedBy = "user")
+	@JsonIgnore
 	private List<Category> category;
 
 	@OneToMany(mappedBy = "user")
+	@JsonIgnore
 	private List<VarientCategory> varientCategory;
 
 	@OneToMany(mappedBy = "userAddress")
+	@JsonIgnore
 	private List<Address> userAddress = new ArrayList<>();
 
 	@OneToMany(mappedBy = "user")
+	@JsonIgnore
 	private List<Identity> user = new ArrayList<>();
 
 	@OneToMany(mappedBy = "user")
+	@JsonIgnore
 	private List<Account> accountId = new ArrayList<>();
 
 	@OneToMany(mappedBy = "vendor")
+	@JsonIgnore
 	private List<Product> product = new ArrayList<>();
 
 	@OneToMany(mappedBy = "user")
+	@JsonIgnore
 	private List<Cart> cart;
 
 	@OneToMany(mappedBy = "user")
+	@JsonIgnore
 	private List<ProductReview> productReview;
 
 	@OneToMany(mappedBy = "user")
+	@JsonIgnore
 	private List<ProductSaveForLater> saveLater;
 
 	@OneToMany
 	@JoinColumn(name = "user_id")
+	@JsonIgnore
 	private List<Notifications> notification;
 
 	@OneToMany(mappedBy = "user")
+	@JsonIgnore
 	private List<TermsAndCondition> termsAndConditons;
 
 	@OneToMany(mappedBy = "user")
+	@JsonIgnore
 	private List<Orders> order;
 
 	public User(String id) {

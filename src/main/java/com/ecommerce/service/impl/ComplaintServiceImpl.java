@@ -44,12 +44,16 @@ public class ComplaintServiceImpl implements ComplaintService {
 	@Override
 	public Map<String, Object> addComplaintDetails(ComplaintRequest complaintRequest, MultipartFile multipartFile) {
 		
+	if (!appUtils.isUserActive()) {
+			throw new BadRequestException(AppConstant.USER_DEACTIVE);
+		}
 		 Map<String, Object> response = new HashMap<>();
 		 
 		 Complaint complaint = this.compliantRequestToComplaint(complaintRequest);
 		
          if(multipartFile != null) {
         	 
+
        	  String uploadImage= appUtils.uploadImage(multipartFile ,AppConstant.COMPLAINT_IMAGE_PATH , null);
        	  
 
@@ -57,20 +61,18 @@ public class ComplaintServiceImpl implements ComplaintService {
          }
 //       	complaint.setComplaintImage(uploadImage); 	
        
-          
+
          complaint.setUser(new User(appUtils.getUserId()));
          
-         complaintRepo.save(complaint);
+         Complaint save = complaintRepo.save(complaint);
          
-         response.put("response",AppConstant.COMPLAINT_ADD_SUCCES);
+         response.put("response",save);
+         response.put("message",AppConstant.COMPLAINT_ADD_SUCCES);
 		
 		return response ;
 	}
-
-
 	private Complaint compliantRequestToComplaint(ComplaintRequest complaintRequest) {
 		 
-		
 		Complaint complaint = new Complaint();
 		
 		complaint.setDescription(complaintRequest.getDescription());
@@ -78,21 +80,14 @@ public class ComplaintServiceImpl implements ComplaintService {
 		complaint.setTitle(complaintRequest.getTitle());
 		
 		complaint.setProduct(productRepo.findById(complaintRequest.getProductId()).get());
-
 		return complaint;
 		
 	}
-
-
 	@Override
 	
-	public Map<String, Object> updateComplaintById(ComplaintRequest complaintRequest) {
-		
+	public Map<String, Object> updateComplaintById(ComplaintRequest complaintRequest) {	
 		 Map<String, Object> response = new HashMap<>();
-		 
-		 Optional<Complaint> OptionalComplaint= complaintRepo.findById(complaintRequest.getId());
-		 
-		
+		 Optional<Complaint> optionalComplaint= complaintRepo.findById(complaintRequest.getId());
 			Complaint complaint = checkComplaint(complaintRequest.getId());;
 			
 			if (complaintRequest.getTitle()!= null)

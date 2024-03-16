@@ -199,4 +199,36 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 		response.put(AppConstant.MESSAGE, AppConstant.UPDATE_FAILED);
 		return response;
 	}
+
+	@Override
+	public Map<String, List<User>> getAllUsersbyGivenRole(String roleTitle) {
+		RoleName roleName;
+		List<User> allUsers = new ArrayList<>();
+		Map<String, List<User>> response = new HashMap<>();
+		switch (roleTitle) {
+		case "CUSTOMER": {
+			roleName = RoleName.CUSTOMER;
+			break;
+		}
+		case "ADMIN": {
+			roleName = RoleName.ADMIN;
+			break;
+		}
+		case "VENDOR": {
+			roleName = RoleName.VENDOR;
+			break;
+		}
+		case "ALL": {
+			allUsers = this.userRepo.findAll();
+			response.put("Users", allUsers);
+			return response;		}
+
+		default:
+			throw new IllegalArgumentException("Unexpected value: " + roleTitle);
+		}
+
+		allUsers = this.userRoleRepo.findUsersByRoleName(roleName);
+		response.put("Users", allUsers);
+		return response;
+	}
 }
