@@ -15,17 +15,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-
 import com.ecommerce.FileService.CloudService;
-
 import com.ecommerce.exception.BadRequestException;
 import com.ecommerce.exception.ResourceNotFoundException;
-import com.ecommerce.model.Address;
 import com.ecommerce.model.Brand;
 import com.ecommerce.model.Status;
 import com.ecommerce.model.User;
-import com.ecommerce.payload.AddressRequest;
-import com.ecommerce.payload.AddressResponse;
 import com.ecommerce.payload.BrandRequest;
 import com.ecommerce.payload.BrandResponse;
 import com.ecommerce.repository.BrandRepo;

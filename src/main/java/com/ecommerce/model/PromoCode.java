@@ -2,8 +2,6 @@ package com.ecommerce.model;
 
 import java.time.LocalDateTime;
 
-import org.hibernate.annotations.GeneratorType;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -39,6 +37,5 @@ public class PromoCode extends Audit {
 	
 	private String status;
 	private String repeatAllow;
-	
-	
+
 }

@@ -1,23 +1,21 @@
 package com.ecommerce.exception;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import java.sql.SQLIntegrityConstraintViolationException;
-
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import io.jsonwebtoken.MalformedJwtException;
 
-@ControllerAdvice
+@RestControllerAdvice
 public class GlobalExceptionHandler {
 
 	@ExceptionHandler(BadRequestException.class)
@@ -43,6 +41,15 @@ public class GlobalExceptionHandler {
 	    	resp.put(field,defaultMessage);
 	    });
 		return new ResponseEntity<Map<String,String>>(resp,HttpStatus.BAD_REQUEST);
+	}
+	
+	@ExceptionHandler(NumberFormatException.class)
+	public ResponseEntity<ExceptionResponse> resolveException(NumberFormatException exception) {
+		ExceptionResponse exceptionResponse = new ExceptionResponse();
+		exceptionResponse.setMessage(exception.getMessage());
+		exceptionResponse.setStatus(HttpStatus.BAD_REQUEST);
+		exceptionResponse.setSuccess(Boolean.FALSE);
+		return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
 	}
 	
 	

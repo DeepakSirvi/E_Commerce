@@ -5,7 +5,10 @@ import java.util.List;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
@@ -20,6 +23,7 @@ import lombok.Setter;
 @Entity
 public class Orders extends Audit{
 	@Id
+	@GeneratedValue(strategy = GenerationType.UUID)
 	private String id;
 
 	@ManyToOne
@@ -34,4 +38,6 @@ public class Orders extends Audit{
 	@ManyToOne
 	private Address address;
 	
+	@ManyToOne
+	private PromoCode promoCode;
 }
