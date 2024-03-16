@@ -44,7 +44,10 @@ public class SecurityConfig {
 
 		http.csrf().disable().cors().disable().authorizeRequests()
 				.requestMatchers("ecommerce/auth/login", "ecommerce/auth/signup", "ecommerce/auth/",
-						"ecommerce/image/**", "**/permitAll/**")
+						"ecommerce/image/**", "**/permitAll/**" ,"/v3/api-docs/**",
+				          "/swagger-ui/**",
+				          "/api/auth/**",
+				          "/api/test/**" )
 				.permitAll()
 				.requestMatchers("ecommerce/category/admin/**", "ecommerce/varient/admin/**",
 						"ecommerce/product/admin/**")

@@ -4,6 +4,8 @@ import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -46,8 +48,9 @@ public class Address extends Audit {
 	@Column(length = 15)
 	private String alternateMobile;
 
-	@Column(length = 15, nullable = true)
-	private String addressType;
+	@Column(nullable = true)
+	@Enumerated(EnumType.STRING)
+	private AddressType addressType;
 
 	private boolean status;
 

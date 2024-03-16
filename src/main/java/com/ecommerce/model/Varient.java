@@ -27,13 +27,8 @@ import lombok.Setter;
 @Entity
 public class Varient extends Audit {
 
-	public Varient(String id2) {
-		this.id = id2;
-	}
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
-
 	private String id;
 	@Column(unique = false)
 	private String varientName;
@@ -65,5 +60,12 @@ public class Varient extends Audit {
 
 	@OneToMany(mappedBy = "varient")
 	private List<ProductSaveForLater> saveLater;
+	
+	@OneToMany(mappedBy = "product")
+	private List<OrderItem> orderItem;
+	
+	public Varient(String id2) {
+		this.id = id2;
+	}
 
 }

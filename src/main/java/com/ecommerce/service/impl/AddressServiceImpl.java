@@ -34,12 +34,12 @@ public class AddressServiceImpl implements AddressService {
 	public AddressResponse addressToAddressResponse(Address address) {
 
 		AddressResponse as = new AddressResponse();
-		as.setAddressType(address.getAddressType());
+//		as.setAddressType(address.getAddressType());
 		// System.err.println(address.getAddressType());
 		as.setCity(address.getCity());
 		as.setLandMark(address.getLandMark());
 		as.setPincode(address.getPincode());
-		as.setAddressType(address.getAddressType());
+//		as.setAddressType(address.getAddressType().);
 		as.setLocality(address.getLocality());
 		as.setMobile(address.getMobile());
 		as.setName(address.getName());
@@ -52,12 +52,12 @@ public class AddressServiceImpl implements AddressService {
 	public Address addressRequestToAddress(AddressRequest addressRequest) {
 		// return this.modelMapper.map(addressRequest, Address.class);
 		Address as = new Address();
-		as.setAddressType(addressRequest.getAddressType());
+//		as.setAddressType(addressRequest.getAddressType());
 		// System.err.println(addressRequest.getAddressType());
 		as.setCity(addressRequest.getCity());
 		as.setLandMark(addressRequest.getLandMark());
 		as.setPincode(addressRequest.getPincode());
-		as.setAddressType(addressRequest.getAddressType());
+//		as.setAddressType(addressRequest.getAddressType());
 		as.setLocality(addressRequest.getLocality());
 		as.setMobile(addressRequest.getMobile());
 		as.setName(addressRequest.getName());
@@ -99,7 +99,7 @@ public class AddressServiceImpl implements AddressService {
 		address2.setAlternateMobile(addressRequest.getAlternateMobile());
 		address2.setName(addressRequest.getName());
 		address2.setState(addressRequest.getState());
-		address2.setAddressType(addressRequest.getAddressType());
+//		address2.setAddressType(addressRequest.getAddressType());
 		address2.setStatus(Boolean.TRUE);
 		User user = new User();
 		user.setId(appUtils.getUserId());

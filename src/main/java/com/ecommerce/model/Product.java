@@ -89,9 +89,6 @@ public class Product extends Audit {
 	@OneToMany(mappedBy = "product")
 	private List<ProductFAQ> faq;
 
-	@OneToMany(mappedBy = "product")
-	private List<OrderItem> orderItem;
-
 	public Product(String id) {
 		this.id = id;
 	}
