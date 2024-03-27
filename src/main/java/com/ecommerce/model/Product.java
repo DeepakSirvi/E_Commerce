@@ -36,7 +36,9 @@ public class Product extends Audit {
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
 	private Status verified;
-	@Column(nullable = false)
+//	@ManyToOne
+//	@JoinColumn(name = "brand_id", nullable = false)
+	@Column(nullable= false)
 	private String brand;
 	@Column(nullable = false)
 	private String fullfillmentBy;

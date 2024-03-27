@@ -14,6 +14,6 @@ public interface UserRoleRepo extends JpaRepository<UserRole, String> {
 	public boolean existsByUserAndRole(User user, Role role);
 
     @Query("SELECT ur.user FROM UserRole ur WHERE ur.role.roleName = :roleName")
-    List<User> findUsersByRoleName(@Param("roleName") RoleName roleName);
+    List<User> findUsersByRoleName(@Param("roleName") String roleName);
 
 }

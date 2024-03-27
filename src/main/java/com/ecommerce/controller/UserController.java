@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.ecommerce.payload.ApiResponse;
 import com.ecommerce.payload.LoginRequest;
@@ -19,6 +20,7 @@ import com.ecommerce.payload.UpdateUserRequest;
 import com.ecommerce.payload.UserRequest;
 import com.ecommerce.payload.UserResponse;
 import com.ecommerce.service.UserService;
+import com.ecommerce.util.AppConstant;
 import com.ecommerce.util.AppUtils;
 
 @RestController
@@ -48,8 +50,13 @@ public class UserController {
 	}
 
 	@GetMapping("/byrole/{roleTitle}")
-	public ResponseEntity<?> getUserByRoletitle(@PathVariable String roleTitle ) {
-		return new ResponseEntity<Map>(userService.getAllUsersbyGivenRole(roleTitle), HttpStatus.OK);
+	public ResponseEntity<?> getAllUsersbyGivenRole(
+			@PathVariable String roleTitle ,
+			@RequestParam(value="pageIndex"  , required= false , defaultValue= AppConstant.DEFAULT_PAGE_NUMBER) Integer page,
+			@RequestParam(value= "pagesize" , required= false , defaultValue= AppConstant.DEFAULT_PAGE_SIZE)   Integer size,
+			@RequestParam(value= "sortDir" , required= false , defaultValue= AppConstant.DEFAULT_SORT_DIR) String SortDir)
+			{
+		return new ResponseEntity<Map>(userService.getAllUsersbyGivenRole(roleTitle ,page, size, SortDir), HttpStatus.OK);
 		
 	}
 	

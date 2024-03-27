@@ -34,8 +34,7 @@ public class AddressServiceImpl implements AddressService {
 	public AddressResponse addressToAddressResponse(Address address) {
 
 		AddressResponse as = new AddressResponse();
-		as.setAddressType(address.getAddressType());
-		// System.err.println(address.getAddressType());
+		as.setAddressType(address.getAddressType());	
 		as.setCity(address.getCity());
 		as.setLandMark(address.getLandMark());
 		as.setPincode(address.getPincode());
