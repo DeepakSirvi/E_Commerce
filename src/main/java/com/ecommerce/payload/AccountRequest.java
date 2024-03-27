@@ -1,5 +1,6 @@
 package com.ecommerce.payload;
 
+import com.ecommerce.custome.validation.StatusValid;
 import com.ecommerce.model.Status;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -27,7 +28,8 @@ public class AccountRequest {
 	private String venderGSTnumber;
 	@NotBlank
 	private String panNumber;
-	private Status status;
+	@StatusValid
+	private String status;
 	private UserRequest user;
 
 }

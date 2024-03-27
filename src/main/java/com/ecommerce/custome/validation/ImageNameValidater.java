@@ -7,7 +7,6 @@ public class ImageNameValidater implements ConstraintValidator<ImageNameValid, S
 
 	@Override
 	public boolean isValid(String value, ConstraintValidatorContext context) {
-		// TODO Auto-generated method stub
 		if(value.isBlank())
 		return false;
 		else 

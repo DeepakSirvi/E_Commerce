@@ -1,10 +1,8 @@
 package com.ecommerce.service;
 
-import org.springframework.stereotype.Service;
-
 import com.ecommerce.payload.PromoCodeRequest;
-import com.ecommerce.payload.PromoCodeResponce;
+import com.ecommerce.payload.PromoCodeResponse;
 
 public interface PromoCodeService {
-    public  PromoCodeResponce addPromoCode(PromoCodeRequest codeRequest);
+    public  PromoCodeResponse addPromoCode(PromoCodeRequest codeRequest);
 }

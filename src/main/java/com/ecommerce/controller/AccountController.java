@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,7 +35,9 @@ public class AccountController {
 	}
 
 	@PostMapping("/create")
-	public ResponseEntity<ApiResponse> addAccount( @RequestBody AccountRequest accountRequest) {
+
+	public ResponseEntity<ApiResponse> addAccount(@RequestBody @Valid AccountRequest accountRequest) {
+
 		return new ResponseEntity<ApiResponse>(this.accountService.addaccount(accountRequest), HttpStatus.CREATED);
 	}
 

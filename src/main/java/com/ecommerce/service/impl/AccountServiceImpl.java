@@ -43,12 +43,12 @@ public class AccountServiceImpl implements AccountService {
 	}
 
 	@Override
-	public ApiResponse addaccount(AccountRequest accountRequest) {
+	public ApiResponse addaccount( AccountRequest accountRequest) {
 		if (accountRepo.existsByAccountNumber(accountRequest.getAccountNumber())) {
 			throw new BadRequestException(AppConstant.ACCOUNT_NUMBER_TAKEN);
 		}
 		accountRequest.setUser(new UserRequest(appUtils.getUserId()));
-		accountRequest.setStatus(Status.ACTIVE);
+		accountRequest.setStatus(Status.ACTIVE.toString());
 		this.accountRepo.save(this.accountToAccountRequest(accountRequest));
 
 		ApiResponse apiResponse = new ApiResponse(AppConstant.ADDRESS_ADDED);

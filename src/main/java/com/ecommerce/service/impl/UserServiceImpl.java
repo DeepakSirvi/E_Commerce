@@ -100,6 +100,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) {
+		System.err.println(username);
 		Optional<User> findByUserName = userRepo.findByUserMobile(username);
 		if (findByUserName.isPresent()) {
 			User user = findByUserName.get();
@@ -108,7 +109,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 					.collect(Collectors.toList());
 			return new org.springframework.security.core.userdetails.User(username, username, authority);
 		}
-		throw new BadRequestException(AppConstant.INTERNAL_SERVER_ERROR);
+		throw new BadRequestException(AppConstant.NEW_USER);
 	}
 
 	@Override
