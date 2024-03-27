@@ -17,21 +17,21 @@ import com.ecommerce.payload.BrandResponse;
 	 
 	  public Map<String, Object> updateStatusById(String  brandId);
 	  
-		
+      public Map<String, Object> getBrandById(String brandId );
 	 
-       public Map<String, Object> getBrandById(String brandId );
+	  public Map<String , Object> getAllBrandById(String userId);
 	 
-	   public Map<String , Object> getAllBrandById(String userId);
-	 
-	   public Map<String , List<BrandResponse> > getAllBrand(Integer page, Integer size, String sortDir);
+	  public Map<String , List<BrandResponse> > getAllBrand(Integer page, Integer size, String sortDir);
 
-	   public Map<String , Object > getVerfiedBrandById(String  brandId);
+	  public Map<String , Object > getVerfiedBrandById(String  brandId);
 		   
-	   public Map<String, Object> getAllVerfiedBrand(Integer page, Integer size, String sortDir);
+	  public Map<String, Object> getAllVerfiedBrand(Integer page, Integer size, String sortDir);
 
-	   public  boolean deleteBrand(String id);
+	  public  boolean deleteBrand(String id);
 
-	Map<String, Object> updateAddress(BrandRequest brandRequest,MultipartFile multipartFiles);
+	  Map<String, Object> updateAddress(BrandRequest brandRequest,MultipartFile multipartFiles);
+	 
+	 
 	  
 
 	  

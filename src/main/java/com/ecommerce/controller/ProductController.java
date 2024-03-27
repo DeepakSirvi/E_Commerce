@@ -111,6 +111,7 @@ public class ProductController {
 			@RequestParam(value = "pageIndex", required = false, defaultValue = AppConstant.DEFAULT_PAGE_NUMBER) Integer pageIndex,
 			@RequestParam(value = "pageSize", required = false, defaultValue = AppConstant.DEFAULT_PAGE_SIZE) Integer pageSize,
 			@RequestParam(value = "sortDir", required = false, defaultValue = AppConstant.DEFAULT_SORT_DIR) String sortDir) {
+		
 		return new ResponseEntity<Map<String, Object>>(
 				productService.getAllProduct(search, pageIndex, pageSize, sortDir), HttpStatus.OK);
 	}

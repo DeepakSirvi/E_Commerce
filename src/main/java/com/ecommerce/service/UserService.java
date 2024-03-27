@@ -1,9 +1,7 @@
 package com.ecommerce.service;
 
-import java.util.List;
 import java.util.Map;
 
-import com.ecommerce.model.User;
 import com.ecommerce.payload.ApiResponse;
 import com.ecommerce.payload.LoginRequest;
 import com.ecommerce.payload.OtpResponse;
@@ -23,6 +21,6 @@ public interface UserService {
 
 	public Map<String, Object> updateUser(UpdateUserRequest userRequest);
 	
-	public Map<String, List<User>> getAllUsersbyGivenRole(String roleTitle);
+	public Map<String, Object> getAllUsersbyGivenRole(String roleName ,Integer page, Integer size, String sortDir);
 
 }

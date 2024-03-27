@@ -121,7 +121,7 @@ public class BrandServiceImpl implements BrandService {
 
 		Map<String, Object> response = new HashMap<>();
 		Optional<Brand> brandOptional = brandRepo.findById(brandId);
-
+		
 		if (brandOptional.isPresent()) {
 			Brand brand = brandOptional.get();
 
@@ -141,7 +141,7 @@ public class BrandServiceImpl implements BrandService {
 		brandResponse.setId(brand2.getId());
 		
 		brandResponse.setBrandName(brand2.getBrandName());
-		brandResponse.setBrandDescription(brand2.getBrandDescription());
+    	brandResponse.setBrandDescription(brand2.getBrandDescription());
 		brandResponse.setBrandImage(brand2.getBrandImage());
 		return brandResponse;
 	}
@@ -195,12 +195,14 @@ public class BrandServiceImpl implements BrandService {
 		Map<String, Object> response = new HashMap<>();
 
 		Optional<Brand> optionalBrand = brandRepo.findById(brandId);
-
+		System.err.println(optionalBrand);
 		if (!optionalBrand.isPresent()) {
 			throw new ResourceNotFoundException("Brand Not Found");
 
 		}
-		if (optionalBrand.get().getStatus().toString().equals("VERIFIED")) {
+		Brand brand = optionalBrand.get();
+	
+		if (optionalBrand.get().getStatus().toString().equals("ACTIVE") ){
 			response.put("response", AppConstant.BRAND_VERIFIED);
 			response.put("data", optionalBrand.get());
 		} else {
@@ -208,6 +210,7 @@ public class BrandServiceImpl implements BrandService {
 		}
 
 		return response;
+		//.toString().equals
 	}
 
 	@Override
@@ -224,7 +227,7 @@ public class BrandServiceImpl implements BrandService {
 		Page<Brand> findAllVerfiedBrand = brandRepo.findAllVerfiedBrand(pageable);
 		response.put("response",
 				findAllVerfiedBrand.getContent().stream().map(obj -> brandFilter(obj)).collect(Collectors.toList()));
-
+	
 		response.put(AppConstant.MESSAGE, AppConstant.ALL_VERFIED_BRAND);
 
 		return response;
@@ -297,7 +300,9 @@ public class BrandServiceImpl implements BrandService {
 		return responce;
 	}
 
-		
+
+
+			
 	}
 
 

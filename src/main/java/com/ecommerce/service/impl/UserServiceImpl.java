@@ -8,18 +8,18 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
-
 import com.ecommerce.exception.BadRequestException;
 import com.ecommerce.exception.ResourceNotFoundException;
 import com.ecommerce.model.Login;
@@ -201,34 +201,39 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	}
 
 	@Override
-	public Map<String, List<User>> getAllUsersbyGivenRole(String roleTitle) {
-		RoleName roleName;
+	public Map<String, Object> getAllUsersbyGivenRole(String roleName, Integer page, Integer size, String sortDir) {
+		
+		if (!appUtils.isUserActive()) {
+			throw new BadRequestException(AppConstant.USER_DEACTIVE);
+		}
+		RoleName role = null;
 		List<User> allUsers = new ArrayList<>();
-		Map<String, List<User>> response = new HashMap<>();
-		switch (roleTitle) {
-		case "CUSTOMER": {
-			roleName = RoleName.CUSTOMER;
-			break;
+		Map<String, Object> response = new HashMap<>();
+		AppUtils.validatePageAndSize(page, size);
+
+		Sort sort1 = null;
+		if (sortDir.equals("DESC")) {
+			sort1 = Sort.by(Sort.Order.desc("updatedAt"));
+		} else {
+			sort1 = Sort.by(Sort.Order.asc("updatedAt"));
 		}
-		case "ADMIN": {
-			roleName = RoleName.ADMIN;
-			break;
-		}
-		case "VENDOR": {
-			roleName = RoleName.VENDOR;
-			break;
-		}
-		case "ALL": {
-			allUsers = this.userRepo.findAll();
+		Pageable pageable = PageRequest.of(page, size, sort1);
+
+		if (roleName.equals("ADMIN")) {
+			role = RoleName.ADMIN;
+		} else if (roleName.equals("CUSTOMER")) {
+			
+			role = RoleName.CUSTOMER;
+		} else if (roleName.equals("VENDOR")) {
+			role = RoleName.VENDOR;
+		} else {
+			allUsers = this.userRepo.findAll();	
 			response.put("Users", allUsers);
-			return response;		}
-
-		default:
-			throw new IllegalArgumentException("Unexpected value: " + roleTitle);
+			return response;
 		}
 
-		allUsers = this.userRoleRepo.findUsersByRoleName(roleName);
-		response.put("Users", allUsers);
+		Page<User> findByRoleName = this.userRepo.findByRoleName(role, pageable);
+		response.put("Users", findByRoleName);
 		return response;
 	}
 }

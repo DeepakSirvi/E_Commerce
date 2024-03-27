@@ -91,7 +91,8 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public Map<String, Object> getAllProduct(String search, Integer pageIndex, Integer pageSize, String sortDir) {
-		if (userRoleRepo.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleName.ADMIN.ordinal()))) {
+	
+		if (userRoleRepo.existsByUserAndRole(new User(appUtils.getUserId()), new Role(RoleName.ADMIN.ordinal()+1))) {
 			Map<String, Object> response = new HashMap<>();
 			AppUtils.validatePageAndSize(pageIndex, pageSize);
 			Sort sort1 = null;
@@ -99,6 +100,7 @@ public class ProductServiceImpl implements ProductService {
 				sort1 = Sort.by(Sort.Order.desc("updatedAt"));
 			} else {
 				sort1 = Sort.by(Sort.Order.asc("updatedAt"));
+				
 			}
 			Pageable pageable = PageRequest.of(pageIndex, pageSize, sort1);
 			Page<Product> productSet = null;
@@ -106,6 +108,7 @@ public class ProductServiceImpl implements ProductService {
 				productSet = productRepo.findByProductDetail(search, pageable);
 			} else {
 				productSet = productRepo.findAll(pageable);
+				System.err.println(productSet);
 			}
 			List<ProductResponse> productResponses = productSet.getContent().stream().map(products -> {
 				ProductResponse productResponse = new ProductResponse();
@@ -220,7 +223,7 @@ public class ProductServiceImpl implements ProductService {
 		product.setVerified(Status.UNVERIFIED);
 		product.setListingStatus(Boolean.FALSE);
 		product.setVendor(new User(appUtils.getUserId()));
-		productRepo.save(product);
+		 productRepo.save(product);
 		ApiResponse apiResponse = new ApiResponse(Boolean.TRUE, AppConstant.PRODUCT_ADDED, HttpStatus.CREATED);
 		response.put(AppConstant.RESPONSE_MESSAGE, apiResponse);
 
@@ -354,8 +357,6 @@ public class ProductServiceImpl implements ProductService {
 		request.setVerified(status);
 		if (!date.isEmpty()) {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-//		    request.setCreatedAt(LocalDate.parse(date , formatter));
-//		    request.setUpdatedAt(LocalDate.parse(date , formatter));
 		}
 		request.getSubCategory().getCategory().setId(catId);
 		Example<Product> example = Example.of(request, exampleMatcher);
@@ -368,12 +369,7 @@ public class ProductServiceImpl implements ProductService {
 		}
 		Pageable pageable = PageRequest.of(pageIndex, pageSize, sort1);
 		Page<Product> productSet = productRepo.findAll(example, pageable);
-//		if (listingStatus != null)
-//			productSet = productRepo.findProductByFilter(catId, date, status, listingStatus, pageable);
-//		else {
-//			productSet = productRepo.findProductByFilterWithOutListing(catId, date, status, pageable);
-//
-//		}
+
 		List<ProductResponse> productResponses = productSet.getContent().stream().map(product -> {
 			return new ProductResponse().productToProductResponseList(product);
 		}).collect(Collectors.toList());
